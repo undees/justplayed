@@ -5,6 +5,8 @@ Feature: Snaps
 
   Scenario: Snapping a song
     Given a list of radio stations
-    Then I should see 0 snaps
+    Then the list of snaps should be empty
     When I press KNRK
-    Then I should see 1 snap for KNRK now
+    Then I should see the following snaps:
+      | station | time |
+      | KNRK    | now  |
