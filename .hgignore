@@ -4,3 +4,4 @@ syntax: glob
 build
 *.pbxuser
 *.mode1v3
+*.tmp
