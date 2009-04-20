@@ -49,5 +49,10 @@ module Encumber
     def dump
       command 'outputView'
     end
+
+    def press(xpath)
+      command 'simulateTouch', 'viewXPath', xpath
+      sleep 1
+    end
   end
 end

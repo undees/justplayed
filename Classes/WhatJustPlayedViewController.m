@@ -7,54 +7,153 @@
 //
 
 #import "WhatJustPlayedViewController.h"
+#import "SnapsController.h"
+
+
+const int StationSection = 0;
+const int SnapSection = 1;
+
+const int TitleTag = 1;
+const int SubtitleTag = 2;
+
+const int StationTag = 3;
+
+NSString* const StationCell = @"StationCell";
+NSString* const SnapCell = @"SnapCell";
+
 
 @implementation WhatJustPlayedViewController
 
 
+@synthesize snapsController;
 @synthesize myView;
-
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView*)tableView
 {
-	return 1;
+	return 2;
 }
 
 
 - (NSString *)tableView:(UITableView*)tableView titleForHeaderInSection:(NSInteger)section
 {
-	return @"Snaps";
+	if (StationSection == section)
+		return @"Stations";
+	else
+		return @"Snaps";
 }
 
 
 - (NSInteger)tableView:(UITableView*)tableView numberOfRowsInSection:(NSInteger)section;
 {
-	return 0;
+	if (StationSection == section)
+		return 1;
+	else
+		return [snapsController countOfList];
 }
 
-- (UITableViewCell*)tableView:(UITableView*)tableView cellForRowAtIndexPath:(NSIndexPath*)indexPath;
+-(CGFloat)tableView:(UITableView*)tableView heightForRowAtIndexPath:(NSIndexPath*)indexPath;
 {
-	UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
+	return (StationSection == indexPath.section ? 44 : 60);
+}
+
+
+- (void)addSnap;
+{
+	[snapsController addData:@"Snap"];
+
+	NSIndexPath* path = [NSIndexPath indexPathForRow:0 inSection:SnapSection];
+	NSArray* paths = [NSArray arrayWithObject:path];
+	UITableView *tv = (UITableView *)self.view;
+	[tv insertRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationTop];
+
+	[tv reloadData];
+}
+
+
+- (UITableViewCell*)stationCellWithView:(UITableView*)tableView;
+{
+	UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:StationCell];
 	if (cell == nil)
 	{
-		cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:@"Cell"] autorelease];
-		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-		cell.selectionStyle = UITableViewCellSelectionStyleNone;
+		CGRect frame = CGRectMake(0, 0, 300, 44);
+		cell = [[[UITableViewCell alloc] initWithFrame:frame reuseIdentifier:StationCell] autorelease];
+
+		UIButton* button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+		[button setFrame:frame];
+		button.tag = StationTag;
+		[button addTarget:self action:@selector(addSnap) forControlEvents:UIControlEventTouchUpInside];
+		[cell.contentView addSubview:button];
 	}
 
-	cell.text = @"Snap";
-	
 	return cell;
 }
 
 
-- (void)didReceiveMemoryWarning {
+- (UITableViewCell*)snapCellWithView:(UITableView*)tableView;
+{
+	UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:SnapCell];
+	if (cell == nil)
+	{
+		CGRect frame = CGRectMake(0, 0, 290, 60);
+		cell = [[[UITableViewCell alloc] initWithFrame:frame reuseIdentifier:SnapCell] autorelease];
+		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+		cell.selectionStyle = UITableViewCellSelectionStyleNone;
+
+		UILabel* snapTitle = [[[UILabel alloc] initWithFrame:CGRectMake(10, 10, 280, 25)] autorelease];
+		snapTitle.tag = TitleTag;
+		[cell.contentView addSubview:snapTitle];
+
+		UILabel* snapSubtitle = [[[UILabel alloc] initWithFrame:CGRectMake(10, 33, 280, 25)] autorelease];
+		snapSubtitle.tag = SubtitleTag;
+		snapSubtitle.font = [UIFont systemFontOfSize:12.0];
+		snapSubtitle.textColor = [UIColor lightGrayColor];
+		[cell.contentView addSubview:snapSubtitle];
+	}
+
+	return cell;
+}
+
+
+- (UITableViewCell*)tableView:(UITableView*)tableView cellForRowAtIndexPath:(NSIndexPath*)indexPath;
+{
+	if (StationSection == indexPath.section)
+	{
+		UITableViewCell* cell = [self stationCellWithView:tableView];
+		UIButton* button = (UIButton*)[cell.contentView viewWithTag:StationTag];
+		[button setTitle:@"KNRK" forState:UIControlStateNormal];
+
+		return cell;
+	}
+	else
+	{
+		UITableViewCell* cell = [self snapCellWithView:tableView];
+		UILabel* snapTitle = (UILabel*)[cell.contentView viewWithTag:TitleTag];
+		UILabel* snapSubtitle = (UILabel *)[cell.contentView viewWithTag:SubtitleTag];
+
+		snapTitle.text = @"KNRK";
+		snapSubtitle.text = @"now";
+
+		return cell;
+	}
+}
+
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+	self.snapsController = [[SnapsController alloc] init];
+}
+
+
+- (void)didReceiveMemoryWarning;
+{
     [super didReceiveMemoryWarning]; // Releases the view if it doesn't have a superview
     // Release anything that's not essential, such as cached data
 }
 
-
-- (void)dealloc {
+- (void)dealloc;
+{
     [super dealloc];
 }
+
 
 @end

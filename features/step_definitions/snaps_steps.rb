@@ -5,7 +5,7 @@ end
 When /^I press (.*)$/ do
   |station|
 
-  pending
+  @app.snap station
 end
 
 Then /^the list of snaps should be empty$/ do
@@ -15,5 +15,5 @@ end
 Then /^I should see the following snaps:$/ do
   |snaps_table|
 
-  pending
+  @app.snaps.should == snaps_table.hashes
 end

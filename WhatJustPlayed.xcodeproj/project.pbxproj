@@ -40,6 +40,8 @@
 		DF7EC9A90F9BFEC5005AD5B0 /* HTTPResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = DF7EC98C0F9BFEC5005AD5B0 /* HTTPResponse.m */; };
 		DF7EC9AA0F9BFEC5005AD5B0 /* HTTPServer.m in Sources */ = {isa = PBXBuildFile; fileRef = DF7EC98E0F9BFEC5005AD5B0 /* HTTPServer.m */; };
 		DF7EC9B90F9BFFA6005AD5B0 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DF7EC9B80F9BFFA6005AD5B0 /* CFNetwork.framework */; };
+		DFAFF55A0F9D0BBE00FDBD74 /* SnapsController.m in Sources */ = {isa = PBXBuildFile; fileRef = DFAFF5590F9D0BBE00FDBD74 /* SnapsController.m */; };
+		DFAFF55B0F9D0BBE00FDBD74 /* SnapsController.m in Sources */ = {isa = PBXBuildFile; fileRef = DFAFF5590F9D0BBE00FDBD74 /* SnapsController.m */; };
 		DFF203FD0F9BEF1000B74721 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = DFF203FC0F9BEF1000B74721 /* Icon.png */; };
 /* End PBXBuildFile section */
 
@@ -89,6 +91,8 @@
 		DF7EC98D0F9BFEC5005AD5B0 /* HTTPServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTTPServer.h; sourceTree = "<group>"; };
 		DF7EC98E0F9BFEC5005AD5B0 /* HTTPServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTTPServer.m; sourceTree = "<group>"; };
 		DF7EC9B80F9BFFA6005AD5B0 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		DFAFF5580F9D0BBE00FDBD74 /* SnapsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SnapsController.h; sourceTree = "<group>"; };
+		DFAFF5590F9D0BBE00FDBD74 /* SnapsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SnapsController.m; sourceTree = "<group>"; };
 		DFF203FC0F9BEF1000B74721 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -121,6 +125,8 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				DFAFF5580F9D0BBE00FDBD74 /* SnapsController.h */,
+				DFAFF5590F9D0BBE00FDBD74 /* SnapsController.m */,
 				1D3623240D0F684500981E51 /* WhatJustPlayedAppDelegate.h */,
 				1D3623250D0F684500981E51 /* WhatJustPlayedAppDelegate.m */,
 				28D7ACF60DDB3853001CB0EB /* WhatJustPlayedViewController.h */,
@@ -323,6 +329,7 @@
 				1D60589B0D05DD56006BFB54 /* main.m in Sources */,
 				1D3623260D0F684500981E51 /* WhatJustPlayedAppDelegate.m in Sources */,
 				28D7ACF80DDB3853001CB0EB /* WhatJustPlayedViewController.m in Sources */,
+				DFAFF55A0F9D0BBE00FDBD74 /* SnapsController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -347,6 +354,7 @@
 				DF7EC9A80F9BFEC5005AD5B0 /* HTTPConnection.m in Sources */,
 				DF7EC9A90F9BFEC5005AD5B0 /* HTTPResponse.m in Sources */,
 				DF7EC9AA0F9BFEC5005AD5B0 /* HTTPServer.m in Sources */,
+				DFAFF55B0F9D0BBE00FDBD74 /* SnapsController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -6,6 +6,10 @@ class WhatJustPlayed
     @gui = Encumber::GUI.new
   end
 
+  def snap(station)
+    @gui.press '//UIRoundedRectButton[currentTitle="%s"]' % station
+  end
+
   TitleTag = 1
   SubtitleTag = 2
 
@@ -21,6 +25,9 @@ class WhatJustPlayed
     times = REXML::XPath.match doc, xpath
     times.map! {|e| e.elements['text'].text}
 
-    stations.zip(times)
+    stations.zip(times).inject([]) do |memo, obj|
+      station, time = obj
+      memo << {'station' => station, 'time' => time}
+    end
   end
 end

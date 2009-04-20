@@ -8,10 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
+@class SnapsController;
+
 @interface WhatJustPlayedViewController : UITableViewController {
+	SnapsController* snapsController;
 	UIView* myView;
 }
 
+@property (nonatomic, retain) SnapsController* snapsController;
 @property (nonatomic, retain) UIView* myView;
 
 @end
