@@ -9,7 +9,7 @@ When /^I press (.*)$/ do
 end
 
 Then /^the list of snaps should be empty$/ do
-  pending
+  @app.snaps.should be_empty
 end
 
 Then /^I should see the following snaps:$/ do

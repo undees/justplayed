@@ -45,5 +45,9 @@ module Encumber
       Net::HTTP.post_quick \
         "http://#{@host}:#{@port}/", command
     end
+
+    def dump
+      command 'outputView'
+    end
   end
 end

@@ -8,9 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
-@interface WhatJustPlayedViewController : UIViewController {
-
+@interface WhatJustPlayedViewController : UITableViewController {
+	UIView* myView;
 }
+
+@property (nonatomic, retain) UIView* myView;
 
 @end
 

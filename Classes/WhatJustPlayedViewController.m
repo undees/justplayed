@@ -11,39 +11,40 @@
 @implementation WhatJustPlayedViewController
 
 
+@synthesize myView;
 
-/*
-// The designated initializer. Override to perform setup that is required before the view is loaded.
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-    if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
-        // Custom initialization
-    }
-    return self;
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView*)tableView
+{
+	return 1;
 }
-*/
 
-/*
-// Implement loadView to create a view hierarchy programmatically, without using a nib.
-- (void)loadView {
+
+- (NSString *)tableView:(UITableView*)tableView titleForHeaderInSection:(NSInteger)section
+{
+	return @"Snaps";
 }
-*/
 
 
-/*
-// Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
-- (void)viewDidLoad {
-    [super viewDidLoad];
+- (NSInteger)tableView:(UITableView*)tableView numberOfRowsInSection:(NSInteger)section;
+{
+	return 0;
 }
-*/
 
+- (UITableViewCell*)tableView:(UITableView*)tableView cellForRowAtIndexPath:(NSIndexPath*)indexPath;
+{
+	UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
+	if (cell == nil)
+	{
+		cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:@"Cell"] autorelease];
+		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+		cell.selectionStyle = UITableViewCellSelectionStyleNone;
+	}
 
-/*
-// Override to allow orientations other than the default portrait orientation.
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    // Return YES for supported orientations
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+	cell.text = @"Snap";
+	
+	return cell;
 }
-*/
 
 
 - (void)didReceiveMemoryWarning {
