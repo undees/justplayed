@@ -1,0 +1,14 @@
+[tree1]
+root = .
+revision = tip
+path.default = http://bitbucket.org/undees/justplayed
+
+[tree2]
+root = bromine
+revision = tip
+path.default = http://bitbucket.org/undees/bromine
+
+[tree3]
+root = server
+revision = tip
+path.default = http://bitbucket.org/undees/server

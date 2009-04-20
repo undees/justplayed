@@ -9,6 +9,11 @@
 #import "WhatJustPlayedAppDelegate.h"
 #import "WhatJustPlayedViewController.h"
 
+#ifdef BROMINE_ENABLED
+	#import "ScriptRunner.h"
+	#import "MyHTTPConnection.h"
+#endif
+
 @implementation WhatJustPlayedAppDelegate
 
 @synthesize window;
@@ -16,10 +21,26 @@
 
 
 - (void)applicationDidFinishLaunching:(UIApplication *)application {    
-    
-    // Override point for customization after app launch    
     [window addSubview:viewController.view];
     [window makeKeyAndVisible];
+	
+#ifdef BROMINE_ENABLED
+	NSString *root = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES) objectAtIndex:0];
+	httpServer = [HTTPServer new];
+	[httpServer setName:@"the iPhone"];
+	[httpServer setType:@"_http._tcp."];
+	[httpServer setConnectionClass:[MyHTTPConnection class]];
+	[httpServer setDocumentRoot:[NSURL fileURLWithPath:root]];
+	[httpServer setPort:50000];
+	
+	NSError *error;
+	if(![httpServer start:&error])
+	{
+		NSLog(@"Error starting HTTP Server: %@", error);
+	}
+	
+	[[[ScriptRunner alloc] init] autorelease];
+#endif
 }
 
 

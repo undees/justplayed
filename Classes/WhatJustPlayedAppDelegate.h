@@ -8,11 +8,19 @@
 
 #import <UIKit/UIKit.h>
 
+#ifdef BROMINE_ENABLED
+#import "HTTPServer.h"
+#endif
+
 @class WhatJustPlayedViewController;
 
 @interface WhatJustPlayedAppDelegate : NSObject <UIApplicationDelegate> {
     UIWindow *window;
     WhatJustPlayedViewController *viewController;
+
+#ifdef BROMINE_ENABLED
+	HTTPServer *httpServer;
+#endif
 }
 
 @property (nonatomic, retain) IBOutlet UIWindow *window;
