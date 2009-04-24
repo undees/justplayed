@@ -96,8 +96,6 @@ NSString* const SnapCell = @"SnapCell";
 	{
 		CGRect frame = CGRectMake(0, 0, 290, 60);
 		cell = [[[UITableViewCell alloc] initWithFrame:frame reuseIdentifier:SnapCell] autorelease];
-		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-		cell.selectionStyle = UITableViewCellSelectionStyleNone;
 
 		UILabel* snapTitle = [[[UILabel alloc] initWithFrame:CGRectMake(10, 10, 280, 25)] autorelease];
 		snapTitle.tag = TitleTag;
@@ -127,6 +125,10 @@ NSString* const SnapCell = @"SnapCell";
 	else
 	{
 		UITableViewCell* cell = [self snapCellWithView:tableView];
+
+		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+		cell.selectionStyle = UITableViewCellSelectionStyleNone;
+
 		UILabel* snapTitle = (UILabel*)[cell.contentView viewWithTag:TitleTag];
 		UILabel* snapSubtitle = (UILabel *)[cell.contentView viewWithTag:SubtitleTag];
 
