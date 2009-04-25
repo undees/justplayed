@@ -26,7 +26,6 @@ NSString* const SnapCell = @"SnapCell";
 
 
 @synthesize snapsController;
-@synthesize myView;
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView*)tableView
 {
