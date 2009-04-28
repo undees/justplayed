@@ -10,11 +10,21 @@
 
 @class SnapsController;
 
-@interface WhatJustPlayedViewController : UITableViewController {
+@interface WhatJustPlayedViewController : UIViewController <UITableViewDataSource, UITableViewDelegate> {
 	SnapsController* snapsController;
+	IBOutlet UITableView* snapsTable;
+	NSString* lookupPattern;
+	NSDate* testTime;
 }
 
++ (NSString*) defaultLookupPattern;
+- (void)setSnaps:(NSArray*) snaps;
+- (IBAction)lookupButtonPressed:(id)sender;
+
 @property (nonatomic, retain) SnapsController* snapsController;
+@property (nonatomic, retain) UITableView* snapsTable;
+@property (nonatomic, retain) NSString* lookupPattern;
+@property (nonatomic, retain) NSDate* testTime;
 
 @end
 

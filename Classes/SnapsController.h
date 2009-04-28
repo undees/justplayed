@@ -15,8 +15,9 @@
 
 - (unsigned)countOfList;
 - (id)objectInListAtIndex:(unsigned)theIndex;
-- (void)addData:(NSString*)data;
+- (void)addData:(NSObject*)data;
 - (void)removeDataAtIndex:(unsigned)theIndex;
+- (void)replaceDataAtIndex:(unsigned)theIndex withData:(NSObject*)data;
 
 @property (nonatomic, copy, readwrite) NSMutableArray* snaps;
 

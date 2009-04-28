@@ -40,7 +40,12 @@
 	[snaps removeObjectAtIndex:theIndex];
 }
 
-- (void)addData:(NSString*)data;
+- (void)replaceDataAtIndex:(unsigned)theIndex withData:(NSObject*)data;
+{
+	[snaps replaceObjectAtIndex:theIndex withObject:data];
+}
+
+- (void)addData:(NSObject*)data;
 {
 	[snaps insertObject:data atIndex:0];
 }
