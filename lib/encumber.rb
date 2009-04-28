@@ -24,11 +24,10 @@ module Encumber
   class GUI
     def initialize(host='localhost', port=50000)
       @host, @port = host, port
-
-      command 'reset'
     end
 
     def command(name, *params)
+      raw = params.shift if params.first == :raw
       command = Tagz.tagz do
         plist_(:version => 1.0) do
           dict_ do
@@ -36,7 +35,7 @@ module Encumber
             string_ name
             params.each_cons(2) do |k, v|
               key_ k
-              string_ v
+              raw ? tagz.concat(v) : string_(v)
             end
           end
         end

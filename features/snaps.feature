@@ -5,8 +5,9 @@ Feature: Snaps
 
   Scenario: Snapping a song
     Given a list of radio stations
+    And a current time of 23:45
     Then the list of snaps should be empty
     When I press KNRK
     Then I should see the following snaps:
-      | station | time |
-      | KNRK    | now  |
+      | station | time     |
+      | KNRK    | 11:45 PM |
