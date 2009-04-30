@@ -10,6 +10,19 @@ Feature: Lookup
       | station | time     |
       | KNRK    | 12:00 PM |
     When I look up my snaps
-    Then I should see the following songs:
-      | artist           | title                |
-      | Jane's Addiction | Been Caught Stealing |
+    Then I should see the following snaps:
+      | title                | artist           |
+      | Been Caught Stealing | Jane's Addiction |
+
+  Scenario: Partial success
+    Given a list of radio stations
+    And a server at http://localhost:4567/:time
+    And the following snaps:
+      | station | time     |
+      | KNRK    | 2:00 PM  |
+      | KNRK    | 12:00 PM |
+    When I look up my snaps
+    Then I should see the following snaps:
+      | title                | subtitle         |
+      | KNRK                 | 2:00 PM          |
+      | Been Caught Stealing | Jane's Addiction |

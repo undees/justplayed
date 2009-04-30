@@ -4,6 +4,7 @@ require 'sinatra'
 # <!-- http://mobile.yes.com/song.jsp?city=24&station=KNRK_94.7&hm=1000 -->
 
 get '/:time' do |time|
+  pass unless time == '1200'
   <<HERE
 <html>
 <body>

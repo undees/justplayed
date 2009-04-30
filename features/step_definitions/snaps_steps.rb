@@ -37,19 +37,10 @@ end
 Then /^I should see the following snaps:$/ do
   |snaps_table|
 
-  general_table = snaps_table.map_headers \
-    'station' => :title,
-    'time' => :subtitle
+  hashes = snaps_table.hashes.map do |h|
+    {:title => h['title'] || h['station'],
+     :subtitle => h['subtitle'] || h['time'] || h['artist']}
+  end
 
-  @app.snaps.should == general_table.hashes
-end
-
-Then /^I should see the following songs:$/ do
-  |songs_table|
-
-  general_table = songs_table.map_headers \
-    'title' => :title,
-    'artist' => :subtitle
-
-  @app.snaps.should == general_table.hashes
+  @app.snaps.should == hashes
 end
