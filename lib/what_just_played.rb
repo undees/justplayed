@@ -19,14 +19,14 @@ class WhatJustPlayed
     doc = REXML::Document.new xml
 
     xpath = '//UILabel[tag="%s"]' % TitleTag
-    stations = REXML::XPath.match doc, xpath
-    stations.map! {|e| e.elements['text'].text}
+    titles = REXML::XPath.match doc, xpath
+    titles.map! {|e| e.elements['text'].text}
 
     xpath = '//UILabel[tag="%s"]' % SubtitleTag
-    times = REXML::XPath.match doc, xpath
-    times.map! {|e| e.elements['text'].text}
+    subtitles = REXML::XPath.match doc, xpath
+    subtitles.map! {|e| e.elements['text'].text}
 
-    stations.zip(times).inject([]) do |memo, obj|
+    titles.zip(subtitles).inject([]) do |memo, obj|
       title, subtitle = obj
       memo << {:title => title, :subtitle => subtitle}
     end
@@ -53,10 +53,12 @@ class WhatJustPlayed
       array_ do
         snaps.each do |snap|
           dict_ do
-            key_ 'station'
-            string_ snap[:station]
-            key_ 'time'
-            string_ snap[:time]
+            key_ 'title'
+            string_ snap[:title]
+            key_ 'subtitle'
+            string_ snap[:subtitle]
+            key_ 'needsLookup'
+            snap[:complete] ? key_('false') : key_('true')
           end
         end
       end

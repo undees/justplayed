@@ -9,6 +9,7 @@
 #import "WhatJustPlayedAppDelegate.h"
 #import "WhatJustPlayedViewController.h"
 #import "Snap.h"
+#import "Song.h"
 
 #ifdef BROMINE_ENABLED
 	#import "ScriptRunner.h"
@@ -62,16 +63,26 @@
 		
 		while ((dict = [e nextObject]))
 		{
-			NSString* station = [dict objectForKey:@"station"];
-			NSString* time = [dict objectForKey:@"time"];
-			NSDateFormatter *dateFormat =
-				[[[NSDateFormatter alloc] init] autorelease];
-			[dateFormat setDateStyle:NSDateFormatterNoStyle];
-			[dateFormat setTimeStyle:NSDateFormatterShortStyle];
-			NSDate* date = [dateFormat dateFromString:time];
+			NSString* title = [dict objectForKey:@"title"];
+			NSString* subtitle = [dict objectForKey:@"subtitle"];
+			NSNumber* needsLookup = [dict objectForKey:@"needsLookup"];
 			
-			Snap* snap = [[Snap alloc] initWithStation:station creationTime:date];
-			[snaps addObject:snap];
+			if ([needsLookup boolValue])
+			{
+				NSDateFormatter *dateFormat =
+					[[[NSDateFormatter alloc] init] autorelease];
+				[dateFormat setDateStyle:NSDateFormatterNoStyle];
+				[dateFormat setTimeStyle:NSDateFormatterShortStyle];
+				NSDate* date = [dateFormat dateFromString:subtitle];
+			
+				Snap* snap = [[Snap alloc] initWithStation:title creationTime:date];
+				[snaps addObject:snap];
+			}
+			else
+			{
+				Song* song = [[Song alloc] initWithTitle:title artist:subtitle];
+				[snaps addObject:song];
+			}
 		}
 		
 		[viewController setSnaps:snaps];

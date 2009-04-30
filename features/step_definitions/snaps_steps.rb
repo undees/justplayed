@@ -5,7 +5,12 @@ end
 Given /^the following snaps:$/ do
   |snaps_table|
 
-  @app.snaps = snaps_table.hashes
+  hashes = snaps_table.hashes.map do |h|
+    {:title => h['title'] || h['station'],
+     :subtitle => h['subtitle'] || h['time'] || h['artist']}
+  end
+
+  @app.snaps = hashes
 end
 
 Given /^a current time of (.*)$/ do
