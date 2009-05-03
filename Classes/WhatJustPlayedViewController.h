@@ -19,6 +19,7 @@
 
 + (NSString*) defaultLookupPattern;
 - (void)setSnaps:(NSArray*) snaps;
+- (void)reloadData;
 - (IBAction)lookupButtonPressed:(id)sender;
 
 @property (nonatomic, retain) SnapsController* snapsController;

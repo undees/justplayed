@@ -19,6 +19,9 @@
 - (void)removeDataAtIndex:(unsigned)theIndex;
 - (void)replaceDataAtIndex:(unsigned)theIndex withData:(NSObject*)data;
 
+- (void)loadSnaps;
+- (void)saveSnaps;
+
 @property (nonatomic, copy, readwrite) NSMutableArray* snaps;
 
 @end

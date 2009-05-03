@@ -11,3 +11,14 @@ Feature: Snaps
     Then I should see the following snaps:
       | station | time     |
       | KNRK    | 11:45 PM |
+
+  Scenario: Remembering snaps
+    Given the following snaps:
+      | station | time    |
+      | KBOO    | 5:03 AM |
+      | KOPB    | 2:17 PM |
+    When I restart the app
+    Then I should see the following snaps:
+      | station | time    |
+      | KBOO    | 5:03 AM |
+      | KOPB    | 2:17 PM |

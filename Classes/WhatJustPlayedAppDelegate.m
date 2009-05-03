@@ -8,8 +8,6 @@
 
 #import "WhatJustPlayedAppDelegate.h"
 #import "WhatJustPlayedViewController.h"
-#import "Snap.h"
-#import "Song.h"
 
 #ifdef BROMINE_ENABLED
 	#import "ScriptRunner.h"
@@ -46,10 +44,15 @@
 }
 
 
-- (void)resetApp:(NSDictionary*)data {
+- (void)restoreDefaults:(NSDictionary*)ignored {
 	[viewController setSnaps:[NSArray array]];
-	[viewController setLookupPattern:[WhatJustPlayedViewController defaultLookupPattern]];
-	[viewController setTestTime:nil];
+	viewController.lookupPattern = [WhatJustPlayedViewController defaultLookupPattern];
+	viewController.testTime = nil;
+}
+
+
+- (void)restartApp:(NSDictionary*)ignored {
+	[viewController reloadData];
 }
 
 
@@ -57,35 +60,7 @@
 	NSArray* table = [data objectForKey:@"snaps"];
 	if (table)
 	{
-		NSMutableArray* snaps = [NSMutableArray array];
-		NSEnumerator* e = [table objectEnumerator];
-		NSDictionary* dict;
-		
-		while ((dict = [e nextObject]))
-		{
-			NSString* title = [dict objectForKey:@"title"];
-			NSString* subtitle = [dict objectForKey:@"subtitle"];
-			NSNumber* needsLookup = [dict objectForKey:@"needsLookup"];
-			
-			if ([needsLookup boolValue])
-			{
-				NSDateFormatter *dateFormat =
-					[[[NSDateFormatter alloc] init] autorelease];
-				[dateFormat setDateStyle:NSDateFormatterNoStyle];
-				[dateFormat setTimeStyle:NSDateFormatterShortStyle];
-				NSDate* date = [dateFormat dateFromString:subtitle];
-			
-				Snap* snap = [[Snap alloc] initWithStation:title creationTime:date];
-				[snaps addObject:snap];
-			}
-			else
-			{
-				Song* song = [[Song alloc] initWithTitle:title artist:subtitle];
-				[snaps addObject:song];
-			}
-		}
-		
-		[viewController setSnaps:snaps];
+		[viewController setSnaps:table];
 	}
 
 	NSString* lookupPattern = [data objectForKey:@"lookupPattern"];

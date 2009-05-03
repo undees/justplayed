@@ -7,8 +7,6 @@
 //
 
 #import "WhatJustPlayedViewController.h"
-#import "Snap.h"
-#import "Song.h"
 #import "SnapsController.h"
 #import "RegexKitLite.h"
 
@@ -34,7 +32,7 @@ NSString* const SnapCell = @"SnapCell";
 + (NSString*) defaultLookupPattern;
 {
 	/* This is just an example.  Be mindful of your responsibilities with people's servers. */
-	return @"http://mobile.yes.com/song.jsp?city=24&station=KNRK_94.7&hm=:time";	
+	return @"http://mobile.yes.com/song.jsp?city=24&station=KNRK_94.7&hm=:time&a=0";	
 }
 
 
@@ -69,11 +67,30 @@ NSString* const SnapCell = @"SnapCell";
 
 - (void)addSnap:(id)sender;
 {
-	Snap* snap = testTime ?
-		[[Snap alloc] initWithStation:@"KNRK" creationTime:testTime] :
-		[[Snap alloc] initWithStation:@"KNRK"];
+	NSString* title = [sender titleForState:UIControlStateNormal];
+
+	NSDate* createdAt =
+		self.testTime ?
+		self.testTime :
+		[NSDate date];
+
+	NSDateFormatter *dateFormat =
+		[[[NSDateFormatter alloc] init] autorelease];
+	[dateFormat setDateStyle:NSDateFormatterNoStyle];
+	[dateFormat setTimeStyle:NSDateFormatterShortStyle];
 	
+	NSString* subtitle = [dateFormat stringFromDate:createdAt];
+
+	NSDictionary* snap =
+		[NSDictionary dictionaryWithObjectsAndKeys:
+		 title, @"title",
+		 subtitle, @"subtitle",
+		 createdAt, @"createdAt",
+		 [NSNumber numberWithBool:YES], @"needsLookup",
+		 nil];
+
 	[snapsController addData:snap];
+	[snapsController saveSnaps];
 
 	NSIndexPath* path = [NSIndexPath indexPathForRow:0 inSection:SnapSection];
 	NSArray* paths = [NSArray arrayWithObject:path];
@@ -85,14 +102,23 @@ NSString* const SnapCell = @"SnapCell";
 - (void)setSnaps:(NSArray*) snaps;
 {
 	[snapsController setSnaps:[NSMutableArray arrayWithArray:snaps]];
+	[snapsController saveSnaps];
 	[snapsTable reloadData];
 }
 
 
-- (NSString*)songHTMLForDate:(NSDate*)date;
+- (void)reloadData;
+{
+	NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+	NSArray* snaps = [userDefaults arrayForKey:@"snaps"];
+	[self setSnaps:snaps];
+}
+
+
+- (NSString*)songHTMLForStation:(NSString*)station date:(NSDate*)date;
 {
 	NSDateFormatter* dateFormat = [[[NSDateFormatter alloc]
-									initWithDateFormat:@"%I%M" allowNaturalLanguage:NO] autorelease];
+									initWithDateFormat:@"%H%M" allowNaturalLanguage:NO] autorelease];
 	NSString* snappedAt = [dateFormat stringFromDate:date];
 	NSString* filledPattern = [lookupPattern stringByReplacingOccurrencesOfString:@":time" withString:snappedAt];
 	NSURL* lookupURL = [NSURL URLWithString:filledPattern];
@@ -140,17 +166,26 @@ NSString* const SnapCell = @"SnapCell";
 
 	for (unsigned i = 0; i < numSnaps; i++)
 	{
-		id snap = [snapsController objectInListAtIndex:i];
+		NSDictionary* snap = [snapsController objectInListAtIndex:i];
+		NSNumber* needsLookup = [snap objectForKey:@"needsLookup"];
 
-		if ([snap needsLookup])
+		if ([needsLookup boolValue])
 		{
-			NSString* result = [self songHTMLForDate:[snap createdAt]];
+			NSString* station = [snap objectForKey:@"title"];
+			NSDate* createdAt = [snap objectForKey:@"createdAt"];
+
+			NSString* result = [self songHTMLForStation:station date:createdAt];
 			NSString* title = [self titleForResult:result];
 			NSString* artist = [self artistForResult:result];
 			
 			if (title && artist)
 			{
-				Song* song = [[Song alloc] initWithTitle:title artist:artist];
+				NSDictionary* song =
+					[NSDictionary dictionaryWithObjectsAndKeys:
+					 title, @"title",
+					 artist, @"subtitle",
+					 [NSNumber numberWithBool:NO], @"needsLookup",
+					 nil];
 				[snapsController replaceDataAtIndex:i withData:song];
 			}
 		}
@@ -224,9 +259,9 @@ NSString* const SnapCell = @"SnapCell";
 		UILabel* snapTitle = (UILabel*)[cell.contentView viewWithTag:TitleTag];
 		UILabel* snapSubtitle = (UILabel *)[cell.contentView viewWithTag:SubtitleTag];
 
-		id snap = [snapsController objectInListAtIndex:[indexPath row]];
-		snapTitle.text = [snap title];
-		snapSubtitle.text = [snap subtitle];
+		NSDictionary* snap = [snapsController objectInListAtIndex:[indexPath row]];
+		snapTitle.text = [snap objectForKey:@"title"];
+		snapSubtitle.text = [snap objectForKey:@"subtitle"];
 
 		return cell;
 	}
@@ -238,6 +273,8 @@ NSString* const SnapCell = @"SnapCell";
 	self.snapsController = [[SnapsController alloc] init];
 	self.lookupPattern = [WhatJustPlayedViewController defaultLookupPattern];
 	self.testTime = nil;
+
+	[self reloadData];
 }
 
 

@@ -1,10 +1,14 @@
 require 'encumber'
 require 'rexml/document'
+require 'time'
 
 class WhatJustPlayed
   def initialize
     @gui = Encumber::GUI.new
-    @gui.command 'resetApp'
+  end
+
+  def reset
+    @gui.command 'restoreDefaults'
   end
 
   def snap(station)
@@ -48,6 +52,10 @@ class WhatJustPlayed
     @gui.press '//UIToolbarButton'
   end
 
+  def restart
+    @gui.command 'restartApp'
+  end
+
   def WhatJustPlayed.snap_plist(snaps)
     Tagz.tagz do
       array_ do
@@ -59,6 +67,11 @@ class WhatJustPlayed
             string_ snap[:subtitle]
             key_ 'needsLookup'
             snap[:complete] ? key_('false') : key_('true')
+
+            if (snap[:created_at])
+              key_ 'createdAt'
+              date_ snap[:created_at].utc.iso8601
+            end
           end
         end
       end

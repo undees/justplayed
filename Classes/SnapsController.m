@@ -8,7 +8,6 @@
 
 #import "SnapsController.h"
 
-
 @implementation SnapsController
 
 @synthesize snaps;
@@ -17,9 +16,7 @@
 {
 	if (self = [super init])
 	{
-		NSMutableArray* newSnaps = [[NSMutableArray alloc] init];
-		self.snaps = newSnaps;
-		[newSnaps release];
+		self.snaps = [NSMutableArray array];
 	}
 
 	return self;
@@ -39,6 +36,22 @@
 {
 	[snaps removeObjectAtIndex:theIndex];
 }
+
+
+- (void)loadSnaps
+{
+	NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+	NSArray* savedSnaps = [userDefaults arrayForKey:@"snaps"];
+	self.snaps = [NSMutableArray arrayWithArray:savedSnaps];
+}
+
+
+- (void)saveSnaps
+{
+	NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+	[userDefaults setValue:snaps forKey:@"snaps"];
+}
+
 
 - (void)replaceDataAtIndex:(unsigned)theIndex withData:(NSObject*)data;
 {
