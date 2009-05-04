@@ -40,6 +40,16 @@ When /^I restart the app$/ do
   app.restart
 end
 
+When /^I delete all my snaps$/ do
+  app.delete_all
+end
+
+When /^I (.*) my choice$/ do
+  |pick|
+
+  app.answer('confirm' == pick)
+end
+
 Then /^the list of snaps should be empty$/ do
   app.snaps.should be_empty
 end

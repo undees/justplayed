@@ -49,11 +49,37 @@ class WhatJustPlayed
   end
 
   def lookup
-    @gui.press '//UIToolbarButton'
+    @gui.press toolbar_buttons[:lookup]
+  end
+
+  def toolbar_buttons
+    xml = @gui.dump
+    doc = REXML::Document.new xml
+
+    xpath = '//UIToolbarButton'
+    buttons = REXML::XPath.match doc, xpath
+
+    locations = []
+    buttons.each_with_index do |b, i|
+      locations << [b.elements['frame/x'].text.to_f, i + 1]
+    end
+    locations.sort!
+
+    {:lookup => "//UIToolbarButton[#{locations[0][1]}]",
+     :delete_all => "//UIToolbarButton[#{locations[1][1]}]"}
   end
 
   def restart
     @gui.command 'restartApp'
+  end
+
+  def delete_all
+    @gui.press toolbar_buttons[:delete_all]
+  end
+
+  def answer(accept)
+    index = accept ? 1 : 2
+    @gui.press "//UIThreePartButton[#{index}]"
   end
 
   def WhatJustPlayed.snap_plist(snaps)

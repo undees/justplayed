@@ -26,7 +26,7 @@ NSString* const SnapCell = @"SnapCell";
 @implementation WhatJustPlayedViewController
 
 
-@synthesize snapsController, snapsTable, lookupPattern, testTime;
+@synthesize snapsController, snapsTable, toolbar, lookupPattern, testTime;
 
 
 + (NSString*) defaultLookupPattern;
@@ -194,6 +194,30 @@ NSString* const SnapCell = @"SnapCell";
 	[snapsTable reloadData];
 
 	[pool release];
+}
+
+
+- (IBAction)deleteButtonPressed:(id)sender;
+{
+	UIActionSheet* confirmation =
+		[[UIActionSheet alloc] 
+		 initWithTitle:nil
+		 delegate:self
+		 cancelButtonTitle:@"Cancel"
+		 destructiveButtonTitle:@"Delete All Snaps"
+		 otherButtonTitles:nil];
+	
+	[confirmation showFromToolbar:toolbar];
+	[confirmation release];
+}
+
+
+- (void)actionSheet:(UIActionSheet*)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex;
+{
+	if (0 == buttonIndex)
+	{
+		[self setSnaps:[NSArray array]];
+	}
 }
 
 
