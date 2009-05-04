@@ -15,8 +15,10 @@ class WhatJustPlayed
     @gui.press '//UIRoundedRectButton[currentTitle="%s"]' % station
   end
 
-  TitleTag = 1
-  SubtitleTag = 2
+  StationTag = 1
+  SnapTag = 2
+  TitleTag = 3
+  SubtitleTag = 4
 
   def snaps
     xml = @gui.dump
@@ -30,9 +32,13 @@ class WhatJustPlayed
     subtitles = REXML::XPath.match doc, xpath
     subtitles.map! {|e| e.elements['text'].text}
 
-    titles.zip(subtitles).inject([]) do |memo, obj|
-      title, subtitle = obj
-      memo << {:title => title, :subtitle => subtitle}
+    xpath = '//UITableViewCell[tag="%s"]' % SnapTag
+    links = REXML::XPath.match doc, xpath
+    links.map! {|e| e.elements['accessoryType'].text.to_i == 1}
+
+    titles.zip(subtitles, links).inject([]) do |memo, obj|
+      title, subtitle, link = obj
+      memo << {:title => title, :subtitle => subtitle, :link => link}
     end
   end
 
@@ -92,7 +98,7 @@ class WhatJustPlayed
             key_ 'subtitle'
             string_ snap[:subtitle]
             key_ 'needsLookup'
-            snap[:complete] ? key_('false') : key_('true')
+            snap[:link] ? key_('false') : key_('true')
 
             if (snap[:created_at])
               key_ 'createdAt'

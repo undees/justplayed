@@ -26,6 +26,8 @@ Feature: Lookup
       | title                | subtitle         |
       | KNRK                 | 2:00 PM          |
       | Been Caught Stealing | Jane's Addiction |
+
+    # Check saving bug:
     When I restart the app
     Then I should see the following snaps:
       | title                | subtitle         |

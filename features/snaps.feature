@@ -14,14 +14,14 @@ Feature: Snaps
 
   Scenario: Remembering snaps
     Given the following snaps:
-      | station | time    |
-      | KBOO    | 5:03 AM |
-      | KOPB    | 2:17 PM |
+      | title | subtitle | link |
+      | KBOO  | 5:03 AM  | no   |
+      | Stand | R.E.M.   | yes  |
     When I restart the app
     Then I should see the following snaps:
-      | station | time    |
-      | KBOO    | 5:03 AM |
-      | KOPB    | 2:17 PM |
+      | title | subtitle | link |
+      | KBOO  | 5:03 AM  | no   |
+      | Stand | R.E.M.   | yes  |
 
   Scenario: Deleting snaps
     Given the following snaps:
