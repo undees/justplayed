@@ -191,6 +191,7 @@ NSString* const SnapCell = @"SnapCell";
 		}
 	}
 	
+	[snapsController saveSnaps];
 	[snapsTable reloadData];
 
 	[pool release];
