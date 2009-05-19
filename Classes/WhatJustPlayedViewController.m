@@ -119,8 +119,11 @@ NSString* const SnapCell = @"SnapCell";
 
 - (NSData*)songXMLForStation:(NSString*)station date:(NSDate*)date;
 {
-	NSDateFormatter* dateFormat = [[[NSDateFormatter alloc]
-									initWithDateFormat:@"%H%M" allowNaturalLanguage:NO] autorelease];
+	NSDateFormatter* dateFormat = [[[NSDateFormatter alloc] init] autorelease];
+	NSTimeZone *timeZone = [NSTimeZone timeZoneWithName:@"UTC"];
+	[dateFormat setTimeZone:timeZone];
+	[dateFormat setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
+	
 	NSString* snappedAt = [dateFormat stringFromDate:date];
 	NSString* lookup = [NSString stringWithFormat:@"%@/%@/%@",
 						[self lookupServer],
