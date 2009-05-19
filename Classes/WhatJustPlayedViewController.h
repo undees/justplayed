@@ -19,11 +19,11 @@
 	SnapsController* snapsController;
 	IBOutlet UITableView* snapsTable;
 	IBOutlet UIToolbar* toolbar;
-	NSString* lookupPattern;
+	NSString* lookupServer;
 	NSDate* testTime;
 }
 
-+ (NSString*) defaultLookupPattern;
++ (NSString*)defaultLookupServer;
 - (void)setSnaps:(NSArray*) snaps;
 - (void)reloadData;
 - (IBAction)lookupButtonPressed:(id)sender;
@@ -32,7 +32,7 @@
 @property (nonatomic, retain) SnapsController* snapsController;
 @property (nonatomic, retain) UITableView* snapsTable;
 @property (nonatomic, retain) UIToolbar* toolbar;
-@property (nonatomic, retain) NSString* lookupPattern;
+@property (nonatomic, retain) NSString* lookupServer;
 @property (nonatomic, retain) NSDate* testTime;
 
 @end

@@ -1,25 +1,16 @@
 require 'rubygems'
 require 'sinatra'
 
-# <!-- http://mobile.yes.com/song.jsp?city=24&station=KNRK_94.7&hm=1000 -->
-
-get '/:time' do |time|
-  pass unless time == '1200'
+get '/:station/:time' do |station, time|
+  pass unless station.downcase == 'knrk' && time == '1200'
   <<HERE
-<html>
-<body>
-<table width="100%" align="center" cellspacing="0">
-  <tr>
-    <td align="left" valign="top"><img src="image.gif" alt="YES" border="0" align="top"/></td>
-  </tr>
-  <tr>
-    <td><div align="center"><b>Now Playing (KNRK 94.7)</b></div></td>
-  </tr>
-  <tr>
-    <td>Been Caught Stealing<br/>by Jane's Addiction<br/>10:00 AM<br/>Ritual de lo Habitual</td>
-  </tr>
-</table>
-</body>
-</html>
+<plist version="1.0">
+<dict>
+	<key>title</key>
+	<string>Been Caught Stealing</string>
+	<key>artist</key>
+	<string>Jane's Addiction</string>
+</dict>
+</plist>
 HERE
 end

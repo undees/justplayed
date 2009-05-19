@@ -47,7 +47,7 @@ class WhatJustPlayed
   end
 
   def server=(url)
-    @gui.command 'setTestData', 'lookupPattern', url
+    @gui.command 'setTestData', 'lookupServer', url
   end
 
   def time=(time)

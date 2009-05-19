@@ -8,7 +8,6 @@
 
 #import "WhatJustPlayedViewController.h"
 #import "SnapsController.h"
-#import "RegexKitLite.h"
 
 
 const int StationSection = 0;
@@ -27,13 +26,12 @@ NSString* const SnapCell = @"SnapCell";
 @implementation WhatJustPlayedViewController
 
 
-@synthesize snapsController, snapsTable, toolbar, lookupPattern, testTime;
+@synthesize snapsController, snapsTable, toolbar, lookupServer, testTime;
 
 
-+ (NSString*) defaultLookupPattern;
++ (NSString*)defaultLookupServer;
 {
-	/* This is just an example.  Be mindful of your responsibilities with people's servers. */
-	return @"http://mobile.yes.com/song.jsp?city=24&station=KNRK_94.7&hm=:time&a=0";	
+	return @"http://dielectric.heroku.com";	
 }
 
 
@@ -113,49 +111,24 @@ NSString* const SnapCell = @"SnapCell";
 	NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
 	NSArray* snaps = [userDefaults arrayForKey:@"snaps"];
 	[self setSnaps:snaps];
+
+	NSString* server = [userDefaults stringForKey:@"lookupServer"];
+	[self setLookupServer:server];
 }
 
 
-- (NSString*)songHTMLForStation:(NSString*)station date:(NSDate*)date;
+- (NSData*)songXMLForStation:(NSString*)station date:(NSDate*)date;
 {
 	NSDateFormatter* dateFormat = [[[NSDateFormatter alloc]
 									initWithDateFormat:@"%H%M" allowNaturalLanguage:NO] autorelease];
 	NSString* snappedAt = [dateFormat stringFromDate:date];
-	NSString* filledPattern = [lookupPattern stringByReplacingOccurrencesOfString:@":time" withString:snappedAt];
-	NSURL* lookupURL = [NSURL URLWithString:filledPattern];
+	NSString* lookup = [NSString stringWithFormat:@"%@/%@/%@",
+						[self lookupServer],
+						station,
+						snappedAt];
 
-	NSData* data = [NSData dataWithContentsOfURL:lookupURL];
-	return [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
-}
-
-
-- (NSString*)titleForResult:(NSString*)result;
-{
-	NSString* regex = @"<td>([^\\<]+)<br\\/>";
-	NSRange range = [result rangeOfRegex:regex capture:1];
-	if (range.length > 0)
-	{
-		return [result substringWithRange:range];
-	}
-	else
-	{
-		return nil;
-	}
-}
-
-
-- (NSString*)artistForResult:(NSString*)result;
-{
-	NSString* regex = @"<br\\/>by ([^\\<]+)<br\\/>";
-	NSRange range = [result rangeOfRegex:regex capture:1];
-	if (range.length > 0)
-	{
-		return [result substringWithRange:range];
-	}
-	else
-	{
-		return nil;
-	}
+	NSURL* lookupURL = [NSURL URLWithString:lookup];
+	return [NSData dataWithContentsOfURL:lookupURL];
 }
 
 
@@ -175,9 +148,16 @@ NSString* const SnapCell = @"SnapCell";
 			NSString* station = [snap objectForKey:@"title"];
 			NSDate* createdAt = [snap objectForKey:@"createdAt"];
 
-			NSString* result = [self songHTMLForStation:station date:createdAt];
-			NSString* title = [self titleForResult:result];
-			NSString* artist = [self artistForResult:result];
+			NSData* result = [self songXMLForStation:station date:createdAt];
+			NSDictionary* details = 
+				[NSPropertyListSerialization
+				 propertyListFromData:result
+				 mutabilityOption:NSPropertyListMutableContainers
+				 format:nil
+				 errorDescription:nil];			
+			
+			NSString* title = [details objectForKey:@"title"];
+			NSString* artist = [details objectForKey:@"artist"];
 			
 			if (title && artist)
 			{
@@ -328,7 +308,7 @@ NSString* const SnapCell = @"SnapCell";
 - (void)viewDidLoad {
     [super viewDidLoad];
 	self.snapsController = [[SnapsController alloc] init];
-	self.lookupPattern = [WhatJustPlayedViewController defaultLookupPattern];
+	self.lookupServer = [WhatJustPlayedViewController defaultLookupServer];
 	self.testTime = nil;
 
 	[self reloadData];

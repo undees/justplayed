@@ -19,8 +19,6 @@
 		DF598C000FA37A0B005D6E40 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = DF598BFE0FA37A0B005D6E40 /* Default.png */; };
 		DF598EA20FA6D1B7005D6E40 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DF598EA10FA6D1B7005D6E40 /* libicucore.dylib */; };
 		DF598EA30FA6D1B7005D6E40 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DF598EA10FA6D1B7005D6E40 /* libicucore.dylib */; };
-		DF598EA90FA6D216005D6E40 /* RegexKitLite.m in Sources */ = {isa = PBXBuildFile; fileRef = DF598EA80FA6D216005D6E40 /* RegexKitLite.m */; };
-		DF598EAA0FA6D216005D6E40 /* RegexKitLite.m in Sources */ = {isa = PBXBuildFile; fileRef = DF598EA80FA6D216005D6E40 /* RegexKitLite.m */; };
 		DF7EC8E00F9BFCE8005AD5B0 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD733E0D9D9553002E5188 /* MainWindow.xib */; };
 		DF7EC8E10F9BFCE8005AD5B0 /* WhatJustPlayedViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2899E5210DE3E06400AC0155 /* WhatJustPlayedViewController.xib */; };
 		DF7EC8E20F9BFCE8005AD5B0 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = DFF203FC0F9BEF1000B74721 /* Icon.png */; };
@@ -48,6 +46,8 @@
 		DF7EC9B90F9BFFA6005AD5B0 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DF7EC9B80F9BFFA6005AD5B0 /* CFNetwork.framework */; };
 		DFAFF55A0F9D0BBE00FDBD74 /* SnapsController.m in Sources */ = {isa = PBXBuildFile; fileRef = DFAFF5590F9D0BBE00FDBD74 /* SnapsController.m */; };
 		DFAFF55B0F9D0BBE00FDBD74 /* SnapsController.m in Sources */ = {isa = PBXBuildFile; fileRef = DFAFF5590F9D0BBE00FDBD74 /* SnapsController.m */; };
+		DFCCD94D0FC27EE900AE65BD /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = DFCCD94C0FC27EE900AE65BD /* Settings.bundle */; };
+		DFCCD94E0FC27EE900AE65BD /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = DFCCD94C0FC27EE900AE65BD /* Settings.bundle */; };
 		DFF203FD0F9BEF1000B74721 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = DFF203FC0F9BEF1000B74721 /* Icon.png */; };
 /* End PBXBuildFile section */
 
@@ -67,8 +67,6 @@
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DF598BFE0FA37A0B005D6E40 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		DF598EA10FA6D1B7005D6E40 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
-		DF598EA70FA6D216005D6E40 /* RegexKitLite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegexKitLite.h; sourceTree = "<group>"; };
-		DF598EA80FA6D216005D6E40 /* RegexKitLite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegexKitLite.m; sourceTree = "<group>"; };
 		DF7EC8DA0F9BF9E9005AD5B0 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 		DF7EC8EE0F9BFCE8005AD5B0 /* Just Played.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Just Played.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DF7EC9180F9BFD50005AD5B0 /* ScriptRunner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScriptRunner.h; sourceTree = "<group>"; };
@@ -103,6 +101,7 @@
 		DF7EC9B80F9BFFA6005AD5B0 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		DFAFF5580F9D0BBE00FDBD74 /* SnapsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SnapsController.h; sourceTree = "<group>"; };
 		DFAFF5590F9D0BBE00FDBD74 /* SnapsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SnapsController.m; sourceTree = "<group>"; };
+		DFCCD94C0FC27EE900AE65BD /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		DFF203FC0F9BEF1000B74721 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -137,8 +136,6 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				DF598EA70FA6D216005D6E40 /* RegexKitLite.h */,
-				DF598EA80FA6D216005D6E40 /* RegexKitLite.m */,
 				DFAFF5580F9D0BBE00FDBD74 /* SnapsController.h */,
 				DFAFF5590F9D0BBE00FDBD74 /* SnapsController.m */,
 				1D3623240D0F684500981E51 /* WhatJustPlayedAppDelegate.h */,
@@ -171,6 +168,7 @@
 				DF7EC8DA0F9BF9E9005AD5B0 /* libxml2.dylib */,
 				DF598EA10FA6D1B7005D6E40 /* libicucore.dylib */,
 				DF7EC9B80F9BFFA6005AD5B0 /* CFNetwork.framework */,
+				DFCCD94C0FC27EE900AE65BD /* Settings.bundle */,
 			);
 			name = CustomTemplate;
 			sourceTree = "<group>";
@@ -323,6 +321,7 @@
 				2899E5220DE3E06400AC0155 /* WhatJustPlayedViewController.xib in Resources */,
 				DFF203FD0F9BEF1000B74721 /* Icon.png in Resources */,
 				DF598BFF0FA37A0B005D6E40 /* Default.png in Resources */,
+				DFCCD94E0FC27EE900AE65BD /* Settings.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -334,6 +333,7 @@
 				DF7EC8E10F9BFCE8005AD5B0 /* WhatJustPlayedViewController.xib in Resources */,
 				DF7EC8E20F9BFCE8005AD5B0 /* Icon.png in Resources */,
 				DF598C000FA37A0B005D6E40 /* Default.png in Resources */,
+				DFCCD94D0FC27EE900AE65BD /* Settings.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -348,7 +348,6 @@
 				1D3623260D0F684500981E51 /* WhatJustPlayedAppDelegate.m in Sources */,
 				28D7ACF80DDB3853001CB0EB /* WhatJustPlayedViewController.m in Sources */,
 				DFAFF55A0F9D0BBE00FDBD74 /* SnapsController.m in Sources */,
-				DF598EA90FA6D216005D6E40 /* RegexKitLite.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -374,7 +373,6 @@
 				DF7EC9A90F9BFEC5005AD5B0 /* HTTPResponse.m in Sources */,
 				DF7EC9AA0F9BFEC5005AD5B0 /* HTTPServer.m in Sources */,
 				DFAFF55B0F9D0BBE00FDBD74 /* SnapsController.m in Sources */,
-				DF598EAA0FA6D216005D6E40 /* RegexKitLite.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

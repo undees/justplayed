@@ -46,7 +46,7 @@
 
 - (void)restoreDefaults:(NSDictionary*)ignored {
 	[viewController setSnaps:[NSArray array]];
-	viewController.lookupPattern = [WhatJustPlayedViewController defaultLookupPattern];
+	viewController.lookupServer = [WhatJustPlayedViewController defaultLookupServer];
 	viewController.testTime = nil;
 }
 
@@ -63,10 +63,10 @@
 		[viewController setSnaps:table];
 	}
 
-	NSString* lookupPattern = [data objectForKey:@"lookupPattern"];
-	if (lookupPattern)
+	NSString* lookupServer = [data objectForKey:@"lookupServer"];
+	if (lookupServer)
 	{
-		[viewController setLookupPattern:lookupPattern];
+		[viewController setLookupServer:lookupServer];
 	}
 
 	NSString* testTime = [data objectForKey:@"testTime"];
