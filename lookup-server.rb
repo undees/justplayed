@@ -2,7 +2,7 @@ require 'rubygems'
 require 'sinatra'
 
 get '/:station/:time' do |station, time|
-  pass unless station.downcase == 'knrk' && time == '1200'
+  halt 404 unless station.downcase == 'knrk' && time == '1200'
   <<HERE
 <plist version="1.0">
 <dict>
