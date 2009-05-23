@@ -33,6 +33,9 @@
 	[httpServer setDocumentRoot:[NSURL fileURLWithPath:root]];
 	[httpServer setPort:50000];
 	
+	ScriptRunner *runner = [[ScriptRunner alloc] init];
+	[MyHTTPConnection setSharedObserver:runner];
+	
 	NSError *error;
 	if(![httpServer start:&error])
 	{
@@ -82,6 +85,8 @@
 
 
 - (void)dealloc {
+	[httpServer release];
+	[MyHTTPConnection setSharedObserver:nil];
     [viewController release];
     [window release];
     [super dealloc];
