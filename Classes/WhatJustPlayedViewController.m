@@ -19,6 +19,7 @@ const int SnapTag = 2;
 const int TitleTag = 3;
 const int SubtitleTag = 4;
 
+NSString* const EmptyCell = @"EmptyCell";
 NSString* const StationCell = @"StationCell";
 NSString* const SnapCell = @"SnapCell";
 
@@ -26,7 +27,7 @@ NSString* const SnapCell = @"SnapCell";
 @implementation WhatJustPlayedViewController
 
 
-@synthesize snapsController, snapsTable, toolbar, lookupServer, testTime;
+@synthesize snapsTable, toolbar, lookupServer, testTime;
 
 
 + (NSString*)defaultLookupServer;
@@ -53,9 +54,14 @@ NSString* const SnapCell = @"SnapCell";
 - (NSInteger)tableView:(UITableView*)tableView numberOfRowsInSection:(NSInteger)section;
 {
 	if (StationSection == section)
-		return 1;
+	{
+		NSUInteger count = [stations count];
+		return (count == 0 ? 1 : count);
+	}
 	else
+	{
 		return [snapsController countOfList];
+	}
 }
 
 -(CGFloat)tableView:(UITableView*)tableView heightForRowAtIndexPath:(NSIndexPath*)indexPath;
@@ -64,9 +70,9 @@ NSString* const SnapCell = @"SnapCell";
 }
 
 
-- (void)addSnap:(id)sender;
+- (void)addSnap:(NSString*)station;
 {
-	NSString* title = [sender titleForState:UIControlStateNormal];
+	NSString* title = station;
 
 	NSDate* createdAt =
 		self.testTime ?
@@ -98,7 +104,17 @@ NSString* const SnapCell = @"SnapCell";
 }
 
 
-- (void)setSnaps:(NSArray*) snaps;
+- (void)setStations:(NSArray*)newStations;
+{
+	[stations autorelease];
+	stations = [newStations copy];
+
+	NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+	[userDefaults setValue:stations forKey:@"stations"];
+}
+
+
+- (void)setSnaps:(NSArray*)snaps;
 {
 	[snapsController setSnaps:[NSMutableArray arrayWithArray:snaps]];
 	[snapsController saveSnaps];
@@ -109,11 +125,25 @@ NSString* const SnapCell = @"SnapCell";
 - (void)reloadData;
 {
 	NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+	NSArray* defStations = [userDefaults arrayForKey:@"stations"];
+	stations = defStations;
+	
+	userDefaults = [NSUserDefaults standardUserDefaults];
 	NSArray* snaps = [userDefaults arrayForKey:@"snaps"];
 	[self setSnaps:snaps];
 
 	NSString* server = [userDefaults stringForKey:@"lookupServer"];
 	[self setLookupServer:server];
+}
+
+
+- (NSData*)stationXML;
+{
+	NSString* lookup = [NSString stringWithFormat:@"%@/%@",
+						[self lookupServer],
+						@"stations"];
+	NSURL* lookupURL = [NSURL URLWithString:lookup];
+	return [NSData dataWithContentsOfURL:lookupURL];
 }
 
 
@@ -139,6 +169,16 @@ NSString* const SnapCell = @"SnapCell";
 {
 	NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
 
+	NSData* stationData = [self stationXML];
+	NSArray* newStations = 
+	[NSPropertyListSerialization
+	 propertyListFromData:stationData
+	 mutabilityOption:NSPropertyListMutableContainers
+	 format:nil
+	 errorDescription:nil];
+	if (newStations)
+		[self setStations:newStations];
+	
 	unsigned numSnaps = [snapsController countOfList];
 
 	for (unsigned i = 0; i < numSnaps; i++)
@@ -206,6 +246,25 @@ NSString* const SnapCell = @"SnapCell";
 }
 
 
+- (UITableViewCell*)emptyCellWithView:(UITableView*)tableView;
+{
+	UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:EmptyCell];
+	if (cell == nil)
+	{
+		CGRect frame = CGRectMake(0, 0, 300, 44);
+		cell = [[[UITableViewCell alloc] initWithFrame:frame reuseIdentifier:EmptyCell] autorelease];
+		
+		cell.tag = StationTag;
+		cell.font = [UIFont systemFontOfSize:12.0];
+		cell.textColor = [UIColor lightGrayColor];
+		cell.textAlignment = UITextAlignmentCenter;
+		cell.text = @"connect to network and press Refresh";
+	}
+	
+	return cell;
+}
+
+
 - (UITableViewCell*)stationCellWithView:(UITableView*)tableView;
 {
 	UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:StationCell];
@@ -213,12 +272,13 @@ NSString* const SnapCell = @"SnapCell";
 	{
 		CGRect frame = CGRectMake(0, 0, 300, 44);
 		cell = [[[UITableViewCell alloc] initWithFrame:frame reuseIdentifier:StationCell] autorelease];
+		cell.tag = StationTag;
+		cell.font = [UIFont boldSystemFontOfSize:15.0];
+		cell.textAlignment = UITextAlignmentCenter;
 
+		// Hey, Apple, how about a +buttonTitleColor for system colors?
 		UIButton* button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-		[button setFrame:frame];
-		button.tag = StationTag;
-		[button addTarget:self action:@selector(addSnap:) forControlEvents:UIControlEventTouchUpInside];
-		[cell.contentView addSubview:button];
+		cell.textColor = button.currentTitleColor;
 	}
 
 	return cell;
@@ -253,11 +313,18 @@ NSString* const SnapCell = @"SnapCell";
 {
 	if (StationSection == indexPath.section)
 	{
-		UITableViewCell* cell = [self stationCellWithView:tableView];
-		UIButton* button = (UIButton*)[cell.contentView viewWithTag:StationTag];
-		[button setTitle:@"KNRK" forState:UIControlStateNormal];
+		if ([stations count] > 0)
+		{
+			UITableViewCell* cell = [self stationCellWithView:tableView];
+			NSString* title = [stations objectAtIndex:[indexPath row]];
+			[cell setText:title];
 
-		return cell;
+			return cell;
+		}
+		else
+		{
+			return [self emptyCellWithView:tableView];
+		}
 	}
 	else
 	{
@@ -286,31 +353,43 @@ NSString* const SnapCell = @"SnapCell";
 
 - (void)tableView:(UITableView*)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath;
 {
-	NSDictionary* snap = [snapsController objectInListAtIndex:[indexPath row]];
-
-	NSNumber* needsLookup = [snap objectForKey:@"needsLookup"];
-	if (![needsLookup boolValue])
+	if (StationSection == indexPath.section)
 	{
-		NSString* title = [snap objectForKey:@"title"];
-		NSString* artist = [snap objectForKey:@"subtitle"];
+		NSString* station = [stations objectAtIndex:[indexPath row]];
+		[self addSnap:station];
+		[tableView deselectRowAtIndexPath:indexPath animated:YES];
+	}
+	else
+	{
+		NSDictionary* snap = [snapsController objectInListAtIndex:[indexPath row]];
 
-		NSString* link =
-			[NSString stringWithFormat:@"http://ax.phobos.apple.com.edgesuite.net/WebObjects/MZStoreServices.woa/wa/itmsSearch?WOURLEncoding=ISO8859_1&lang=1&output=lm&country=US&term=\"%@\" \"%@\"&media=all",
-			 title,
-			 artist];
-		NSString* escapedLink =
-			[link stringByAddingPercentEscapesUsingEncoding:
-			 NSASCIIStringEncoding];
-		NSURL* url = [NSURL URLWithString:escapedLink];
+		NSNumber* needsLookup = [snap objectForKey:@"needsLookup"];
+		if (![needsLookup boolValue])
+		{
+			NSString* title = [snap objectForKey:@"title"];
+			NSString* artist = [snap objectForKey:@"subtitle"];
 
-		[[UIApplication sharedApplication] openURL:url];
+			NSString* link =
+				[NSString stringWithFormat:@"http://ax.phobos.apple.com.edgesuite.net/WebObjects/MZStoreServices.woa/wa/itmsSearch?WOURLEncoding=ISO8859_1&lang=1&output=lm&country=US&term=\"%@\" \"%@\"&media=all",
+				 title,
+				 artist];
+			NSString* escapedLink =
+				[link stringByAddingPercentEscapesUsingEncoding:
+				 NSASCIIStringEncoding];
+			NSURL* url = [NSURL URLWithString:escapedLink];
+
+			[[UIApplication sharedApplication] openURL:url];
+		}
 	}
 }
 
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-	self.snapsController = [[SnapsController alloc] init];
+
+	stations = [[NSArray alloc] init];
+	snapsController = [[SnapsController alloc] init];
+
 	self.lookupServer = [WhatJustPlayedViewController defaultLookupServer];
 	self.testTime = nil;
 
@@ -326,6 +405,9 @@ NSString* const SnapCell = @"SnapCell";
 
 - (void)dealloc;
 {
+	[stations release];
+	[snapsController release];
+
     [super dealloc];
 }
 

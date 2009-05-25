@@ -42,6 +42,15 @@ class WhatJustPlayed
     end
   end
 
+  def stations
+    xml = @gui.dump
+    doc = REXML::Document.new xml
+
+    xpath = '//UITableViewCell[tag="%s"]' % StationTag
+    titles = REXML::XPath.match doc, xpath
+    titles.map {|e| e.elements['text'].text}
+  end
+
   def snaps=(list)
     @gui.command 'setTestData', :raw, 'snaps', WhatJustPlayed.snap_plist(list)
   end

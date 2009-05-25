@@ -48,6 +48,7 @@
 
 
 - (void)restoreDefaults:(NSDictionary*)ignored {
+	[viewController setStations:[NSArray array]];
 	[viewController setSnaps:[NSArray array]];
 	viewController.lookupServer = [WhatJustPlayedViewController defaultLookupServer];
 	viewController.testTime = nil;
