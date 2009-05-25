@@ -355,8 +355,12 @@ NSString* const SnapCell = @"SnapCell";
 {
 	if (StationSection == indexPath.section)
 	{
-		NSString* station = [stations objectAtIndex:[indexPath row]];
-		[self addSnap:station];
+		if ([stations count] > 0)
+		{
+			NSString* station = [stations objectAtIndex:[indexPath row]];
+			[self addSnap:station];
+		}
+
 		[tableView deselectRowAtIndexPath:indexPath animated:YES];
 	}
 	else
