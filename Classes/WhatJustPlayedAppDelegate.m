@@ -76,8 +76,8 @@
 	NSString* testTime = [data objectForKey:@"testTime"];
 	if (testTime)
 	{
-		NSDateFormatter* dateFormat = [[[NSDateFormatter alloc]
-										initWithDateFormat:@"%I:%M" allowNaturalLanguage:NO] autorelease];
+		NSDateFormatter* dateFormat = [[[NSDateFormatter alloc] init] autorelease];
+		[dateFormat setDateFormat:@"%I:%M"];
 		NSDate* date = [dateFormat dateFromString:testTime];
 		
 		[viewController setTestTime:date];
@@ -86,9 +86,12 @@
 
 
 - (void)dealloc {
+#ifdef BROMINE_ENABLED
 	[httpServer release];
 	[MyHTTPConnection setSharedObserver:nil];
-    [viewController release];
+#endif
+
+	[viewController release];
     [window release];
     [super dealloc];
 }
