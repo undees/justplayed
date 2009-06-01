@@ -9,7 +9,7 @@
 #import "WhatJustPlayedAppDelegate.h"
 #import "WhatJustPlayedViewController.h"
 
-#ifdef BROMINE_ENABLED
+#ifdef BROMINET_ENABLED
 	#import "ScriptRunner.h"
 	#import "MyHTTPConnection.h"
 #endif
@@ -24,7 +24,7 @@
     [window addSubview:viewController.view];
     [window makeKeyAndVisible];
 	
-#ifdef BROMINE_ENABLED
+#ifdef BROMINET_ENABLED
 	NSString *root = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES) objectAtIndex:0];
 	httpServer = [HTTPServer new];
 	[httpServer setName:@"the iPhone"];
@@ -86,7 +86,7 @@
 
 
 - (void)dealloc {
-#ifdef BROMINE_ENABLED
+#ifdef BROMINET_ENABLED
 	[httpServer release];
 	[MyHTTPConnection setSharedObserver:nil];
 #endif

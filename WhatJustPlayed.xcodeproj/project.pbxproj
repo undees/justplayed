@@ -159,7 +159,7 @@
 			isa = PBXGroup;
 			children = (
 				080E96DDFE201D6D7F000001 /* Classes */,
-				DF7EC8FB0F9BFD50005AD5B0 /* Bromine */,
+				DF7EC8FB0F9BFD50005AD5B0 /* Brominet */,
 				DF7EC9490F9BFEC5005AD5B0 /* Server */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
@@ -204,7 +204,7 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		DF7EC8FB0F9BFD50005AD5B0 /* Bromine */ = {
+		DF7EC8FB0F9BFD50005AD5B0 /* Brominet */ = {
 			isa = PBXGroup;
 			children = (
 				DF7EC9180F9BFD50005AD5B0 /* ScriptRunner.h */,
@@ -219,8 +219,8 @@
 				DF7EC9220F9BFD50005AD5B0 /* XPathQuery.h */,
 				DF7EC9230F9BFD50005AD5B0 /* XPathQuery.m */,
 			);
-			name = Bromine;
-			path = bromine;
+			name = Brominet;
+			path = brominet;
 			sourceTree = "<group>";
 		};
 		DF7EC9490F9BFEC5005AD5B0 /* Server */ = {
@@ -277,9 +277,9 @@
 			productReference = 1D6058910D05DD3D006BFB54 /* Just Played.app */;
 			productType = "com.apple.product-type.application";
 		};
-		DF7EC8DE0F9BFCE8005AD5B0 /* Bromine */ = {
+		DF7EC8DE0F9BFCE8005AD5B0 /* Brominet */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = DF7EC8EB0F9BFCE8005AD5B0 /* Build configuration list for PBXNativeTarget "Bromine" */;
+			buildConfigurationList = DF7EC8EB0F9BFCE8005AD5B0 /* Build configuration list for PBXNativeTarget "Brominet" */;
 			buildPhases = (
 				DF7EC8DF0F9BFCE8005AD5B0 /* Resources */,
 				DF7EC8E30F9BFCE8005AD5B0 /* Sources */,
@@ -289,7 +289,7 @@
 			);
 			dependencies = (
 			);
-			name = Bromine;
+			name = Brominet;
 			productName = WhatJustPlayed;
 			productReference = DF7EC8EE0F9BFCE8005AD5B0 /* Just Played.app */;
 			productType = "com.apple.product-type.application";
@@ -307,7 +307,7 @@
 			projectRoot = "";
 			targets = (
 				1D6058900D05DD3D006BFB54 /* WhatJustPlayed */,
-				DF7EC8DE0F9BFCE8005AD5B0 /* Bromine */,
+				DF7EC8DE0F9BFCE8005AD5B0 /* Brominet */,
 			);
 		};
 /* End PBXProject section */
@@ -441,7 +441,7 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = WhatJustPlayed_Prefix.pch;
-				GCC_PREPROCESSOR_DEFINITIONS = BROMINE_ENABLED;
+				GCC_PREPROCESSOR_DEFINITIONS = BROMINET_ENABLED;
 				HEADER_SEARCH_PATHS = /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS2.2.1.sdk/usr/include/libxml2;
 				INFOPLIST_FILE = Info.plist;
 				PRODUCT_NAME = "Just Played";
@@ -455,7 +455,7 @@
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = WhatJustPlayed_Prefix.pch;
-				GCC_PREPROCESSOR_DEFINITIONS = BROMINE_ENABLED;
+				GCC_PREPROCESSOR_DEFINITIONS = BROMINET_ENABLED;
 				HEADER_SEARCH_PATHS = /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS2.2.1.sdk/usr/include/libxml2;
 				INFOPLIST_FILE = Info.plist;
 				PRODUCT_NAME = "Just Played";
@@ -483,7 +483,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		DF7EC8EB0F9BFCE8005AD5B0 /* Build configuration list for PBXNativeTarget "Bromine" */ = {
+		DF7EC8EB0F9BFCE8005AD5B0 /* Build configuration list for PBXNativeTarget "Brominet" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				DF7EC8EC0F9BFCE8005AD5B0 /* Debug */,

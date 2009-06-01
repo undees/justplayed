@@ -278,7 +278,7 @@
 					<string key="className">UIView</string>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">bromine/UIView+XMLDescription.h</string>
+						<string key="minorKey">brominet/UIView+XMLDescription.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">

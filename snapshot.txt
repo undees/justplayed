@@ -4,11 +4,11 @@ revision = tip
 path.default = http://bitbucket.org/undees/justplayed
 
 [tree2]
-root = bromine
+root = brominet
 revision = tip
-path.default = http://bitbucket.org/undees/bromine
+path.default = http://bitbucket.org/undees/brominet
 
 [tree3]
 root = server
 revision = tip
-path.default = http://bitbucket.org/undees/server
+path.default = http://bitbucket.org/undees/cocoahttpserver

@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-#ifdef BROMINE_ENABLED
+#ifdef BROMINET_ENABLED
 #import "HTTPServer.h"
 #endif
 
@@ -18,7 +18,7 @@
     UIWindow *window;
     WhatJustPlayedViewController *viewController;
 
-#ifdef BROMINE_ENABLED
+#ifdef BROMINET_ENABLED
 	HTTPServer *httpServer;
 #endif
 }
