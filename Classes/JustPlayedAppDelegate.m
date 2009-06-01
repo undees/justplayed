@@ -33,7 +33,7 @@
 	[httpServer setDocumentRoot:[NSURL fileURLWithPath:root]];
 	[httpServer setPort:50000];
 
-	ScriptRunner *runner = [[ScriptRunner alloc] init];
+	ScriptRunner *runner = [[[ScriptRunner alloc] init] autorelease];
 	[MyHTTPConnection setSharedObserver:runner];
 
 	NSError *error;
@@ -41,8 +41,6 @@
 	{
 		NSLog(@"Error starting HTTP Server: %@", error);
 	}
-
-	[[[ScriptRunner alloc] init] autorelease];
 #endif
 }
 
@@ -118,6 +116,7 @@
 
 	[viewController release];
     [window release];
+
     [super dealloc];
 }
 

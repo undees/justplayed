@@ -395,8 +395,8 @@ NSString* const SnapCell = @"SnapCell";
 
 - (void)setToFactoryDefaults;
 {
-	self.stations = [[NSArray alloc] init];
-	self.snapsController = [[SnapsController alloc] init];
+	self.stations = [NSArray array];
+	self.snapsController = [[[SnapsController alloc] init] autorelease];
 	self.lookupServer = [JustPlayedViewController defaultLookupServer];
 	self.testTime = nil;
 }
