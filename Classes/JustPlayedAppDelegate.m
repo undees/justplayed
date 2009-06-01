@@ -45,21 +45,25 @@
 }
 
 
-- (void)restoreDefaults:(NSDictionary*)ignored {
+- (NSString*)restoreDefaults:(NSDictionary*)ignored {
 	[viewController setToFactoryDefaults];
 	[viewController refreshView];
+
+	return @"pass";
 }
 
 
-- (void)restartApp:(NSDictionary*)ignored {
+- (NSString*)restartApp:(NSDictionary*)ignored {
 	[viewController saveUserData];
 	[viewController setToFactoryDefaults];
 	[viewController loadUserData];
 	[viewController refreshView];
+	
+	return @"pass";
 }
 
 
-- (void)setTestData:(NSDictionary*)data {
+- (NSString*)setTestData:(NSDictionary*)data {
 	NSArray* stations = [data objectForKey:@"stations"];
 	if (stations)
 	{
@@ -105,6 +109,8 @@
 	}
 	
 	[viewController refreshView];
+
+	return @"pass";
 }
 
 
