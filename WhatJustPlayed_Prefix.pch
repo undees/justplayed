@@ -1,5 +1,5 @@
 //
-// Prefix header for all source files of the 'WhatJustPlayed' target in the 'WhatJustPlayed' project
+// Prefix header for all source files of the 'JustPlayed' target in the 'JustPlayed' project
 //
 
 #ifdef __OBJC__

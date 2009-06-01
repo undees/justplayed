@@ -1,6 +1,6 @@
 //
-//  WhatJustPlayedViewController.h
-//  WhatJustPlayed
+//  JustPlayedViewController.h
+//  JustPlayed
 //
 //  Created by Ian Dees on 4/19/09.
 //  Copyright __MyCompanyName__ 2009. All rights reserved.
@@ -10,7 +10,7 @@
 
 @class SnapsController;
 
-@interface WhatJustPlayedViewController :
+@interface JustPlayedViewController :
 	UIViewController
 		<UITableViewDataSource,
 		 UITableViewDelegate,

@@ -1,29 +1,29 @@
 //
-//  WhatJustPlayedAppDelegate.m
-//  WhatJustPlayed
+//  JustPlayedAppDelegate.m
+//  JustPlayed
 //
 //  Created by Ian Dees on 4/19/09.
 //  Copyright __MyCompanyName__ 2009. All rights reserved.
 //
 
-#import "WhatJustPlayedAppDelegate.h"
-#import "WhatJustPlayedViewController.h"
+#import "JustPlayedAppDelegate.h"
+#import "JustPlayedViewController.h"
 
 #ifdef BROMINET_ENABLED
 	#import "ScriptRunner.h"
 	#import "MyHTTPConnection.h"
 #endif
 
-@implementation WhatJustPlayedAppDelegate
+@implementation JustPlayedAppDelegate
 
 @synthesize window;
 @synthesize viewController;
 
 
-- (void)applicationDidFinishLaunching:(UIApplication *)application {    
+- (void)applicationDidFinishLaunching:(UIApplication *)application {
     [window addSubview:viewController.view];
     [window makeKeyAndVisible];
-	
+
 #ifdef BROMINET_ENABLED
 	NSString *root = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES) objectAtIndex:0];
 	httpServer = [HTTPServer new];
@@ -32,16 +32,16 @@
 	[httpServer setConnectionClass:[MyHTTPConnection class]];
 	[httpServer setDocumentRoot:[NSURL fileURLWithPath:root]];
 	[httpServer setPort:50000];
-	
+
 	ScriptRunner *runner = [[ScriptRunner alloc] init];
 	[MyHTTPConnection setSharedObserver:runner];
-	
+
 	NSError *error;
 	if(![httpServer start:&error])
 	{
 		NSLog(@"Error starting HTTP Server: %@", error);
 	}
-	
+
 	[[[ScriptRunner alloc] init] autorelease];
 #endif
 }
@@ -50,7 +50,7 @@
 - (void)restoreDefaults:(NSDictionary*)ignored {
 	[viewController setStations:[NSArray array]];
 	[viewController setSnaps:[NSArray array]];
-	viewController.lookupServer = [WhatJustPlayedViewController defaultLookupServer];
+	viewController.lookupServer = [JustPlayedViewController defaultLookupServer];
 	viewController.testTime = nil;
 }
 
@@ -79,7 +79,7 @@
 		NSDateFormatter* dateFormat = [[[NSDateFormatter alloc] init] autorelease];
 		[dateFormat setDateFormat:@"%I:%M"];
 		NSDate* date = [dateFormat dateFromString:testTime];
-		
+
 		[viewController setTestTime:date];
 	}
 }

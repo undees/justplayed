@@ -1,5 +1,5 @@
-#import "WhatJustPlayed.h"
+#import "JustPlayed.h"
 
-void Init_WhatJustPlayed()
+void Init_JustPlayed()
 {
 }

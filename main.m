@@ -1,6 +1,6 @@
 //
 //  main.m
-//  WhatJustPlayed
+//  JustPlayed
 //
 //  Created by Ian Dees on 4/19/09.
 //  Copyright __MyCompanyName__ 2009. All rights reserved.

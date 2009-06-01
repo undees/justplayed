@@ -1,12 +1,12 @@
 $: << File.join(File.dirname(__FILE__), '/../../lib')
 
-require 'what_just_played'
+require 'just_played'
 require 'chronic'
 require 'spec/expectations'
 
 module SnapsHelper
   def app
-    @app ||= WhatJustPlayed.new
+    @app ||= JustPlayed.new
   end
 end
 

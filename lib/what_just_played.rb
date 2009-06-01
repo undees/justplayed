@@ -2,7 +2,7 @@ require 'encumber'
 require 'rexml/document'
 require 'time'
 
-class WhatJustPlayed
+class JustPlayed
   def initialize
     @gui = Encumber::GUI.new
   end
@@ -52,7 +52,7 @@ class WhatJustPlayed
   end
 
   def snaps=(list)
-    @gui.command 'setTestData', :raw, 'snaps', WhatJustPlayed.snap_plist(list)
+    @gui.command 'setTestData', :raw, 'snaps', JustPlayed.snap_plist(list)
   end
 
   def server=(url)
@@ -97,7 +97,7 @@ class WhatJustPlayed
     @gui.press "//UIThreePartButton[#{index}]"
   end
 
-  def WhatJustPlayed.snap_plist(snaps)
+  def JustPlayed.snap_plist(snaps)
     Tagz.tagz do
       array_ do
         snaps.each do |snap|

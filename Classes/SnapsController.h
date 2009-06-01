@@ -1,6 +1,6 @@
 //
 //  SnapsController.h
-//  WhatJustPlayed
+//  JustPlayed
 //
 //  Created by Ian Dees on 4/19/09.
 //  Copyright 2009 __MyCompanyName__. All rights reserved.

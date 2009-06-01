@@ -1,12 +1,12 @@
 //
-//  WhatJustPlayedViewController.m
-//  WhatJustPlayed
+//  JustPlayedViewController.m
+//  JustPlayed
 //
 //  Created by Ian Dees on 4/19/09.
 //  Copyright __MyCompanyName__ 2009. All rights reserved.
 //
 
-#import "WhatJustPlayedViewController.h"
+#import "JustPlayedViewController.h"
 #import "SnapsController.h"
 
 
@@ -24,7 +24,7 @@ NSString* const StationCell = @"StationCell";
 NSString* const SnapCell = @"SnapCell";
 
 
-@implementation WhatJustPlayedViewController
+@implementation JustPlayedViewController
 
 
 @synthesize snapsTable, toolbar, lookupServer, testTime;
@@ -32,7 +32,7 @@ NSString* const SnapCell = @"SnapCell";
 
 + (NSString*)defaultLookupServer;
 {
-	return @"http://dielectric.heroku.com";	
+	return @"http://dielectric.heroku.com";
 }
 
 
@@ -83,7 +83,7 @@ NSString* const SnapCell = @"SnapCell";
 		[[[NSDateFormatter alloc] init] autorelease];
 	[dateFormat setDateStyle:NSDateFormatterNoStyle];
 	[dateFormat setTimeStyle:NSDateFormatterShortStyle];
-	
+
 	NSString* subtitle = [dateFormat stringFromDate:createdAt];
 
 	NSDictionary* snap =
@@ -127,7 +127,7 @@ NSString* const SnapCell = @"SnapCell";
 	NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
 	NSArray* defStations = [userDefaults arrayForKey:@"stations"];
 	stations = defStations;
-	
+
 	userDefaults = [NSUserDefaults standardUserDefaults];
 	NSArray* snaps = [userDefaults arrayForKey:@"snaps"];
 	[self setSnaps:snaps];
@@ -153,7 +153,7 @@ NSString* const SnapCell = @"SnapCell";
 	NSTimeZone *timeZone = [NSTimeZone timeZoneWithName:@"UTC"];
 	[dateFormat setTimeZone:timeZone];
 	[dateFormat setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
-	
+
 	NSString* snappedAt = [dateFormat stringFromDate:date];
 	NSString* lookup = [NSString stringWithFormat:@"%@/%@/%@",
 						[self lookupServer],
@@ -170,7 +170,7 @@ NSString* const SnapCell = @"SnapCell";
 	NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
 
 	NSData* stationData = [self stationXML];
-	NSArray* newStations = 
+	NSArray* newStations =
 	[NSPropertyListSerialization
 	 propertyListFromData:stationData
 	 mutabilityOption:NSPropertyListMutableContainers
@@ -178,7 +178,7 @@ NSString* const SnapCell = @"SnapCell";
 	 errorDescription:nil];
 	if (newStations)
 		[self setStations:newStations];
-	
+
 	unsigned numSnaps = [snapsController countOfList];
 
 	for (unsigned i = 0; i < numSnaps; i++)
@@ -192,16 +192,16 @@ NSString* const SnapCell = @"SnapCell";
 			NSDate* createdAt = [snap objectForKey:@"createdAt"];
 
 			NSData* result = [self songXMLForStation:station date:createdAt];
-			NSDictionary* details = 
+			NSDictionary* details =
 				[NSPropertyListSerialization
 				 propertyListFromData:result
 				 mutabilityOption:NSPropertyListMutableContainers
 				 format:nil
-				 errorDescription:nil];			
-			
+				 errorDescription:nil];
+
 			NSString* title = [details objectForKey:@"title"];
 			NSString* artist = [details objectForKey:@"artist"];
-			
+
 			if (title && artist)
 			{
 				NSDictionary* song =
@@ -214,7 +214,7 @@ NSString* const SnapCell = @"SnapCell";
 			}
 		}
 	}
-	
+
 	[snapsController saveSnaps];
 	[snapsTable reloadData];
 
@@ -225,13 +225,13 @@ NSString* const SnapCell = @"SnapCell";
 - (IBAction)deleteButtonPressed:(id)sender;
 {
 	UIActionSheet* confirmation =
-		[[UIActionSheet alloc] 
+		[[UIActionSheet alloc]
 		 initWithTitle:nil
 		 delegate:self
 		 cancelButtonTitle:@"Cancel"
 		 destructiveButtonTitle:@"Delete All Snaps"
 		 otherButtonTitles:nil];
-	
+
 	[confirmation showFromToolbar:toolbar];
 	[confirmation release];
 }
@@ -253,14 +253,14 @@ NSString* const SnapCell = @"SnapCell";
 	{
 		CGRect frame = CGRectMake(0, 0, 300, 44);
 		cell = [[[UITableViewCell alloc] initWithFrame:frame reuseIdentifier:EmptyCell] autorelease];
-		
+
 		cell.tag = StationTag;
 		cell.font = [UIFont systemFontOfSize:12.0];
 		cell.textColor = [UIColor lightGrayColor];
 		cell.textAlignment = UITextAlignmentCenter;
 		cell.text = @"connect to network and press Refresh";
 	}
-	
+
 	return cell;
 }
 
@@ -394,7 +394,7 @@ NSString* const SnapCell = @"SnapCell";
 	stations = [[NSArray alloc] init];
 	snapsController = [[SnapsController alloc] init];
 
-	self.lookupServer = [WhatJustPlayedViewController defaultLookupServer];
+	self.lookupServer = [JustPlayedViewController defaultLookupServer];
 	self.testTime = nil;
 
 	[self reloadData];

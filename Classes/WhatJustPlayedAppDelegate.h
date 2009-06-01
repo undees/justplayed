@@ -1,6 +1,6 @@
 //
-//  WhatJustPlayedAppDelegate.h
-//  WhatJustPlayed
+//  JustPlayedAppDelegate.h
+//  JustPlayed
 //
 //  Created by Ian Dees on 4/19/09.
 //  Copyright __MyCompanyName__ 2009. All rights reserved.
@@ -12,11 +12,11 @@
 #import "HTTPServer.h"
 #endif
 
-@class WhatJustPlayedViewController;
+@class JustPlayedViewController;
 
-@interface WhatJustPlayedAppDelegate : NSObject <UIApplicationDelegate> {
+@interface JustPlayedAppDelegate : NSObject <UIApplicationDelegate> {
     UIWindow *window;
-    WhatJustPlayedViewController *viewController;
+    JustPlayedViewController *viewController;
 
 #ifdef BROMINET_ENABLED
 	HTTPServer *httpServer;
@@ -24,7 +24,7 @@
 }
 
 @property (nonatomic, retain) IBOutlet UIWindow *window;
-@property (nonatomic, retain) IBOutlet WhatJustPlayedViewController *viewController;
+@property (nonatomic, retain) IBOutlet JustPlayedViewController *viewController;
 
 @end
 
