@@ -173,15 +173,15 @@ NSString* const SnapCell = @"SnapCell";
 
 - (IBAction)lookupButtonPressed:(id)sender;
 {
-	NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
-
 	NSData* stationData = [self stationXML];
+
 	NSArray* newStations =
-	[NSPropertyListSerialization
-	 propertyListFromData:stationData
-	 mutabilityOption:NSPropertyListMutableContainers
-	 format:nil
-	 errorDescription:nil];
+		[NSPropertyListSerialization
+		 propertyListFromData:stationData
+		 mutabilityOption:NSPropertyListImmutable
+		 format:nil
+		 errorDescription:nil];
+
 	if (newStations)
 		self.stations = newStations;
 
@@ -201,7 +201,7 @@ NSString* const SnapCell = @"SnapCell";
 			NSDictionary* details =
 				[NSPropertyListSerialization
 				 propertyListFromData:result
-				 mutabilityOption:NSPropertyListMutableContainers
+				 mutabilityOption:NSPropertyListImmutable
 				 format:nil
 				 errorDescription:nil];
 
@@ -222,8 +222,6 @@ NSString* const SnapCell = @"SnapCell";
 	}
 
 	[self refreshView];
-
-	[pool release];
 }
 
 
