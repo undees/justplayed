@@ -4,7 +4,7 @@ Feature: Lookup
   I want to look up the songs I bookmarked
 
   Scenario: Looking up a snap
-    Given a list of radio stations
+    Given a list of radio stations "KNRK"
     And a server at http://localhost:4567
     And the following snaps:
       | station | time     |
@@ -15,7 +15,7 @@ Feature: Lookup
       | Been Caught Stealing | Jane's Addiction |
 
   Scenario: Partial success
-    Given a list of radio stations
+    Given a list of radio stations "KNRK"
     And a server at http://localhost:4567
     And the following snaps:
       | station | time     |

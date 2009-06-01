@@ -1,5 +1,7 @@
-Given /^a list of radio stations$/ do
-  # no-op
+Given /^a list of radio stations "(.*)"$/ do
+  |stations|
+
+  app.stations = stations.split(',')
 end
 
 Given /^the following snaps:$/ do

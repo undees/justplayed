@@ -4,7 +4,7 @@ Feature: Stations
   I want to track songs from many stations
 
   Scenario: Empty list
-    Given a list of radio stations
+    Given a list of radio stations ""
     Then I should be invited to press Refresh
 
   Scenario: Looking up stations
@@ -13,7 +13,7 @@ Feature: Stations
     Then I should see the stations "KNRK,KOPB"
 
   Scenario: Remembering stations
-    Given a server at http://localhost:4567
-    When I look up my stations
-    And I restart the app
-    Then I should see the stations "KNRK,KOPB"
+    Given a list of radio stations "KBOO,KINK"
+    And a server at http://localhost:4567
+    When I restart the app
+    Then I should see the stations "KBOO,KINK"

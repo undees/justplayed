@@ -27,7 +27,7 @@ NSString* const SnapCell = @"SnapCell";
 @implementation JustPlayedViewController
 
 
-@synthesize snapsTable, toolbar, lookupServer, testTime;
+@synthesize stations, snapsController, snapsTable, toolbar, lookupServer, testTime;
 
 
 + (NSString*)defaultLookupServer;
@@ -55,12 +55,12 @@ NSString* const SnapCell = @"SnapCell";
 {
 	if (StationSection == section)
 	{
-		NSUInteger count = [stations count];
+		NSUInteger count = [self.stations count];
 		return (count == 0 ? 1 : count);
 	}
 	else
 	{
-		return [snapsController countOfList];
+		return [self.snapsController countOfList];
 	}
 }
 
@@ -94,53 +94,59 @@ NSString* const SnapCell = @"SnapCell";
 		 [NSNumber numberWithBool:YES], @"needsLookup",
 		 nil];
 
-	[snapsController addData:snap];
-	[snapsController saveSnaps];
+	[self.snapsController addData:snap];
+	[self.snapsController saveSnaps];
 
 	NSIndexPath* path = [NSIndexPath indexPathForRow:0 inSection:SnapSection];
 	NSArray* paths = [NSArray arrayWithObject:path];
 	[snapsTable insertRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationTop];
-	[snapsTable reloadData];
-}
-
-
-- (void)setStations:(NSArray*)newStations;
-{
-	[stations autorelease];
-	stations = [newStations copy];
-
-	NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
-	[userDefaults setValue:stations forKey:@"stations"];
+	[self refreshView];
 }
 
 
 - (void)setSnaps:(NSArray*)snaps;
 {
-	[snapsController setSnaps:[NSMutableArray arrayWithArray:snaps]];
-	[snapsController saveSnaps];
-	[snapsTable reloadData];
+	[self.snapsController setSnaps:[NSMutableArray arrayWithArray:snaps]];
+	[self.snapsController saveSnaps];
+	[self refreshView];
 }
 
 
-- (void)reloadData;
+- (void)loadUserData;
 {
 	NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
 	NSArray* defStations = [userDefaults arrayForKey:@"stations"];
-	stations = defStations;
+	self.stations = defStations;
 
 	userDefaults = [NSUserDefaults standardUserDefaults];
 	NSArray* snaps = [userDefaults arrayForKey:@"snaps"];
 	[self setSnaps:snaps];
 
 	NSString* server = [userDefaults stringForKey:@"lookupServer"];
-	[self setLookupServer:server];
+	self.lookupServer = server;
+}
+
+
+- (void)saveUserData;
+{
+	NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+	[userDefaults setValue:self.stations forKey:@"stations"];
+	[userDefaults setValue:self.lookupServer forKey:@"lookupServer"];
+	
+	[self.snapsController saveSnaps];
+}
+
+
+- (void)refreshView;
+{
+	[self.snapsTable reloadData];
 }
 
 
 - (NSData*)stationXML;
 {
 	NSString* lookup = [NSString stringWithFormat:@"%@/%@",
-						[self lookupServer],
+						self.lookupServer,
 						@"stations"];
 	NSURL* lookupURL = [NSURL URLWithString:lookup];
 	return [NSData dataWithContentsOfURL:lookupURL];
@@ -156,7 +162,7 @@ NSString* const SnapCell = @"SnapCell";
 
 	NSString* snappedAt = [dateFormat stringFromDate:date];
 	NSString* lookup = [NSString stringWithFormat:@"%@/%@/%@",
-						[self lookupServer],
+						self.lookupServer,
 						station,
 						snappedAt];
 
@@ -177,13 +183,13 @@ NSString* const SnapCell = @"SnapCell";
 	 format:nil
 	 errorDescription:nil];
 	if (newStations)
-		[self setStations:newStations];
+		self.stations = newStations;
 
-	unsigned numSnaps = [snapsController countOfList];
+	unsigned numSnaps = [self.snapsController countOfList];
 
 	for (unsigned i = 0; i < numSnaps; i++)
 	{
-		NSDictionary* snap = [snapsController objectInListAtIndex:i];
+		NSDictionary* snap = [self.snapsController objectInListAtIndex:i];
 		NSNumber* needsLookup = [snap objectForKey:@"needsLookup"];
 
 		if ([needsLookup boolValue])
@@ -210,13 +216,12 @@ NSString* const SnapCell = @"SnapCell";
 					 artist, @"subtitle",
 					 [NSNumber numberWithBool:NO], @"needsLookup",
 					 nil];
-				[snapsController replaceDataAtIndex:i withData:song];
+				[self.snapsController replaceDataAtIndex:i withData:song];
 			}
 		}
 	}
 
-	[snapsController saveSnaps];
-	[snapsTable reloadData];
+	[self refreshView];
 
 	[pool release];
 }
@@ -313,10 +318,10 @@ NSString* const SnapCell = @"SnapCell";
 {
 	if (StationSection == indexPath.section)
 	{
-		if ([stations count] > 0)
+		if ([self.stations count] > 0)
 		{
 			UITableViewCell* cell = [self stationCellWithView:tableView];
-			NSString* title = [stations objectAtIndex:[indexPath row]];
+			NSString* title = [self.stations objectAtIndex:[indexPath row]];
 			[cell setText:title];
 
 			return cell;
@@ -335,7 +340,7 @@ NSString* const SnapCell = @"SnapCell";
 		UILabel* snapTitle = (UILabel*)[cell.contentView viewWithTag:TitleTag];
 		UILabel* snapSubtitle = (UILabel *)[cell.contentView viewWithTag:SubtitleTag];
 
-		NSDictionary* snap = [snapsController objectInListAtIndex:[indexPath row]];
+		NSDictionary* snap = [self.snapsController objectInListAtIndex:[indexPath row]];
 
 		snapTitle.text = [snap objectForKey:@"title"];
 		snapSubtitle.text = [snap objectForKey:@"subtitle"];
@@ -355,9 +360,9 @@ NSString* const SnapCell = @"SnapCell";
 {
 	if (StationSection == indexPath.section)
 	{
-		if ([stations count] > 0)
+		if ([self.stations count] > 0)
 		{
-			NSString* station = [stations objectAtIndex:[indexPath row]];
+			NSString* station = [self.stations objectAtIndex:[indexPath row]];
 			[self addSnap:station];
 		}
 
@@ -365,7 +370,7 @@ NSString* const SnapCell = @"SnapCell";
 	}
 	else
 	{
-		NSDictionary* snap = [snapsController objectInListAtIndex:[indexPath row]];
+		NSDictionary* snap = [self.snapsController objectInListAtIndex:[indexPath row]];
 
 		NSNumber* needsLookup = [snap objectForKey:@"needsLookup"];
 		if (![needsLookup boolValue])
@@ -388,16 +393,32 @@ NSString* const SnapCell = @"SnapCell";
 }
 
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-
-	stations = [[NSArray alloc] init];
-	snapsController = [[SnapsController alloc] init];
-
+- (void)setToFactoryDefaults;
+{
+	self.stations = [[NSArray alloc] init];
+	self.snapsController = [[SnapsController alloc] init];
 	self.lookupServer = [JustPlayedViewController defaultLookupServer];
 	self.testTime = nil;
+}
 
-	[self reloadData];
+
+- (void)viewDidLoad;
+{
+	[super viewDidLoad];
+	[self setToFactoryDefaults];
+}
+
+
+- (void)viewWillAppear:(BOOL)animated;
+{
+	[super viewWillAppear:animated];
+	[self loadUserData];
+}
+
+
+- (void)viewWillDisappear:(BOOL)animated {
+	[super viewWillDisappear:animated];
+	[self saveUserData];
 }
 
 

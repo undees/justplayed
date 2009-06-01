@@ -48,40 +48,65 @@
 
 
 - (void)restoreDefaults:(NSDictionary*)ignored {
-	[viewController setStations:[NSArray array]];
-	[viewController setSnaps:[NSArray array]];
-	viewController.lookupServer = [JustPlayedViewController defaultLookupServer];
-	viewController.testTime = nil;
+	[viewController setToFactoryDefaults];
+	[viewController refreshView];
 }
 
 
 - (void)restartApp:(NSDictionary*)ignored {
-	[viewController reloadData];
+	[viewController saveUserData];
+	[viewController setToFactoryDefaults];
+	[viewController loadUserData];
+	[viewController refreshView];
 }
 
 
 - (void)setTestData:(NSDictionary*)data {
-	NSArray* table = [data objectForKey:@"snaps"];
-	if (table)
+	NSArray* stations = [data objectForKey:@"stations"];
+	if (stations)
 	{
-		[viewController setSnaps:table];
+		viewController.stations = stations;
+	}
+	
+	NSArray* snaps = [data objectForKey:@"snaps"];
+	if (snaps)
+	{
+		[viewController setSnaps:snaps];
 	}
 
 	NSString* lookupServer = [data objectForKey:@"lookupServer"];
 	if (lookupServer)
 	{
-		[viewController setLookupServer:lookupServer];
+		viewController.lookupServer = lookupServer;
 	}
 
 	NSString* testTime = [data objectForKey:@"testTime"];
 	if (testTime)
 	{
-		NSDateFormatter* dateFormat = [[[NSDateFormatter alloc] init] autorelease];
-		[dateFormat setDateFormat:@"%I:%M"];
-		NSDate* date = [dateFormat dateFromString:testTime];
+		NSCalendarDate* date = [NSCalendarDate calendarDate];
+		NSInteger year = [date yearOfCommonEra];
+		NSInteger month = [date monthOfYear];
+		NSInteger day = [date dayOfMonth];
 
-		[viewController setTestTime:date];
+		NSCalendarDate* time =
+			[NSCalendarDate dateWithString:testTime calendarFormat:@"%H:%M"];
+		NSInteger hour = [time hourOfDay];
+		NSInteger minute = [time minuteOfHour];
+		
+		NSCalendarDate* dateTime =
+			[NSCalendarDate
+			 dateWithYear:year
+			 month:month
+			 day:day
+			 hour:hour
+			 minute:minute
+			 second:0
+			 timeZone:[NSTimeZone localTimeZone]];
+
+		viewController.testTime = dateTime;
 	}
+	
+	[viewController refreshView];
 }
 
 

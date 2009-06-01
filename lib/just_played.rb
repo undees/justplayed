@@ -12,7 +12,7 @@ class JustPlayed
   end
 
   def snap(station)
-    @gui.press '//UIRoundedRectButton[currentTitle="%s"]' % station
+    @gui.press '//UITableViewCell[text="%s"]' % station
   end
 
   StationTag = 1
@@ -49,6 +49,16 @@ class JustPlayed
     xpath = '//UITableViewCell[tag="%s"]' % StationTag
     titles = REXML::XPath.match doc, xpath
     titles.map {|e| e.elements['text'].text}
+  end
+
+  def stations=(list)
+    plist = Tagz.tagz do
+      array_ do
+        list.each {|station| string_ station}
+      end
+    end
+
+    @gui.command 'setTestData', :raw, 'stations', plist
   end
 
   def snaps=(list)
