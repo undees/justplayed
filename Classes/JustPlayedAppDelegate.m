@@ -54,7 +54,7 @@
 
 - (NSString*)restartApp:(NSDictionary*)ignored {
 	[viewController saveUserData];
-	[viewController setToFactoryDefaults];
+	[viewController clearUserData];
 	[viewController loadUserData];
 	
 	return @"pass";

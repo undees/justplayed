@@ -19,6 +19,7 @@ class JustPlayed
   SnapTag = 2
   TitleTag = 3
   SubtitleTag = 4
+  DownloadingTag = 5
 
   def snaps
     xml = @gui.dump
@@ -75,6 +76,15 @@ class JustPlayed
 
   def lookup
     @gui.press toolbar_buttons[:lookup]
+    timeout(10) {sleep 2 while downloading?}
+  end
+
+  def downloading?
+    xml = @gui.dump
+    doc = REXML::Document.new xml
+
+    xpath = '//UIProgressView[tag="%s"]' % DownloadingTag
+    !REXML::XPath.match(doc, xpath).empty?
   end
 
   def toolbar_buttons

@@ -21,6 +21,8 @@ const int SnapTag = 2;
 const int TitleTag = 3;
 const int SubtitleTag = 4;
 
+const int DownloadingTag = 5;
+
 NSString* const EmptyCell = @"EmptyCell";
 NSString* const StationCell = @"StationCell";
 NSString* const SnapCell = @"SnapCell";
@@ -91,7 +93,6 @@ NSString* const SnapCell = @"SnapCell";
 		 nil];
 
 	[self.snapsController addData:snap];
-	[self.snapsController saveSnaps];
 
 	NSIndexPath* path = [NSIndexPath indexPathForRow:0 inSection:SnapSection];
 	
@@ -117,7 +118,6 @@ NSString* const SnapCell = @"SnapCell";
 - (void)setSnaps:(NSArray*)snaps;
 {
 	[self.snapsController setSnaps:[NSMutableArray arrayWithArray:snaps]];
-	[self.snapsController saveSnaps];
 	[self refreshView];
 }
 
@@ -135,6 +135,15 @@ NSString* const SnapCell = @"SnapCell";
 	NSString* server = [userDefaults stringForKey:@"lookupServer"];
 	self.lookupServer = server;
 	
+	[self refreshView];
+}
+
+
+- (void)clearUserData;
+{
+	self.stations = [NSArray array];
+	[self setSnaps:[NSArray array]];
+	self.lookupServer = @"";
 	[self refreshView];
 }
 
@@ -233,6 +242,24 @@ NSString* const SnapCell = @"SnapCell";
 }
 
 
+- (void)showProgressBar:(BOOL)show;
+{
+	[UIView beginAnimations:@"progressAnimations" context:nil];
+	[UIView setAnimationDuration:0.3];
+
+	[progressBar setHidden:!show];
+	[progressBar setTag:(show ? DownloadingTag : 0)];
+
+	[UIView commitAnimations];
+}
+
+
+- (void)lookupDidFinish:(ASINetworkQueue*)queue;
+{
+	[self showProgressBar:NO];
+}
+
+
 - (IBAction)lookupButtonPressed:(id)sender;
 {
 	NSString* lookup = [NSString stringWithFormat:@"%@/%@",
@@ -242,9 +269,13 @@ NSString* const SnapCell = @"SnapCell";
 
 	[networkQueue cancelAllOperations];
 	[networkQueue setRequestDidFinishSelector:@selector(fetchComplete:)];
-//	[networkQueue setShowAccurateProgress:[accurateProgress isOn]];
+	[networkQueue setDownloadProgressDelegate:progressBar];
+	[networkQueue setShowAccurateProgress:YES];
+	[networkQueue setQueueDidFinishSelector:@selector(lookupDidFinish:)];
 	[networkQueue setDelegate:self];
 
+	[progressBar setProgress:0.0];
+	
 	ASIHTTPRequest *request;
 	request = [[[ASIHTTPRequest alloc] initWithURL:lookupURL] autorelease];
 	NSDictionary* context = [NSDictionary dictionaryWithObjectsAndKeys:@"stationFetchComplete:", @"selector", nil];
@@ -288,6 +319,7 @@ NSString* const SnapCell = @"SnapCell";
 	}
 
 	[networkQueue go];
+	[self showProgressBar:YES];
 }
 
 
@@ -459,8 +491,10 @@ NSString* const SnapCell = @"SnapCell";
 
 - (void)setToFactoryDefaults;
 {
-	[NSUserDefaults resetStandardUserDefaults];
-	[NSUserDefaults standardUserDefaults];
+	NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+	[userDefaults removeObjectForKey:@"stations"];
+	[userDefaults removeObjectForKey:@"snaps"];
+	[userDefaults removeObjectForKey:@"lookupServer"];
 	
 	self.testTime = nil;
 	
@@ -481,7 +515,7 @@ NSString* const SnapCell = @"SnapCell";
 			@"http://dielectric.heroku.com", @"lookupServer", nil];
     [defaults registerDefaults:appDefaults];
 
-	[self setToFactoryDefaults];
+	[self loadUserData];
 
 	networkQueue = [[ASINetworkQueue alloc] init];
 }

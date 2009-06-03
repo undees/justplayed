@@ -21,6 +21,7 @@
 	SnapsController* snapsController;
 	IBOutlet UITableView* snapsTable;
 	IBOutlet UIToolbar* toolbar;
+	IBOutlet UIProgressView* progressBar;
 	NSString* lookupServer;
 	NSDate* testTime;
 	ASINetworkQueue* networkQueue;
@@ -31,6 +32,7 @@
 
 - (void)setToFactoryDefaults;
 - (void)loadUserData;
+- (void)clearUserData;
 - (void)saveUserData;
 - (void)refreshView;
 
