@@ -85,25 +85,29 @@
 	NSString* testTime = [data objectForKey:@"testTime"];
 	if (testTime)
 	{
-		NSCalendarDate* date = [NSCalendarDate calendarDate];
-		NSInteger year = [date yearOfCommonEra];
-		NSInteger month = [date monthOfYear];
-		NSInteger day = [date dayOfMonth];
+		NSDate* date = [NSDate date];
+		NSCalendar* calendar = [NSCalendar currentCalendar];
+		NSInteger dateUnits =
+			NSYearCalendarUnit |
+			NSMonthCalendarUnit |
+			NSDayCalendarUnit;
+		NSDateComponents* dateParts = [calendar components:dateUnits fromDate:date];
 
-		NSCalendarDate* time =
-			[NSCalendarDate dateWithString:testTime calendarFormat:@"%H:%M"];
-		NSInteger hour = [time hourOfDay];
-		NSInteger minute = [time minuteOfHour];
-		
-		NSCalendarDate* dateTime =
-			[NSCalendarDate
-			 dateWithYear:year
-			 month:month
-			 day:day
-			 hour:hour
-			 minute:minute
-			 second:0
-			 timeZone:[NSTimeZone localTimeZone]];
+		NSDateFormatter* format = [[[NSDateFormatter alloc] init] autorelease];
+		[format setDateFormat:@"HH:mm"];
+		NSDate* time = [format dateFromString:testTime];
+
+		NSInteger timeUnits =
+			NSHourCalendarUnit |
+			NSMinuteCalendarUnit;
+		NSDateComponents* timeParts = [calendar components:timeUnits fromDate:time];
+
+		NSInteger hour = [timeParts hour];
+		NSInteger minute = [timeParts minute];
+
+		[dateParts setHour:hour];
+		[dateParts setMinute:minute];
+		NSDate* dateTime = [calendar dateFromComponents:dateParts];
 
 		viewController.testTime = dateTime;
 	}
