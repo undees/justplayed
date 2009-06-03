@@ -48,6 +48,13 @@
 		DFAFF55B0F9D0BBE00FDBD74 /* SnapsController.m in Sources */ = {isa = PBXBuildFile; fileRef = DFAFF5590F9D0BBE00FDBD74 /* SnapsController.m */; };
 		DFCCD94D0FC27EE900AE65BD /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = DFCCD94C0FC27EE900AE65BD /* Settings.bundle */; };
 		DFCCD94E0FC27EE900AE65BD /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = DFCCD94C0FC27EE900AE65BD /* Settings.bundle */; };
+		DFD4C5C20FD6D30C00532647 /* ASIHTTPRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = DFD4C5BF0FD6D30C00532647 /* ASIHTTPRequest.m */; };
+		DFD4C5C30FD6D30C00532647 /* ASINetworkQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = DFD4C5C10FD6D30C00532647 /* ASINetworkQueue.m */; };
+		DFD4C5C40FD6D30C00532647 /* ASIHTTPRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = DFD4C5BF0FD6D30C00532647 /* ASIHTTPRequest.m */; };
+		DFD4C5C50FD6D30C00532647 /* ASINetworkQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = DFD4C5C10FD6D30C00532647 /* ASINetworkQueue.m */; };
+		DFD4C5CB0FD6D39A00532647 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DF7EC9B80F9BFFA6005AD5B0 /* CFNetwork.framework */; };
+		DFD4C5CD0FD6D3B800532647 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DFD4C5CC0FD6D3B800532647 /* libz.dylib */; };
+		DFD4C5CE0FD6D3B800532647 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DFD4C5CC0FD6D3B800532647 /* libz.dylib */; };
 		DFF203FD0F9BEF1000B74721 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = DFF203FC0F9BEF1000B74721 /* Icon.png */; };
 /* End PBXBuildFile section */
 
@@ -102,6 +109,11 @@
 		DFAFF5580F9D0BBE00FDBD74 /* SnapsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SnapsController.h; sourceTree = "<group>"; };
 		DFAFF5590F9D0BBE00FDBD74 /* SnapsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SnapsController.m; sourceTree = "<group>"; };
 		DFCCD94C0FC27EE900AE65BD /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
+		DFD4C5BE0FD6D30C00532647 /* ASIHTTPRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ASIHTTPRequest.h; path = "asi-http-request/Classes/ASIHTTPRequest.h"; sourceTree = "<group>"; };
+		DFD4C5BF0FD6D30C00532647 /* ASIHTTPRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ASIHTTPRequest.m; path = "asi-http-request/Classes/ASIHTTPRequest.m"; sourceTree = "<group>"; };
+		DFD4C5C00FD6D30C00532647 /* ASINetworkQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ASINetworkQueue.h; path = "asi-http-request/Classes/ASINetworkQueue.h"; sourceTree = "<group>"; };
+		DFD4C5C10FD6D30C00532647 /* ASINetworkQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ASINetworkQueue.m; path = "asi-http-request/Classes/ASINetworkQueue.m"; sourceTree = "<group>"; };
+		DFD4C5CC0FD6D3B800532647 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		DFF203FC0F9BEF1000B74721 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -114,6 +126,8 @@
 				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
 				288765A50DF7441C002DB57D /* CoreGraphics.framework in Frameworks */,
 				DF598EA20FA6D1B7005D6E40 /* libicucore.dylib in Frameworks */,
+				DFD4C5CB0FD6D39A00532647 /* CFNetwork.framework in Frameworks */,
+				DFD4C5CE0FD6D3B800532647 /* libz.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -127,6 +141,7 @@
 				DF7EC8F60F9BFD26005AD5B0 /* libxml2.dylib in Frameworks */,
 				DF7EC9B90F9BFFA6005AD5B0 /* CFNetwork.framework in Frameworks */,
 				DF598EA30FA6D1B7005D6E40 /* libicucore.dylib in Frameworks */,
+				DFD4C5CD0FD6D3B800532647 /* libz.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -159,6 +174,7 @@
 			isa = PBXGroup;
 			children = (
 				080E96DDFE201D6D7F000001 /* Classes */,
+				DFD4C5BD0FD6D2E700532647 /* ASIHTTPRequest */,
 				DF7EC8FB0F9BFD50005AD5B0 /* Brominet */,
 				DF7EC9490F9BFEC5005AD5B0 /* Server */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
@@ -167,6 +183,7 @@
 				19C28FACFE9D520D11CA2CBB /* Products */,
 				DF7EC8DA0F9BF9E9005AD5B0 /* libxml2.dylib */,
 				DF598EA10FA6D1B7005D6E40 /* libicucore.dylib */,
+				DFD4C5CC0FD6D3B800532647 /* libz.dylib */,
 				DF7EC9B80F9BFFA6005AD5B0 /* CFNetwork.framework */,
 				DFCCD94C0FC27EE900AE65BD /* Settings.bundle */,
 			);
@@ -255,6 +272,17 @@
 				DF7EC9800F9BFEC5005AD5B0 /* MyHTTPConnection.m */,
 			);
 			path = Classes;
+			sourceTree = "<group>";
+		};
+		DFD4C5BD0FD6D2E700532647 /* ASIHTTPRequest */ = {
+			isa = PBXGroup;
+			children = (
+				DFD4C5BE0FD6D30C00532647 /* ASIHTTPRequest.h */,
+				DFD4C5BF0FD6D30C00532647 /* ASIHTTPRequest.m */,
+				DFD4C5C00FD6D30C00532647 /* ASINetworkQueue.h */,
+				DFD4C5C10FD6D30C00532647 /* ASINetworkQueue.m */,
+			);
+			name = ASIHTTPRequest;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -348,6 +376,8 @@
 				1D3623260D0F684500981E51 /* JustPlayedAppDelegate.m in Sources */,
 				28D7ACF80DDB3853001CB0EB /* JustPlayedViewController.m in Sources */,
 				DFAFF55A0F9D0BBE00FDBD74 /* SnapsController.m in Sources */,
+				DFD4C5C40FD6D30C00532647 /* ASIHTTPRequest.m in Sources */,
+				DFD4C5C50FD6D30C00532647 /* ASINetworkQueue.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -373,6 +403,8 @@
 				DF7EC9A90F9BFEC5005AD5B0 /* HTTPResponse.m in Sources */,
 				DF7EC9AA0F9BFEC5005AD5B0 /* HTTPServer.m in Sources */,
 				DFAFF55B0F9D0BBE00FDBD74 /* SnapsController.m in Sources */,
+				DFD4C5C20FD6D30C00532647 /* ASIHTTPRequest.m in Sources */,
+				DFD4C5C30FD6D30C00532647 /* ASINetworkQueue.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

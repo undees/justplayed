@@ -4,11 +4,16 @@ revision = tip
 path.default = http://bitbucket.org/undees/justplayed
 
 [tree2]
+root = asi-http-request
+revision = tip
+path.default = http://bitbucket.org/undees/asi-http-request
+
+[tree3]
 root = brominet
 revision = tip
 path.default = http://bitbucket.org/undees/brominet
 
-[tree3]
+[tree4]
 root = server
 revision = tip
 path.default = http://bitbucket.org/undees/cocoahttpserver

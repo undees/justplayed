@@ -8,6 +8,8 @@
 
 #import "JustPlayedViewController.h"
 #import "SnapsController.h"
+#import "ASIHTTPRequest.h"
+#import "ASINetworkQueue.h"
 
 
 const int StationSection = 0;
@@ -28,12 +30,6 @@ NSString* const SnapCell = @"SnapCell";
 
 
 @synthesize stations, snapsController, snapsTable, toolbar, lookupServer, testTime;
-
-
-+ (NSString*)defaultLookupServer;
-{
-	return @"http://dielectric.heroku.com";
-}
 
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView*)tableView
@@ -98,8 +94,22 @@ NSString* const SnapCell = @"SnapCell";
 	[self.snapsController saveSnaps];
 
 	NSIndexPath* path = [NSIndexPath indexPathForRow:0 inSection:SnapSection];
+	
 	NSArray* paths = [NSArray arrayWithObject:path];
 	[snapsTable insertRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationTop];
+
+	[self refreshView];
+}
+
+
+- (void)setStations:(NSArray*)newStations;
+{
+	if (newStations == stations)
+		return;
+	
+	[stations release];
+	stations = [newStations retain];
+	
 	[self refreshView];
 }
 
@@ -124,6 +134,8 @@ NSString* const SnapCell = @"SnapCell";
 
 	NSString* server = [userDefaults stringForKey:@"lookupServer"];
 	self.lookupServer = server;
+	
+	[self refreshView];
 }
 
 
@@ -143,48 +155,102 @@ NSString* const SnapCell = @"SnapCell";
 }
 
 
-- (NSData*)stationXML;
+- (void)stationFetchComplete:(ASIHTTPRequest*)request;
 {
-	NSString* lookup = [NSString stringWithFormat:@"%@/%@",
-						self.lookupServer,
-						@"stations"];
-	NSURL* lookupURL = [NSURL URLWithString:lookup];
-	return [NSData dataWithContentsOfURL:lookupURL];
+	NSData* data = [request responseData];
+
+	NSArray* newStations =
+		[NSPropertyListSerialization
+		 propertyListFromData:data
+		 mutabilityOption:NSPropertyListImmutable
+		 format:nil
+		 errorDescription:nil];
+	
+	[self performSelectorOnMainThread:@selector(setStations:)
+		withObject:newStations
+		waitUntilDone:NO];
 }
 
 
-- (NSData*)songXMLForStation:(NSString*)station date:(NSDate*)date;
+- (void)updateSnap:(NSArray*)snapAndSong
 {
-	NSDateFormatter* dateFormat = [[[NSDateFormatter alloc] init] autorelease];
-	NSTimeZone *timeZone = [NSTimeZone timeZoneWithName:@"UTC"];
-	[dateFormat setTimeZone:timeZone];
-	[dateFormat setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
+	NSDictionary* snap = [snapAndSong objectAtIndex:0];
+	NSDictionary* song = [snapAndSong objectAtIndex:1];
+	
+	NSMutableArray* snaps = [snapsController snaps];
+	NSUInteger found = [snaps indexOfObject:snap];
+	
+	if (NSNotFound == found)
+		return;
 
-	NSString* snappedAt = [dateFormat stringFromDate:date];
-	NSString* lookup = [NSString stringWithFormat:@"%@/%@/%@",
-						self.lookupServer,
-						station,
-						snappedAt];
+	[self.snapsController replaceDataAtIndex:found withData:song];
+	[self refreshView];
+}
 
-	NSURL* lookupURL = [NSURL URLWithString:lookup];
-	return [NSData dataWithContentsOfURL:lookupURL];
+
+- (void)snapFetchComplete:(ASIHTTPRequest*)request;
+{
+	NSData* data = [request responseData];
+	NSDictionary* snap = [[request userInfo] objectForKey:@"snap"];
+	
+	NSDictionary* details =
+		[NSPropertyListSerialization
+		 propertyListFromData:data
+		 mutabilityOption:NSPropertyListImmutable
+		 format:nil
+		 errorDescription:nil];
+	
+	NSString* title = [details objectForKey:@"title"];
+	NSString* artist = [details objectForKey:@"artist"];
+	
+	if (!title || !artist || !snap)
+		return;
+	
+	NSDictionary* song =
+		[NSDictionary dictionaryWithObjectsAndKeys:
+		 title, @"title",
+		 artist, @"subtitle",
+		 [NSNumber numberWithBool:NO], @"needsLookup",
+		 nil];
+
+	NSArray* snapAndSong =
+		[NSArray arrayWithObjects:snap, song, nil];
+	
+	[self performSelectorOnMainThread:@selector(updateSnap:)
+						   withObject:snapAndSong
+						waitUntilDone:NO];
+}
+
+
+- (void)fetchComplete:(ASIHTTPRequest*)request;
+{
+	NSString* selectorName = [[request userInfo] objectForKey:@"selector"];
+	if (!selectorName)
+		return;
+
+	SEL selector = NSSelectorFromString(selectorName);
+	[self performSelector:selector withObject:request];
 }
 
 
 - (IBAction)lookupButtonPressed:(id)sender;
 {
-	NSData* stationData = [self stationXML];
+	NSString* lookup = [NSString stringWithFormat:@"%@/%@",
+						self.lookupServer,
+						@"stations"];
+	NSURL* lookupURL = [NSURL URLWithString:lookup];
 
-	NSArray* newStations =
-		[NSPropertyListSerialization
-		 propertyListFromData:stationData
-		 mutabilityOption:NSPropertyListImmutable
-		 format:nil
-		 errorDescription:nil];
+	[networkQueue cancelAllOperations];
+	[networkQueue setRequestDidFinishSelector:@selector(fetchComplete:)];
+//	[networkQueue setShowAccurateProgress:[accurateProgress isOn]];
+	[networkQueue setDelegate:self];
 
-	if (newStations)
-		self.stations = newStations;
-
+	ASIHTTPRequest *request;
+	request = [[[ASIHTTPRequest alloc] initWithURL:lookupURL] autorelease];
+	NSDictionary* context = [NSDictionary dictionaryWithObjectsAndKeys:@"stationFetchComplete:", @"selector", nil];
+	[request setUserInfo:context];
+	[networkQueue addOperation:request];
+	
 	unsigned numSnaps = [self.snapsController countOfList];
 
 	for (unsigned i = 0; i < numSnaps; i++)
@@ -194,34 +260,34 @@ NSString* const SnapCell = @"SnapCell";
 
 		if ([needsLookup boolValue])
 		{
+			NSDate* date = [snap objectForKey:@"createdAt"];
 			NSString* station = [snap objectForKey:@"title"];
-			NSDate* createdAt = [snap objectForKey:@"createdAt"];
+			
+			NSDateFormatter* dateFormat = [[[NSDateFormatter alloc] init] autorelease];
+			NSTimeZone *timeZone = [NSTimeZone timeZoneWithName:@"UTC"];
+			[dateFormat setTimeZone:timeZone];
+			[dateFormat setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
+			
+			NSString* snappedAt = [dateFormat stringFromDate:date];
+			NSString* lookup = [NSString stringWithFormat:@"%@/%@/%@",
+								self.lookupServer,
+								station,
+								snappedAt];
+			
+			NSURL* lookupURL = [NSURL URLWithString:lookup];
 
-			NSData* result = [self songXMLForStation:station date:createdAt];
-			NSDictionary* details =
-				[NSPropertyListSerialization
-				 propertyListFromData:result
-				 mutabilityOption:NSPropertyListImmutable
-				 format:nil
-				 errorDescription:nil];
-
-			NSString* title = [details objectForKey:@"title"];
-			NSString* artist = [details objectForKey:@"artist"];
-
-			if (title && artist)
-			{
-				NSDictionary* song =
-					[NSDictionary dictionaryWithObjectsAndKeys:
-					 title, @"title",
-					 artist, @"subtitle",
-					 [NSNumber numberWithBool:NO], @"needsLookup",
-					 nil];
-				[self.snapsController replaceDataAtIndex:i withData:song];
-			}
+			ASIHTTPRequest* request = [[[ASIHTTPRequest alloc] initWithURL:lookupURL] autorelease];
+			[[request userInfo] setValue:snap forKey:@"snap"];
+			NSDictionary* context = [NSDictionary dictionaryWithObjectsAndKeys:
+										@"snapFetchComplete:", @"selector",
+										snap, @"snap",
+										nil];
+			[request setUserInfo:context];
+			[networkQueue addOperation:request];
 		}
 	}
 
-	[self refreshView];
+	[networkQueue go];
 }
 
 
@@ -393,17 +459,31 @@ NSString* const SnapCell = @"SnapCell";
 
 - (void)setToFactoryDefaults;
 {
-	self.stations = [NSArray array];
-	self.snapsController = [[[SnapsController alloc] init] autorelease];
-	self.lookupServer = [JustPlayedViewController defaultLookupServer];
+	[NSUserDefaults resetStandardUserDefaults];
+	[NSUserDefaults standardUserDefaults];
+	
 	self.testTime = nil;
+	
+	[self loadUserData];
 }
 
 
 - (void)viewDidLoad;
 {
 	[super viewDidLoad];
+	self.snapsController = [[[SnapsController alloc] init] autorelease];
+
+	NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSDictionary* appDefaults =
+		[NSDictionary dictionaryWithObjectsAndKeys:
+			[NSArray array], @"stations",
+			[NSArray array], @"snaps",
+			@"http://dielectric.heroku.com", @"lookupServer", nil];
+    [defaults registerDefaults:appDefaults];
+
 	[self setToFactoryDefaults];
+
+	networkQueue = [[ASINetworkQueue alloc] init];
 }
 
 
@@ -430,6 +510,7 @@ NSString* const SnapCell = @"SnapCell";
 {
 	[stations release];
 	[snapsController release];
+	[networkQueue release];
 
     [super dealloc];
 }

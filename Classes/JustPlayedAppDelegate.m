@@ -47,7 +47,6 @@
 
 - (NSString*)restoreDefaults:(NSDictionary*)ignored {
 	[viewController setToFactoryDefaults];
-	[viewController refreshView];
 
 	return @"pass";
 }
@@ -57,7 +56,6 @@
 	[viewController saveUserData];
 	[viewController setToFactoryDefaults];
 	[viewController loadUserData];
-	[viewController refreshView];
 	
 	return @"pass";
 }

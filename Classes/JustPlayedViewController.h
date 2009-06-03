@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @class SnapsController;
+@class ASINetworkQueue;
 
 @interface JustPlayedViewController :
 	UIViewController
@@ -22,9 +23,8 @@
 	IBOutlet UIToolbar* toolbar;
 	NSString* lookupServer;
 	NSDate* testTime;
+	ASINetworkQueue* networkQueue;
 }
-
-+ (NSString*)defaultLookupServer;
 
 - (void)setStations:(NSArray*)newStations;
 - (void)setSnaps:(NSArray*)snaps;
