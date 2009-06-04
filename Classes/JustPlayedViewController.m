@@ -260,6 +260,27 @@ NSString* const SnapCell = @"SnapCell";
 }
 
 
+- (void)lookupDidFail:(ASINetworkQueue*)queue;
+{
+	NSString* title = @"Temporary difficulties";
+	NSString* message = @"Looks like someone kicked out the plug \
+at the other end of the network connection. \
+Sorry about that!";
+	
+	UIAlertView* alert =
+		[[UIAlertView alloc]
+			initWithTitle:title
+			message:message
+			delegate:nil
+			cancelButtonTitle:@"Close"
+			otherButtonTitles:nil];
+	
+	[alert show];
+	[alert release];
+	[self showProgressBar:NO];
+}
+
+
 - (IBAction)lookupButtonPressed:(id)sender;
 {
 	NSString* lookup = [NSString stringWithFormat:@"%@/%@",
@@ -272,6 +293,7 @@ NSString* const SnapCell = @"SnapCell";
 	[networkQueue setDownloadProgressDelegate:progressBar];
 	[networkQueue setShowAccurateProgress:YES];
 	[networkQueue setQueueDidFinishSelector:@selector(lookupDidFinish:)];
+	[networkQueue setRequestDidFailSelector:@selector(lookupDidFail:)];
 	[networkQueue setDelegate:self];
 
 	[progressBar setProgress:0.0];

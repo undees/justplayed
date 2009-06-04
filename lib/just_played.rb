@@ -96,6 +96,17 @@ class JustPlayed
     !REXML::XPath.match(doc, xpath).empty?
   end
 
+  def dismiss_warning
+    xml = @gui.dump
+    doc = REXML::Document.new xml
+
+    xpath = '//UIAlertView'
+    warning = REXML::XPath.match(doc, xpath).first
+    raise 'Expected a warning message' unless warning
+
+    @gui.press '//UIThreePartButton'
+  end
+
   def toolbar_buttons
     xml = @gui.dump
     doc = REXML::Document.new xml

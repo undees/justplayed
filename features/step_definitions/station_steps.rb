@@ -2,6 +2,14 @@ When /^I look up my stations$/ do
   app.lookup
 end
 
+When /^I try looking up my stations$/ do
+  begin
+    app.lookup
+  rescue Timeout::Error
+    # ok
+  end
+end
+
 Then /^I should see the stations "([^\"]*)"$/ do
   |text|
 

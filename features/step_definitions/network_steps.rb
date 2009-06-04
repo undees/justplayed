@@ -12,3 +12,7 @@ end
 Then /^the server should not be empty$/ do
   app.server.should_not be_empty
 end
+
+Then /^I should see a network warning$/ do
+  app.dismiss_warning
+end
