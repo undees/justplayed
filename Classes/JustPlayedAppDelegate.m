@@ -52,12 +52,29 @@
 }
 
 
-- (NSString*)restartApp:(NSDictionary*)ignored {
+- (NSString*)terminateApp:(NSDictionary*)ignored {
 	[viewController saveUserData];
-	[viewController clearUserData];
-	[viewController loadUserData];
-	
+	[[NSUserDefaults standardUserDefaults] synchronize];
+	exit(0);
+
 	return @"pass";
+}
+
+
+- (NSString*)getTestData:(NSDictionary*)data {
+	NSString* key = [data objectForKey:@"key"];
+	if ([key isEqualToString:@"lookupServer"])
+	{
+		NSData* data = [NSPropertyListSerialization
+			dataFromPropertyList:(viewController.lookupServer)
+			format:NSPropertyListXMLFormat_v1_0
+			errorDescription:nil];
+		return [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
+	}
+	else
+	{
+		return nil;
+	}
 }
 
 

@@ -66,6 +66,15 @@ class JustPlayed
     @gui.command 'setTestData', :raw, 'snaps', JustPlayed.snap_plist(list)
   end
 
+  def server
+    xml = @gui.command 'getTestData', 'key', 'lookupServer'
+    doc = REXML::Document.new xml
+
+    xpath = '//string'
+    tag = REXML::XPath.match(doc, xpath).first
+    tag ? tag.text : ''
+  end
+
   def server=(url)
     @gui.command 'setTestData', 'lookupServer', url
   end
@@ -105,7 +114,22 @@ class JustPlayed
   end
 
   def restart
-    @gui.command 'restartApp'
+    begin
+      @gui.command 'terminateApp'
+    rescue EOFError
+      # no-op
+    end
+
+    yield if block_given?
+
+    system(<<-HERE)
+      osascript -e 'tell application "Xcode"'\\
+        -e 'set myProject to active project document'\\
+        -e 'launch the active executable of myProject'\\
+      -e 'end tell' >/dev/null
+    HERE
+
+    sleep 7
   end
 
   def delete_all
