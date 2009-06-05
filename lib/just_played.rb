@@ -162,7 +162,7 @@ class JustPlayed
             key_ 'subtitle'
             string_ snap[:subtitle]
             key_ 'needsLookup'
-            snap[:link] ? key_('false') : key_('true')
+            tagz__ snap[:link] ? 'false/' : 'true/'
 
             if (snap[:created_at])
               key_ 'createdAt'
