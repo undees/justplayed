@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@class SnapsController;
 @class ASINetworkQueue;
 
 @interface JustPlayedViewController :
@@ -18,7 +17,8 @@
 		 UIActionSheetDelegate>
 {
 	NSArray* stations;
-	SnapsController* snapsController;
+	NSMutableArray* snaps;
+
 	IBOutlet UITableView* snapsTable;
 	IBOutlet UIToolbar* toolbar;
 	IBOutlet UIProgressView* progressBar;
@@ -28,7 +28,7 @@
 }
 
 - (void)setStations:(NSArray*)newStations;
-- (void)setSnaps:(NSArray*)snaps;
+- (void)setSnaps:(NSArray*)newSnaps;
 
 - (void)setToFactoryDefaults;
 - (void)loadUserData;
@@ -40,7 +40,7 @@
 - (IBAction)deleteButtonPressed:(id)sender;
 
 @property (nonatomic, retain) NSArray* stations;
-@property (nonatomic, retain) SnapsController* snapsController;
+@property (nonatomic, copy) NSArray* snaps;
 
 @property (nonatomic, retain) UITableView* snapsTable;
 @property (nonatomic, retain) UIToolbar* toolbar;

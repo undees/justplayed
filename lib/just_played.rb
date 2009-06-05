@@ -131,6 +131,8 @@ class JustPlayed
       # no-op
     end
 
+    sleep 3
+
     yield if block_given?
 
     system(<<-HERE)

@@ -7,7 +7,7 @@
 //
 
 #import "JustPlayedViewController.h"
-#import "SnapsController.h"
+#import "Snap.h"
 #import "ASIHTTPRequest.h"
 #import "ASINetworkQueue.h"
 
@@ -31,7 +31,7 @@ NSString* const SnapCell = @"SnapCell";
 @implementation JustPlayedViewController
 
 
-@synthesize stations, snapsController, snapsTable, toolbar, lookupServer, testTime;
+@synthesize stations, snaps, snapsTable, toolbar, lookupServer, testTime;
 
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView*)tableView
@@ -58,7 +58,7 @@ NSString* const SnapCell = @"SnapCell";
 	}
 	else
 	{
-		return [self.snapsController countOfList];
+		return [self.snaps count];
 	}
 }
 
@@ -68,34 +68,14 @@ NSString* const SnapCell = @"SnapCell";
 }
 
 
-- (void)addSnap:(NSString*)station;
+- (void)addSnapForStation:(NSString*)station;
 {
-	NSString* title = station;
-
-	NSDate* createdAt =
-		self.testTime ?
-		self.testTime :
-		[NSDate date];
-
-	NSDateFormatter *dateFormat =
-		[[[NSDateFormatter alloc] init] autorelease];
-	[dateFormat setDateStyle:NSDateFormatterNoStyle];
-	[dateFormat setTimeStyle:NSDateFormatterShortStyle];
-
-	NSString* subtitle = [dateFormat stringFromDate:createdAt];
-
-	NSDictionary* snap =
-		[NSDictionary dictionaryWithObjectsAndKeys:
-		 title, @"title",
-		 subtitle, @"subtitle",
-		 createdAt, @"createdAt",
-		 [NSNumber numberWithBool:YES], @"needsLookup",
-		 nil];
-
-	[self.snapsController addData:snap];
+	NSDate* date = (self.testTime ? self.testTime : [NSDate date]);
+	Snap* snap = [[Snap alloc] initWithStation:station creationTime:date];
+	
+	[snaps insertObject:snap atIndex:0];
 
 	NSIndexPath* path = [NSIndexPath indexPathForRow:0 inSection:SnapSection];
-	
 	NSArray* paths = [NSArray arrayWithObject:path];
 	[snapsTable insertRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationTop];
 
@@ -115,9 +95,14 @@ NSString* const SnapCell = @"SnapCell";
 }
 
 
-- (void)setSnaps:(NSArray*)snaps;
+- (void)setSnaps:(NSArray*)newSnaps;
 {
-	[self.snapsController setSnaps:[NSMutableArray arrayWithArray:snaps]];
+	if (newSnaps == snaps)
+		return;
+
+	[snaps release];
+	snaps = [newSnaps mutableCopy];
+
 	[self refreshView];
 }
 
@@ -125,15 +110,10 @@ NSString* const SnapCell = @"SnapCell";
 - (void)loadUserData;
 {
 	NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
-	NSArray* defStations = [userDefaults arrayForKey:@"stations"];
-	self.stations = defStations;
 
-	userDefaults = [NSUserDefaults standardUserDefaults];
-	NSArray* snaps = [userDefaults arrayForKey:@"snaps"];
-	[self setSnaps:snaps];
-
-	NSString* server = [userDefaults stringForKey:@"lookupServer"];
-	self.lookupServer = server;
+	self.stations = [userDefaults arrayForKey:@"stations"];;
+	self.snaps = [Snap snapsFromPropertyLists:[userDefaults arrayForKey:@"snaps"]];
+	self.lookupServer = [userDefaults stringForKey:@"lookupServer"];
 	
 	[self refreshView];
 }
@@ -142,8 +122,9 @@ NSString* const SnapCell = @"SnapCell";
 - (void)clearUserData;
 {
 	self.stations = [NSArray array];
-	[self setSnaps:[NSArray array]];
+	[snaps removeAllObjects];
 	self.lookupServer = @"";
+
 	[self refreshView];
 }
 
@@ -151,10 +132,11 @@ NSString* const SnapCell = @"SnapCell";
 - (void)saveUserData;
 {
 	NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
-	[userDefaults setValue:self.stations forKey:@"stations"];
-	[userDefaults setValue:self.lookupServer forKey:@"lookupServer"];
-	
-	[self.snapsController saveSnaps];
+	[userDefaults setObject:self.stations forKey:@"stations"];
+	[userDefaults setObject:self.lookupServer forKey:@"lookupServer"];
+	[userDefaults
+		setObject:[Snap propertyListsFromSnaps:self.snaps]
+		forKey:@"snaps"];
 }
 
 
@@ -183,16 +165,17 @@ NSString* const SnapCell = @"SnapCell";
 
 - (void)updateSnap:(NSArray*)snapAndSong
 {
-	NSDictionary* snap = [snapAndSong objectAtIndex:0];
+	Snap* snap = [snapAndSong objectAtIndex:0];
 	NSDictionary* song = [snapAndSong objectAtIndex:1];
 	
-	NSMutableArray* snaps = [snapsController snaps];
-	NSUInteger found = [snaps indexOfObject:snap];
+	NSUInteger found = [self.snaps indexOfObject:snap];
 	
 	if (NSNotFound == found)
 		return;
 
-	[self.snapsController replaceDataAtIndex:found withData:song];
+	Snap* result = [[Snap alloc] initWithPropertyList:song];
+
+	[snaps replaceObjectAtIndex:found withObject:result];
 	[self refreshView];
 }
 
@@ -262,6 +245,10 @@ NSString* const SnapCell = @"SnapCell";
 
 - (void)lookupDidFail:(ASINetworkQueue*)queue;
 {
+	BOOL alreadyWarnedUser = progressBar.hidden;
+	if (alreadyWarnedUser)
+		return;
+
 	NSString* title = @"Temporary difficulties";
 	NSString* message = @"Looks like someone kicked out the plug \
 at the other end of the network connection. \
@@ -291,7 +278,6 @@ Sorry about that!";
 	[networkQueue cancelAllOperations];
 	[networkQueue setRequestDidFinishSelector:@selector(fetchComplete:)];
 	[networkQueue setDownloadProgressDelegate:progressBar];
-	[networkQueue setShowAccurateProgress:YES];
 	[networkQueue setQueueDidFinishSelector:@selector(lookupDidFinish:)];
 	[networkQueue setRequestDidFailSelector:@selector(lookupDidFail:)];
 	[networkQueue setDelegate:self];
@@ -304,27 +290,23 @@ Sorry about that!";
 	[request setUserInfo:context];
 	[networkQueue addOperation:request];
 	
-	unsigned numSnaps = [self.snapsController countOfList];
+	unsigned numSnaps = [self.snaps count];
 
 	for (unsigned i = 0; i < numSnaps; i++)
 	{
-		NSDictionary* snap = [self.snapsController objectInListAtIndex:i];
-		NSNumber* needsLookup = [snap objectForKey:@"needsLookup"];
+		Snap* snap = [self.snaps objectAtIndex:i];
 
-		if ([needsLookup boolValue])
+		if (snap.needsLookup)
 		{
-			NSDate* date = [snap objectForKey:@"createdAt"];
-			NSString* station = [snap objectForKey:@"title"];
-			
 			NSDateFormatter* dateFormat = [[[NSDateFormatter alloc] init] autorelease];
 			NSTimeZone *timeZone = [NSTimeZone timeZoneWithName:@"UTC"];
 			[dateFormat setTimeZone:timeZone];
 			[dateFormat setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
 			
-			NSString* snappedAt = [dateFormat stringFromDate:date];
+			NSString* snappedAt = [dateFormat stringFromDate:snap.createdAt];
 			NSString* lookup = [NSString stringWithFormat:@"%@/%@/%@",
 								self.lookupServer,
-								station,
+								snap.title,
 								snappedAt];
 			
 			NSURL* lookupURL = [NSURL URLWithString:lookup];
@@ -364,7 +346,8 @@ Sorry about that!";
 {
 	if (0 == buttonIndex)
 	{
-		[self setSnaps:[NSArray array]];
+		[snaps removeAllObjects];
+		[self refreshView];
 	}
 }
 
@@ -458,14 +441,12 @@ Sorry about that!";
 		UILabel* snapTitle = (UILabel*)[cell.contentView viewWithTag:TitleTag];
 		UILabel* snapSubtitle = (UILabel *)[cell.contentView viewWithTag:SubtitleTag];
 
-		NSDictionary* snap = [self.snapsController objectInListAtIndex:[indexPath row]];
+		Snap* snap = [self.snaps objectAtIndex:[indexPath row]];
+		snapTitle.text = snap.title;
+		snapSubtitle.text = snap.subtitle;
 
-		snapTitle.text = [snap objectForKey:@"title"];
-		snapSubtitle.text = [snap objectForKey:@"subtitle"];
-
-		NSNumber* needsLookup = [snap objectForKey:@"needsLookup"];
 		cell.accessoryType =
-			[needsLookup boolValue] ?
+			snap.needsLookup ?
 			UITableViewCellAccessoryNone :
 			UITableViewCellAccessoryDisclosureIndicator;
 
@@ -481,25 +462,21 @@ Sorry about that!";
 		if ([self.stations count] > 0)
 		{
 			NSString* station = [self.stations objectAtIndex:[indexPath row]];
-			[self addSnap:station];
+			[self addSnapForStation:station];
 		}
 
 		[tableView deselectRowAtIndexPath:indexPath animated:YES];
 	}
 	else
 	{
-		NSDictionary* snap = [self.snapsController objectInListAtIndex:[indexPath row]];
+		Snap* snap = [self.snaps objectAtIndex:[indexPath row]];
 
-		NSNumber* needsLookup = [snap objectForKey:@"needsLookup"];
-		if (![needsLookup boolValue])
+		if (!snap.needsLookup)
 		{
-			NSString* title = [snap objectForKey:@"title"];
-			NSString* artist = [snap objectForKey:@"subtitle"];
-
 			NSString* link =
 				[NSString stringWithFormat:@"http://ax.phobos.apple.com.edgesuite.net/WebObjects/MZStoreServices.woa/wa/itmsSearch?WOURLEncoding=ISO8859_1&lang=1&output=lm&country=US&term=\"%@\" \"%@\"&media=all",
-				 title,
-				 artist];
+				 snap.title,
+				 snap.subtitle];
 			NSString* escapedLink =
 				[link stringByAddingPercentEscapesUsingEncoding:
 				 NSASCIIStringEncoding];
@@ -527,7 +504,6 @@ Sorry about that!";
 - (void)viewDidLoad;
 {
 	[super viewDidLoad];
-	self.snapsController = [[[SnapsController alloc] init] autorelease];
 
 	NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     NSDictionary* appDefaults =
@@ -540,13 +516,6 @@ Sorry about that!";
 	[self loadUserData];
 
 	networkQueue = [[ASINetworkQueue alloc] init];
-}
-
-
-- (void)viewWillAppear:(BOOL)animated;
-{
-	[super viewWillAppear:animated];
-	[self loadUserData];
 }
 
 
@@ -565,7 +534,7 @@ Sorry about that!";
 - (void)dealloc;
 {
 	[stations release];
-	[snapsController release];
+	[snaps release];
 	[networkQueue release];
 
     [super dealloc];

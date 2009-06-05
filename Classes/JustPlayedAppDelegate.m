@@ -8,6 +8,7 @@
 
 #import "JustPlayedAppDelegate.h"
 #import "JustPlayedViewController.h"
+#import "Snap.h"
 
 #ifdef BROMINET_ENABLED
 	#import "ScriptRunner.h"
@@ -78,6 +79,35 @@
 }
 
 
+- (NSDate*)dateFromClockTime:(NSString*)clockTime;
+{
+	NSDate* date = [NSDate date];
+	NSCalendar* calendar = [NSCalendar currentCalendar];
+	NSInteger dateUnits =
+	NSYearCalendarUnit |
+	NSMonthCalendarUnit |
+	NSDayCalendarUnit;
+	NSDateComponents* dateParts = [calendar components:dateUnits fromDate:date];
+	
+	NSDateFormatter* format = [[[NSDateFormatter alloc] init] autorelease];
+	[format setDateFormat:@"HH:mm"];
+	NSDate* time = [format dateFromString:clockTime];
+	
+	NSInteger timeUnits =
+	NSHourCalendarUnit |
+	NSMinuteCalendarUnit;
+	NSDateComponents* timeParts = [calendar components:timeUnits fromDate:time];
+	
+	NSInteger hour = [timeParts hour];
+	NSInteger minute = [timeParts minute];
+	
+	[dateParts setHour:hour];
+	[dateParts setMinute:minute];
+	
+	return [calendar dateFromComponents:dateParts];
+}
+
+
 - (NSString*)setTestData:(NSDictionary*)data {
 	NSArray* stations = [data objectForKey:@"stations"];
 	if (stations)
@@ -85,10 +115,10 @@
 		viewController.stations = stations;
 	}
 	
-	NSArray* snaps = [data objectForKey:@"snaps"];
-	if (snaps)
+	NSArray* plists = [data objectForKey:@"snaps"];
+	if (plists)
 	{
-		[viewController setSnaps:snaps];
+		[viewController setSnaps:[Snap snapsFromPropertyLists:plists]];
 	}
 
 	NSString* lookupServer = [data objectForKey:@"lookupServer"];
@@ -100,31 +130,7 @@
 	NSString* testTime = [data objectForKey:@"testTime"];
 	if (testTime)
 	{
-		NSDate* date = [NSDate date];
-		NSCalendar* calendar = [NSCalendar currentCalendar];
-		NSInteger dateUnits =
-			NSYearCalendarUnit |
-			NSMonthCalendarUnit |
-			NSDayCalendarUnit;
-		NSDateComponents* dateParts = [calendar components:dateUnits fromDate:date];
-
-		NSDateFormatter* format = [[[NSDateFormatter alloc] init] autorelease];
-		[format setDateFormat:@"HH:mm"];
-		NSDate* time = [format dateFromString:testTime];
-
-		NSInteger timeUnits =
-			NSHourCalendarUnit |
-			NSMinuteCalendarUnit;
-		NSDateComponents* timeParts = [calendar components:timeUnits fromDate:time];
-
-		NSInteger hour = [timeParts hour];
-		NSInteger minute = [timeParts minute];
-
-		[dateParts setHour:hour];
-		[dateParts setMinute:minute];
-		NSDate* dateTime = [calendar dateFromComponents:dateParts];
-
-		viewController.testTime = dateTime;
+		viewController.testTime = [self dateFromClockTime:testTime];
 	}
 	
 	[viewController refreshView];
