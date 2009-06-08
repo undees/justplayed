@@ -27,6 +27,7 @@ NSString* const EmptyCell = @"EmptyCell";
 NSString* const StationCell = @"StationCell";
 NSString* const SnapCell = @"SnapCell";
 
+NSString* const DefaultServer = @"http://justplayed.heroku.com/pdx";
 
 @implementation JustPlayedViewController
 
@@ -510,7 +511,7 @@ Sorry about that!";
 		[NSDictionary dictionaryWithObjectsAndKeys:
 			[NSArray array], @"stations",
 			[NSArray array], @"snaps",
-			@"http://dielectric.heroku.com", @"lookupServer", nil];
+			DefaultServer, @"lookupServer", nil];
     [defaults registerDefaults:appDefaults];
 
 	[self loadUserData];
