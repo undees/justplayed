@@ -12,6 +12,7 @@ Feature: Snaps
       | station | time     |
       | KNRK    | 11:45 PM |
 
+  @restart
   Scenario: Remembering snaps
     Given the following snaps:
       | title | subtitle | link |

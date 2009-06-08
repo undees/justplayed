@@ -12,6 +12,7 @@ Feature: Stations
     When I look up my stations
     Then I should see the stations "KNRK,KOPB"
 
+  @restart
   Scenario: Remembering stations
     Given a list of radio stations "KBOO,KINK"
     And a server at http://localhost:4567

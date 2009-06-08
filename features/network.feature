@@ -3,6 +3,7 @@ Feature: Network
   As a new user of the app
   I want information on status and progress
 
+  @restart
   Scenario: Default server
     Given a fresh install
     Then the server should not be empty
