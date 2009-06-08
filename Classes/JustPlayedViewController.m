@@ -71,7 +71,7 @@ NSString* const SnapCell = @"SnapCell";
 - (void)addSnapForStation:(NSString*)station;
 {
 	NSDate* date = (self.testTime ? self.testTime : [NSDate date]);
-	Snap* snap = [[Snap alloc] initWithStation:station creationTime:date];
+	Snap* snap = [[[Snap alloc] initWithStation:station creationTime:date] autorelease];
 	
 	[snaps insertObject:snap atIndex:0];
 
@@ -173,7 +173,7 @@ NSString* const SnapCell = @"SnapCell";
 	if (NSNotFound == found)
 		return;
 
-	Snap* result = [[Snap alloc] initWithPropertyList:song];
+	Snap* result = [[[Snap alloc] initWithPropertyList:song] autorelease];
 
 	[snaps replaceObjectAtIndex:found withObject:result];
 	[self refreshView];
