@@ -12,3 +12,7 @@ Feature: Network
     Given a server at http://localhost:55555
     When I try looking up my stations
     Then I should see a network warning
+
+  Scenario: New user
+    Given a list of radio stations ""
+    Then I should see a help button

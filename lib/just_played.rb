@@ -20,6 +20,7 @@ class JustPlayed
   TitleTag = 3
   SubtitleTag = 4
   DownloadingTag = 5
+  HelpTag = 6
 
   def snaps
     xml = @gui.dump
@@ -105,6 +106,14 @@ class JustPlayed
     raise 'Expected a warning message' unless warning
 
     @gui.press '//UIThreePartButton'
+  end
+
+  def has_help_button?
+    xml = @gui.dump
+    doc = REXML::Document.new xml
+
+    xpath = '//UIButton[tag="%s"]' % HelpTag
+    !REXML::XPath.match(doc, xpath).empty?
   end
 
   def toolbar_buttons

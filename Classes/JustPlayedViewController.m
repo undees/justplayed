@@ -28,6 +28,7 @@ NSString* const StationCell = @"StationCell";
 NSString* const SnapCell = @"SnapCell";
 
 NSString* const DefaultServer = @"http://justplayed.heroku.com/pdx";
+NSString* const HelpLocation = @"http://justplayed.heroku.com";
 
 @implementation JustPlayedViewController
 
@@ -350,6 +351,13 @@ Sorry about that!";
 		[snaps removeAllObjects];
 		[self refreshView];
 	}
+}
+
+
+- (IBAction)helpButtonPressed:(id)sender;
+{
+	NSURL* url = [NSURL URLWithString:HelpLocation];
+	[[UIApplication sharedApplication] openURL:url];
 }
 
 
