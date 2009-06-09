@@ -38,6 +38,7 @@
 
 - (IBAction)lookupButtonPressed:(id)sender;
 - (IBAction)deleteButtonPressed:(id)sender;
+- (IBAction)helpButtonPressed:(id)sender;
 
 @property (nonatomic, retain) NSArray* stations;
 @property (nonatomic, copy) NSArray* snaps;

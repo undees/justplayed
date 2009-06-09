@@ -16,3 +16,7 @@ end
 Then /^I should see a network warning$/ do
   app.dismiss_warning
 end
+
+Then /^I should see a help button$/ do
+  app.should have_help_button
+end
