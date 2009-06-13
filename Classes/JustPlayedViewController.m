@@ -483,7 +483,7 @@ Sorry about that!";
 		if (!snap.needsLookup)
 		{
 			NSString* link =
-				[NSString stringWithFormat:@"http://ax.phobos.apple.com.edgesuite.net/WebObjects/MZStoreServices.woa/wa/itmsSearch?WOURLEncoding=ISO8859_1&lang=1&output=lm&country=US&term=\"%@\" \"%@\"&media=all",
+				[NSString stringWithFormat:@"itms://phobos.apple.com/WebObjects/MZSearch.woa/wa/com.apple.jingle.search.DirectAction/search?term=%@ %@",
 				 snap.title,
 				 snap.subtitle];
 			NSString* escapedLink =
