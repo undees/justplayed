@@ -5,7 +5,7 @@ Feature: Lookup
 
   Scenario: Looking up a snap
     Given a list of radio stations "KNRK"
-    And a server at http://localhost:4567
+    And a test server
     And the following snaps:
       | station | time     |
       | KNRK    | 12:00 PM |
@@ -17,7 +17,7 @@ Feature: Lookup
   @restart
   Scenario: Partial success
     Given a list of radio stations "KNRK"
-    And a server at http://localhost:4567
+    And a test server
     And the following snaps:
       | station | time     |
       | KNRK    | 2:00 PM  |

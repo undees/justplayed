@@ -8,13 +8,13 @@ Feature: Stations
     Then I should be invited to press Refresh
 
   Scenario: Looking up stations
-    Given a server at http://localhost:4567
+    Given a test server
     When I look up my stations
     Then I should see the stations "KNRK,KOPB"
 
   @restart
   Scenario: Remembering stations
     Given a list of radio stations "KBOO,KINK"
-    And a server at http://localhost:4567
+    And a test server
     When I restart the app
     Then I should see the stations "KBOO,KINK"

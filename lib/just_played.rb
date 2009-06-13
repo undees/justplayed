@@ -3,8 +3,8 @@ require 'rexml/document'
 require 'time'
 
 class JustPlayed
-  def initialize
-    @gui = Encumber::GUI.new
+  def initialize(host = 'localhost')
+    @gui = Encumber::GUI.new host
   end
 
   def reset

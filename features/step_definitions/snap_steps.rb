@@ -24,10 +24,12 @@ Given /^a current time of (.*)$/ do
   app.time = time
 end
 
-Given /^a server at (.*)$/ do
-  |url|
+Given /^a test server$/ do
+  app.server = test_server
+end
 
-  app.server = url
+Given /^a missing test server$/ do
+  app.server = 'http://localhost:55555'
 end
 
 When /^I press (.*)$/ do

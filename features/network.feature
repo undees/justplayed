@@ -9,7 +9,7 @@ Feature: Network
     Then the server should not be empty
 
   Scenario: Missing server
-    Given a server at http://localhost:55555
+    Given a missing test server
     When I try looking up my stations
     Then I should see a network warning
 
