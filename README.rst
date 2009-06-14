@@ -62,6 +62,11 @@ Once you've deployed your own server somewhere, you can point Just Played at at 
 
 Enjoy!
 
+Credits
+-------
+
+Thanks to DRB62 on flickr.com for the CC-licensed `speaker photo`_ used in the icon.
+
 .. _ASIHTTPRequest: http://allseeing-i.com/ASIHTTPRequest
 .. _embedded Web server: http://code.google.com/p/cocoahttpserver
 .. _GUI testing library: http://code.google.com/p/bromine
@@ -69,3 +74,4 @@ Enjoy!
 .. _forest extension: http://www.selenic.com/mercurial/wiki/ForestExtension
 .. _two: http://bitbucket.org/undees/dielectric
 .. _main: http://github.com/undees/dielectric
+.. _speaker photo: http://www.flickr.com/photos/drb62/3012428460
