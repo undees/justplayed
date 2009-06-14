@@ -42,12 +42,38 @@ NSString* const HelpLocation = @"http://justplayed.heroku.com";
 }
 
 
-- (NSString *)tableView:(UITableView*)tableView titleForHeaderInSection:(NSInteger)section
+- (CGFloat)tableView:(UITableView*)tableView heightForHeaderInSection:(NSInteger)section
 {
+	return 44;
+}
+
+
+- (UIView*)tableView:(UITableView*)tableView viewForHeaderInSection:(NSInteger)section
+{
+	UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 44)];
+
+	UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(19, 10, headerView.bounds.size.width, 30)];
+	label.backgroundColor = [UIColor clearColor];
+	label.font = [UIFont boldSystemFontOfSize:17];
+	label.textColor = [UIColor colorWithRed:0.243 green:0.306 blue:0.435 alpha:1.0]; //http://bit.ly/1tMGn9
+	label.shadowColor = [UIColor whiteColor];
+	label.shadowOffset = CGSizeMake(0, 1);
+	
+	label.text = (StationSection == section ? @"Stations" : @"Snaps");
+	[headerView addSubview:label];
+
 	if (StationSection == section)
-		return @"Stations";
-	else
-		return @"Snaps";
+	{
+		UIButton *button = [UIButton buttonWithType:UIButtonTypeInfoDark];
+		button.center = CGPointMake(291, 28);
+		button.alpha = 0.6;
+		button.tag = HelpTag;
+
+		[button addTarget:self action:@selector(helpButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+		[headerView addSubview:button];
+	}
+	
+	return headerView;
 }
 
 
