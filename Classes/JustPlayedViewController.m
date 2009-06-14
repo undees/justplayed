@@ -16,12 +16,11 @@ const int StationSection = 0;
 const int SnapSection = 1;
 
 const int StationTag = 1;
-
 const int SnapTag = 2;
 const int TitleTag = 3;
 const int SubtitleTag = 4;
-
 const int DownloadingTag = 5;
+const int HelpTag = 6;
 
 NSString* const EmptyCell = @"EmptyCell";
 NSString* const StationCell = @"StationCell";
@@ -374,7 +373,15 @@ Sorry about that!";
 {
 	if (0 == buttonIndex)
 	{
+		NSMutableArray *doomed = [NSMutableArray arrayWithCapacity:[snaps count]];
+		for (int i = 0; i < [snaps count]; ++i)
+		{
+			NSIndexPath *path = [NSIndexPath indexPathForRow:i inSection:SnapSection];
+			[doomed addObject:path];
+		}
+
 		[snaps removeAllObjects];
+		[snapsTable deleteRowsAtIndexPaths:doomed withRowAnimation:UITableViewRowAnimationBottom];
 		[self refreshView];
 	}
 }
