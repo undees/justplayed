@@ -26,8 +26,7 @@ NSString* const EmptyCell = @"EmptyCell";
 NSString* const StationCell = @"StationCell";
 NSString* const SnapCell = @"SnapCell";
 
-NSString* const DefaultServer = @"http://justplayed.heroku.com/pdx";
-NSString* const HelpLocation = @"http://justplayed.heroku.com";
+NSString* const DefaultServer = @"http://justplayed.heroku.com";
 
 @implementation JustPlayedViewController
 
@@ -389,7 +388,7 @@ Sorry about that!";
 
 - (IBAction)helpButtonPressed:(id)sender;
 {
-	NSURL* url = [NSURL URLWithString:HelpLocation];
+	NSURL* url = [NSURL URLWithString:DefaultServer];
 	[[UIApplication sharedApplication] openURL:url];
 }
 
