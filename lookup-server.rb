@@ -4,7 +4,8 @@ require 'time'
 
 get '/:station/:time' do |station, time|
   sleep 1
-  local_clock = Time.parse(time).localtime.strftime('%H%M')
+  local_clock = Time.parse(time).strftime('%H%M')
+  puts local_clock
   halt 404 unless station.downcase == 'knrk' && local_clock == '1200'
   <<HERE
 <plist version="1.0">
@@ -21,10 +22,12 @@ end
 get '/stations' do
   <<HERE
 <plist version="1.0">
-<array>
-	<string>KNRK</string>
-	<string>KOPB</string>
-</array>
+<dict>
+	<key>KNRK</key>
+	<string>http://yes.com/KNRK</string>
+	<key>KOPB</key>
+	<string>http://yes.com/KOPB</string>
+</dict>
 </plist>
 HERE
 end

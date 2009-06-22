@@ -176,13 +176,15 @@ NSString* const DefaultServer = @"http://justplayed.heroku.com";
 {
 	NSData* data = [request responseData];
 
-	NSArray* newStations =
+	NSDictionary* details =
 		[NSPropertyListSerialization
 		 propertyListFromData:data
 		 mutabilityOption:NSPropertyListImmutable
 		 format:nil
 		 errorDescription:nil];
 	
+	NSArray* newStations = [[details allKeys] sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
+
 	[self performSelectorOnMainThread:@selector(setStations:)
 		withObject:newStations
 		waitUntilDone:NO];
@@ -325,9 +327,7 @@ Sorry about that!";
 		if (snap.needsLookup)
 		{
 			NSDateFormatter* dateFormat = [[[NSDateFormatter alloc] init] autorelease];
-			NSTimeZone *timeZone = [NSTimeZone timeZoneWithName:@"UTC"];
-			[dateFormat setTimeZone:timeZone];
-			[dateFormat setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
+			[dateFormat setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
 			
 			NSString* snappedAt = [dateFormat stringFromDate:snap.createdAt];
 			NSString* lookup = [NSString stringWithFormat:@"%@/%@/%@",
