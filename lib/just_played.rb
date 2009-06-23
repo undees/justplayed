@@ -84,7 +84,12 @@ class JustPlayed
     @gui.command 'setTestData', 'testTime', time
   end
 
-  def lookup
+  def lookup_stations
+    @gui.press toolbar_buttons[:locate]
+    timeout(10) {sleep 2 while downloading?}
+  end
+
+  def lookup_snaps
     @gui.press toolbar_buttons[:lookup]
     timeout(10) {sleep 2 while downloading?}
   end
@@ -93,7 +98,7 @@ class JustPlayed
     xml = @gui.dump
     doc = REXML::Document.new xml
 
-    xpath = '//UIProgressView[tag="%s"]' % DownloadingTag
+    xpath = '//UIActivityIndicatorView[tag="%s"]' % DownloadingTag
     !REXML::XPath.match(doc, xpath).empty?
   end
 
@@ -112,8 +117,10 @@ class JustPlayed
     xml = @gui.dump
     doc = REXML::Document.new xml
 
-    xpath = '//UIButton[tag="%s"]' % HelpTag
-    !REXML::XPath.match(doc, xpath).empty?
+    # Not much of a check; all we can hope for is a squawk
+    # if we rearrange the toolbar and leave out help
+    xpath = '//UIToolbarButton'
+    REXML::XPath.match(doc, xpath).size == 4
   end
 
   def toolbar_buttons
@@ -129,8 +136,10 @@ class JustPlayed
     end
     locations.sort!
 
-    {:lookup => "//UIToolbarButton[#{locations[0][1]}]",
-     :delete_all => "//UIToolbarButton[#{locations[1][1]}]"}
+    {:help => "//UIToolbarButton[#{locations[0][1]}]",
+     :locate => "//UIToolbarButton[#{locations[1][1]}]",
+     :lookup => "//UIToolbarButton[#{locations[2][1]}]",
+     :delete_all => "//UIToolbarButton[#{locations[3][1]}]"}
   end
 
   def restart

@@ -10,15 +10,27 @@
 	<array>
 		<dict>
 			<key>Type</key>
-			<string>PSGroupSpecifier</string>
+			<string>PSTextFieldSpecifier</string>
 			<key>Title</key>
-			<string>Lookup Server</string>
+			<string>Location</string>
+			<key>Key</key>
+			<string>location</string>
+			<key>DefaultValue</key>
+			<string>Portland</string>
+			<key>IsSecure</key>
+			<false/>
+			<key>KeyboardType</key>
+			<string>NumberPad</string>
+			<key>AutocapitalizationType</key>
+			<string>None</string>
+			<key>AutocorrectionType</key>
+			<string>No</string>
 		</dict>
 		<dict>
 			<key>Type</key>
 			<string>PSTextFieldSpecifier</string>
 			<key>Title</key>
-			<string></string>
+			<string>Lookup Server</string>
 			<key>Key</key>
 			<string>lookupServer</string>
 			<key>DefaultValue</key>

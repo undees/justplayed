@@ -1,9 +1,3 @@
-Given /^a list of radio stations "(.*)"$/ do
-  |stations|
-
-  app.stations = stations.split(',')
-end
-
 Given /^the following snaps:$/ do
   |snaps_table|
 
@@ -24,14 +18,6 @@ Given /^a current time of (.*)$/ do
   app.time = time
 end
 
-Given /^a test server$/ do
-  app.server = test_server
-end
-
-Given /^a missing test server$/ do
-  app.server = 'http://localhost:55555'
-end
-
 When /^I press (.*)$/ do
   |station|
 
@@ -39,7 +25,7 @@ When /^I press (.*)$/ do
 end
 
 When /^I look up my snaps$/ do
-  app.lookup
+  app.lookup_snaps
 end
 
 When /^I restart the app$/ do

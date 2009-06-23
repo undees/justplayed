@@ -21,17 +21,19 @@ const int TitleTag = 3;
 const int SubtitleTag = 4;
 const int DownloadingTag = 5;
 const int HelpTag = 6;
+const int LocationTag = 7;
 
 NSString* const EmptyCell = @"EmptyCell";
 NSString* const StationCell = @"StationCell";
 NSString* const SnapCell = @"SnapCell";
 
 NSString* const DefaultServer = @"http://justplayed.heroku.com";
+NSString* const DefaultLocation = @"Portland";
 
 @implementation JustPlayedViewController
 
 
-@synthesize stations, snaps, snapsTable, toolbar, lookupServer, testTime;
+@synthesize stations, snaps, snapsTable, toolbar, lookupServer, location, testTime;
 
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView*)tableView
@@ -40,38 +42,12 @@ NSString* const DefaultServer = @"http://justplayed.heroku.com";
 }
 
 
-- (CGFloat)tableView:(UITableView*)tableView heightForHeaderInSection:(NSInteger)section
+- (NSString*)tableView:(UITableView*)tableView titleForHeaderInSection:(NSInteger)section
 {
-	return 44;
-}
-
-
-- (UIView*)tableView:(UITableView*)tableView viewForHeaderInSection:(NSInteger)section
-{
-	UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 44)];
-
-	UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(19, 10, headerView.bounds.size.width, 30)];
-	label.backgroundColor = [UIColor clearColor];
-	label.font = [UIFont boldSystemFontOfSize:17];
-	label.textColor = [UIColor colorWithRed:0.243 green:0.306 blue:0.435 alpha:1.0]; //http://bit.ly/1tMGn9
-	label.shadowColor = [UIColor whiteColor];
-	label.shadowOffset = CGSizeMake(0, 1);
-	
-	label.text = (StationSection == section ? @"Stations" : @"Snaps");
-	[headerView addSubview:label];
-
 	if (StationSection == section)
-	{
-		UIButton *button = [UIButton buttonWithType:UIButtonTypeInfoDark];
-		button.center = CGPointMake(291, 28);
-		button.alpha = 0.6;
-		button.tag = HelpTag;
-
-		[button addTarget:self action:@selector(helpButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-		[headerView addSubview:button];
-	}
-	
-	return headerView;
+		return @"Stations";
+	else
+		return @"Snaps";
 }
 
 
@@ -115,7 +91,7 @@ NSString* const DefaultServer = @"http://justplayed.heroku.com";
 		return;
 	
 	[stations release];
-	stations = [newStations retain];
+	stations = [newStations mutableCopy];
 	
 	[self refreshView];
 }
@@ -140,6 +116,7 @@ NSString* const DefaultServer = @"http://justplayed.heroku.com";
 	self.stations = [userDefaults arrayForKey:@"stations"];;
 	self.snaps = [Snap snapsFromPropertyLists:[userDefaults arrayForKey:@"snaps"]];
 	self.lookupServer = [userDefaults stringForKey:@"lookupServer"];
+	self.location = [userDefaults stringForKey:@"location"];
 	
 	[self refreshView];
 }
@@ -147,9 +124,10 @@ NSString* const DefaultServer = @"http://justplayed.heroku.com";
 
 - (void)clearUserData;
 {
-	self.stations = [NSArray array];
+	self.stations = [NSMutableArray array];
 	[snaps removeAllObjects];
 	self.lookupServer = @"";
+	self.location = @"";
 
 	[self refreshView];
 }
@@ -158,11 +136,13 @@ NSString* const DefaultServer = @"http://justplayed.heroku.com";
 - (void)saveUserData;
 {
 	NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+
 	[userDefaults setObject:self.stations forKey:@"stations"];
-	[userDefaults setObject:self.lookupServer forKey:@"lookupServer"];
 	[userDefaults
 		setObject:[Snap propertyListsFromSnaps:self.snaps]
 		forKey:@"snaps"];
+	[userDefaults setObject:self.lookupServer forKey:@"lookupServer"];
+	[userDefaults setObject:self.location forKey:@"location"];
 }
 
 
@@ -255,13 +235,9 @@ NSString* const DefaultServer = @"http://justplayed.heroku.com";
 
 - (void)showProgressBar:(BOOL)show;
 {
-	[UIView beginAnimations:@"progressAnimations" context:nil];
-	[UIView setAnimationDuration:0.3];
-
-	[progressBar setHidden:!show];
-	[progressBar setTag:(show ? DownloadingTag : 0)];
-
-	[UIView commitAnimations];
+	[downloadProgress setTag:(show ? DownloadingTag : 0)];
+	[downloadProgress performSelector:
+		(show ? @selector(startAnimating) : @selector(stopAnimating))];
 }
 
 
@@ -273,7 +249,7 @@ NSString* const DefaultServer = @"http://justplayed.heroku.com";
 
 - (void)lookupDidFail:(ASINetworkQueue*)queue;
 {
-	BOOL alreadyWarnedUser = progressBar.hidden;
+	BOOL alreadyWarnedUser = ![downloadProgress isAnimating];
 	if (alreadyWarnedUser)
 		return;
 
@@ -296,28 +272,36 @@ Sorry about that!";
 }
 
 
-- (IBAction)lookupButtonPressed:(id)sender;
+- (IBAction)locationButtonPressed:(id)sender;
 {
-	NSString* lookup = [NSString stringWithFormat:@"%@/%@",
+	NSString* lookup = [NSString stringWithFormat:@"%@/stations/%@",
 						self.lookupServer,
-						@"stations"];
+						self.location];
 	NSURL* lookupURL = [NSURL URLWithString:lookup];
-
-	[networkQueue cancelAllOperations];
+	
 	[networkQueue setRequestDidFinishSelector:@selector(fetchComplete:)];
-	[networkQueue setDownloadProgressDelegate:progressBar];
 	[networkQueue setQueueDidFinishSelector:@selector(lookupDidFinish:)];
 	[networkQueue setRequestDidFailSelector:@selector(lookupDidFail:)];
 	[networkQueue setDelegate:self];
-
-	[progressBar setProgress:0.0];
 	
 	ASIHTTPRequest *request;
 	request = [[[ASIHTTPRequest alloc] initWithURL:lookupURL] autorelease];
 	NSDictionary* context = [NSDictionary dictionaryWithObjectsAndKeys:@"stationFetchComplete:", @"selector", nil];
 	[request setUserInfo:context];
 	[networkQueue addOperation:request];
-	
+
+	[networkQueue go];
+	[self showProgressBar:YES];
+}
+
+
+- (IBAction)lookupButtonPressed:(id)sender;
+{
+	[networkQueue setRequestDidFinishSelector:@selector(fetchComplete:)];
+	[networkQueue setQueueDidFinishSelector:@selector(lookupDidFinish:)];
+	[networkQueue setRequestDidFailSelector:@selector(lookupDidFail:)];
+	[networkQueue setDelegate:self];
+
 	unsigned numSnaps = [self.snaps count];
 
 	for (unsigned i = 0; i < numSnaps; i++)
@@ -405,7 +389,7 @@ Sorry about that!";
 		cell.font = [UIFont systemFontOfSize:12.0];
 		cell.textColor = [UIColor lightGrayColor];
 		cell.textAlignment = UITextAlignmentCenter;
-		cell.text = @"connect to network and press Refresh";
+		cell.text = @"connect to network and press Locate";
 	}
 
 	return cell;
@@ -529,12 +513,46 @@ Sorry about that!";
 }
 
 
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath;
+{
+	if (StationSection == indexPath.section)
+	{
+		if ([stations count] == 0)
+			return;
+
+		[stations removeObjectAtIndex:indexPath.row];
+
+		if ([stations count] > 0)
+		{
+			NSArray* doomed = [NSArray arrayWithObject:indexPath];
+			[tableView deleteRowsAtIndexPaths:doomed withRowAnimation:UITableViewRowAnimationBottom];
+		}
+
+		[self refreshView];
+	}
+}
+
+- (BOOL)tableView:(UITableView*)tableView shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath*)indexPath;
+{
+	return NO;
+}
+
+- (UITableViewCellEditingStyle)tableView:(UITableView*)tableView editingStyleForRowAtIndexPath:(NSIndexPath*)indexPath;
+{
+	if (StationSection == indexPath.section)
+		return UITableViewCellEditingStyleDelete;
+	else
+		return UITableViewCellEditingStyleNone;
+}
+
+
 - (void)setToFactoryDefaults;
 {
 	NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
 	[userDefaults removeObjectForKey:@"stations"];
 	[userDefaults removeObjectForKey:@"snaps"];
 	[userDefaults removeObjectForKey:@"lookupServer"];
+	[userDefaults removeObjectForKey:@"location"];
 	
 	self.testTime = nil;
 	
@@ -545,13 +563,14 @@ Sorry about that!";
 - (void)viewDidLoad;
 {
 	[super viewDidLoad];
-
+	
 	NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     NSDictionary* appDefaults =
 		[NSDictionary dictionaryWithObjectsAndKeys:
 			[NSArray array], @"stations",
 			[NSArray array], @"snaps",
-			DefaultServer, @"lookupServer", nil];
+			DefaultServer, @"lookupServer",
+			DefaultLocation, @"location", nil];
     [defaults registerDefaults:appDefaults];
 
 	[self loadUserData];

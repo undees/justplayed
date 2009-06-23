@@ -16,13 +16,15 @@
 		 UITableViewDelegate,
 		 UIActionSheetDelegate>
 {
-	NSArray* stations;
+	NSMutableArray* stations;
 	NSMutableArray* snaps;
 
 	IBOutlet UITableView* snapsTable;
 	IBOutlet UIToolbar* toolbar;
-	IBOutlet UIProgressView* progressBar;
+	IBOutlet UIActivityIndicatorView* downloadProgress;
+
 	NSString* lookupServer;
+	NSString* location;
 	NSDate* testTime;
 	ASINetworkQueue* networkQueue;
 }
@@ -36,6 +38,7 @@
 - (void)saveUserData;
 - (void)refreshView;
 
+- (IBAction)locationButtonPressed:(id)sender;
 - (IBAction)lookupButtonPressed:(id)sender;
 - (IBAction)deleteButtonPressed:(id)sender;
 - (IBAction)helpButtonPressed:(id)sender;
@@ -47,6 +50,7 @@
 @property (nonatomic, retain) UIToolbar* toolbar;
 
 @property (nonatomic, retain) NSString* lookupServer;
+@property (nonatomic, retain) NSString* location;
 @property (nonatomic, retain) NSDate* testTime;
 
 @end

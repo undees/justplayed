@@ -9,6 +9,14 @@ Given /^a fresh install$/ do
   end
 end
 
+Given /^a test server$/ do
+  app.server = test_server
+end
+
+Given /^a missing test server$/ do
+  app.server = 'http://localhost:55555'
+end
+
 Then /^the server should not be empty$/ do
   app.server.should_not be_empty
 end

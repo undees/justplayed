@@ -5,7 +5,7 @@ Feature: Stations
 
   Scenario: Empty list
     Given a list of radio stations ""
-    Then I should be invited to press Refresh
+    Then I should be invited to press Locate
 
   Scenario: Looking up stations
     Given a test server
@@ -18,3 +18,8 @@ Feature: Stations
     And a test server
     When I restart the app
     Then I should see the stations "KBOO,KINK"
+
+  Scenario: Deleting stations
+    Given a list of radio stations "KNRK,KOPB"
+    When I delete the first station
+    Then I should see the stations "KOPB"
