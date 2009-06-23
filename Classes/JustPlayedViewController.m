@@ -303,6 +303,9 @@ Sorry about that!";
 	[networkQueue setDelegate:self];
 
 	unsigned numSnaps = [self.snaps count];
+	
+	if (0 == numSnaps)
+		return;
 
 	for (unsigned i = 0; i < numSnaps; i++)
 	{
