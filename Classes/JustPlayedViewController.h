@@ -43,9 +43,6 @@
 - (IBAction)deleteButtonPressed:(id)sender;
 - (IBAction)helpButtonPressed:(id)sender;
 
-@property (nonatomic, retain) NSArray* stations;
-@property (nonatomic, copy) NSArray* snaps;
-
 @property (nonatomic, retain) UITableView* snapsTable;
 @property (nonatomic, retain) UIToolbar* toolbar;
 

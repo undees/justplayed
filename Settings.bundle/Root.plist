@@ -20,7 +20,7 @@
 			<key>IsSecure</key>
 			<false/>
 			<key>KeyboardType</key>
-			<string>NumberPad</string>
+			<string>Alphabet</string>
 			<key>AutocapitalizationType</key>
 			<string>None</string>
 			<key>AutocorrectionType</key>

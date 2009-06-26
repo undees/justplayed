@@ -112,7 +112,7 @@
 	NSArray* stations = [data objectForKey:@"stations"];
 	if (stations)
 	{
-		viewController.stations = stations;
+		[viewController setStations:stations];
 	}
 	
 	NSArray* plists = [data objectForKey:@"snaps"];

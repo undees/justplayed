@@ -33,7 +33,7 @@ NSString* const DefaultLocation = @"Portland";
 @implementation JustPlayedViewController
 
 
-@synthesize stations, snaps, snapsTable, toolbar, lookupServer, location, testTime;
+@synthesize snapsTable, toolbar, lookupServer, location, testTime;
 
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView*)tableView
@@ -55,12 +55,12 @@ NSString* const DefaultLocation = @"Portland";
 {
 	if (StationSection == section)
 	{
-		NSUInteger count = [self.stations count];
+		NSUInteger count = [stations count];
 		return (count == 0 ? 1 : count);
 	}
 	else
 	{
-		return [self.snaps count];
+		return [snaps count];
 	}
 }
 
@@ -113,8 +113,8 @@ NSString* const DefaultLocation = @"Portland";
 {
 	NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
 
-	self.stations = [userDefaults arrayForKey:@"stations"];;
-	self.snaps = [Snap snapsFromPropertyLists:[userDefaults arrayForKey:@"snaps"]];
+	[self setStations:[userDefaults arrayForKey:@"stations"]];
+	[self setSnaps:[Snap snapsFromPropertyLists:[userDefaults arrayForKey:@"snaps"]]];
 	self.lookupServer = [userDefaults stringForKey:@"lookupServer"];
 	self.location = [userDefaults stringForKey:@"location"];
 	
@@ -124,7 +124,7 @@ NSString* const DefaultLocation = @"Portland";
 
 - (void)clearUserData;
 {
-	self.stations = [NSMutableArray array];
+	[self setStations:[NSMutableArray array]];
 	[snaps removeAllObjects];
 	self.lookupServer = @"";
 	self.location = @"";
@@ -137,9 +137,9 @@ NSString* const DefaultLocation = @"Portland";
 {
 	NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
 
-	[userDefaults setObject:self.stations forKey:@"stations"];
+	[userDefaults setObject:stations forKey:@"stations"];
 	[userDefaults
-		setObject:[Snap propertyListsFromSnaps:self.snaps]
+		setObject:[Snap propertyListsFromSnaps:snaps]
 		forKey:@"snaps"];
 	[userDefaults setObject:self.lookupServer forKey:@"lookupServer"];
 	[userDefaults setObject:self.location forKey:@"location"];
@@ -176,7 +176,7 @@ NSString* const DefaultLocation = @"Portland";
 	Snap* snap = [snapAndSong objectAtIndex:0];
 	NSDictionary* song = [snapAndSong objectAtIndex:1];
 	
-	NSUInteger found = [self.snaps indexOfObject:snap];
+	NSUInteger found = [snaps indexOfObject:snap];
 	
 	if (NSNotFound == found)
 		return;
@@ -302,14 +302,14 @@ Sorry about that!";
 	[networkQueue setRequestDidFailSelector:@selector(lookupDidFail:)];
 	[networkQueue setDelegate:self];
 
-	unsigned numSnaps = [self.snaps count];
+	unsigned numSnaps = [snaps count];
 	
 	if (0 == numSnaps)
 		return;
 
 	for (unsigned i = 0; i < numSnaps; i++)
 	{
-		Snap* snap = [self.snaps objectAtIndex:i];
+		Snap* snap = [snaps objectAtIndex:i];
 
 		if (snap.needsLookup)
 		{
@@ -389,10 +389,16 @@ Sorry about that!";
 		cell = [[[UITableViewCell alloc] initWithFrame:frame reuseIdentifier:EmptyCell] autorelease];
 
 		cell.tag = StationTag;
-		cell.font = [UIFont systemFontOfSize:12.0];
-		cell.textColor = [UIColor lightGrayColor];
-		cell.textAlignment = UITextAlignmentCenter;
-		cell.text = @"connect to network and press Locate";
+
+#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 30000
+		UILabel* custom = cell.textLabel;
+#else
+		UITableViewCell* custom = cell;
+#endif
+		custom.font = [UIFont systemFontOfSize:12.0];
+		custom.textColor = [UIColor lightGrayColor];
+		custom.textAlignment = UITextAlignmentCenter;
+		custom.text = @"connect to network and press Locate";
 	}
 
 	return cell;
@@ -407,12 +413,20 @@ Sorry about that!";
 		CGRect frame = CGRectMake(0, 0, 300, 44);
 		cell = [[[UITableViewCell alloc] initWithFrame:frame reuseIdentifier:StationCell] autorelease];
 		cell.tag = StationTag;
-		cell.font = [UIFont boldSystemFontOfSize:15.0];
-		cell.textAlignment = UITextAlignmentCenter;
 
 		// Hey, Apple, how about a +buttonTitleColor for system colors?
 		UIButton* button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-		cell.textColor = button.currentTitleColor;
+		UIColor* textColor = button.currentTitleColor;
+		
+#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 30000
+		UILabel* custom = cell.textLabel;
+#else
+		UITableViewCell* custom = cell;
+#endif
+		
+		custom.font = [UIFont boldSystemFontOfSize:15.0];
+		custom.textAlignment = UITextAlignmentCenter;
+		custom.textColor = textColor;
 	}
 
 	return cell;
@@ -447,11 +461,16 @@ Sorry about that!";
 {
 	if (StationSection == indexPath.section)
 	{
-		if ([self.stations count] > 0)
+		if ([stations count] > 0)
 		{
 			UITableViewCell* cell = [self stationCellWithView:tableView];
-			NSString* title = [self.stations objectAtIndex:[indexPath row]];
-			[cell setText:title];
+			NSString* title = [stations objectAtIndex:[indexPath row]];
+
+#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 30000
+			cell.textLabel.text = title;
+#else
+			cell.text = title;
+#endif
 
 			return cell;
 		}
@@ -469,7 +488,7 @@ Sorry about that!";
 		UILabel* snapTitle = (UILabel*)[cell.contentView viewWithTag:TitleTag];
 		UILabel* snapSubtitle = (UILabel *)[cell.contentView viewWithTag:SubtitleTag];
 
-		Snap* snap = [self.snaps objectAtIndex:[indexPath row]];
+		Snap* snap = [snaps objectAtIndex:[indexPath row]];
 		snapTitle.text = snap.title;
 		snapSubtitle.text = snap.subtitle;
 
@@ -487,9 +506,9 @@ Sorry about that!";
 {
 	if (StationSection == indexPath.section)
 	{
-		if ([self.stations count] > 0)
+		if ([stations count] > 0)
 		{
-			NSString* station = [self.stations objectAtIndex:[indexPath row]];
+			NSString* station = [stations objectAtIndex:[indexPath row]];
 			[self addSnapForStation:station];
 		}
 
@@ -497,7 +516,7 @@ Sorry about that!";
 	}
 	else
 	{
-		Snap* snap = [self.snaps objectAtIndex:[indexPath row]];
+		Snap* snap = [snaps objectAtIndex:[indexPath row]];
 
 		if (!snap.needsLookup)
 		{
