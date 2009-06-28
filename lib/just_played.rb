@@ -117,10 +117,8 @@ class JustPlayed
     xml = @gui.dump
     doc = REXML::Document.new xml
 
-    # Not much of a check; all we can hope for is a squawk
-    # if we rearrange the toolbar and leave out help
-    xpath = '//UIToolbarButton'
-    REXML::XPath.match(doc, xpath).size == 4
+    xpath = '//UIButton[tag="%s"]' % HelpTag
+    !REXML::XPath.match(doc, xpath).empty?
   end
 
   def toolbar_buttons
@@ -136,10 +134,9 @@ class JustPlayed
     end
     locations.sort!
 
-    {:help => "//UIToolbarButton[#{locations[0][1]}]",
-     :locate => "//UIToolbarButton[#{locations[1][1]}]",
-     :lookup => "//UIToolbarButton[#{locations[2][1]}]",
-     :delete_all => "//UIToolbarButton[#{locations[3][1]}]"}
+    {:locate => "//UIToolbarButton[#{locations[0][1]}]",
+     :lookup => "//UIToolbarButton[#{locations[1][1]}]",
+     :delete_all => "//UIToolbarButton[#{locations[2][1]}]"}
   end
 
   def restart
