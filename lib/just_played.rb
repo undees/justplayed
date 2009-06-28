@@ -63,6 +63,13 @@ class JustPlayed
     @gui.command 'setTestData', :raw, 'stations', plist
   end
 
+  def delete_station(row)
+    @gui.command 'scrollToRow', 'viewXPath', '//UITableView', 'rowIndex', row
+    @gui.command 'simulateSwipe', 'viewXPath', "//UITableViewCell[#{row + 1}]"
+    @gui.command 'simulateTouch', 'viewXPath', '//UIRemoveControlTextButton', 'hitTest', 0
+    sleep 1
+  end
+
   def snaps=(list)
     @gui.command 'setTestData', :raw, 'snaps', JustPlayed.snap_plist(list)
   end

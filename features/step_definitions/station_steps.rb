@@ -16,6 +16,10 @@ When /^I try looking up my stations$/ do
   end
 end
 
+When /^I delete the first station$/ do
+  app.delete_station(0)
+end
+
 Then /^I should see the stations "([^\"]*)"$/ do
   |text|
 
