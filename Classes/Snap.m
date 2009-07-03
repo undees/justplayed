@@ -3,7 +3,7 @@
 //  JustPlayed
 //
 //  Created by Ian Dees on 4/28/09.
-//  Copyright 2009 25y26z. All rights reserved.
+//  Copyright 25y26z 2009. See LICENSE.txt for details.
 //
 
 #import "Snap.h"

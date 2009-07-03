@@ -3,7 +3,7 @@
 //  JustPlayed
 //
 //  Created by Ian Dees on 4/19/09.
-//  Copyright __MyCompanyName__ 2009. All rights reserved.
+//  Copyright 25y26z 2009. See LICENSE.txt for details.
 //
 
 #import "JustPlayedAppDelegate.h"
