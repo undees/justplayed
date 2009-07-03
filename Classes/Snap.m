@@ -20,10 +20,13 @@
 	NSMutableArray* array =
 		[NSMutableArray arrayWithCapacity:[snaps count]];
 
-	for (unsigned i = 0; i < [snaps count]; i++)
+	NSEnumerator *e = [snaps objectEnumerator];
+	id snap;
+	
+	while ((snap = [e nextObject]))
 	{
-		[array addObject:[[snaps objectAtIndex:i] propertyList]];
-	}
+		[array addObject:[snap propertyList]];
+	}	
 	
 	return array;
 }
@@ -32,11 +35,14 @@
 {
 	NSMutableArray* array =
 		[NSMutableArray arrayWithCapacity:[plists count]];
+
+	NSEnumerator *e = [plists objectEnumerator];
+	id plist;
 	
-	for (unsigned i = 0; i < [plists count]; i++)
+	while ((plist = [e nextObject]))
 	{
-		[array addObject:[[[Snap alloc] initWithPropertyList:[plists objectAtIndex:i]]autorelease]];
-	}
+		[array addObject:[[[Snap alloc] initWithPropertyList:plist] autorelease]];
+	}	
 	
 	return array;
 }
