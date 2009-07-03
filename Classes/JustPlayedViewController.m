@@ -373,6 +373,8 @@ NSString * const DefaultLocation = @"Portland";
 									 snap, @"snap",
 									 nil];
 			[request setUserInfo:context];
+
+			[request setUseCookiePersistance:NO];
 			
 			[networkQueue addOperation:request];
 		}
@@ -573,6 +575,8 @@ NSString * const DefaultLocation = @"Portland";
 	NSDictionary *context =
 		[NSDictionary dictionaryWithObjectsAndKeys:@"stationFetchComplete:", @"selector", nil];
 	[request setUserInfo:context];
+
+	[request setUseCookiePersistance:NO];
 
 	[networkQueue addOperation:request];
 	[networkQueue go];
