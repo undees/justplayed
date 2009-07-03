@@ -3,7 +3,7 @@
 //  JustPlayed
 //
 //  Created by Ian Dees on 4/28/09.
-//  Copyright 2009 Ian Dees. All rights reserved.
+//  Copyright 2009 25y26z. All rights reserved.
 //
 
 #import "Snap.h"
@@ -15,9 +15,12 @@
 @synthesize title, subtitle, createdAt, needsLookup;
 
 
-+ (NSArray*)propertyListsFromSnaps:(NSArray*)snaps;
+// Returns a key/value representation of an array of snaps.
+// Used for saving user data.
+//
++ (NSArray *)propertyListsFromSnaps:(NSArray *)snaps;
 {
-	NSMutableArray* array =
+	NSMutableArray *array =
 		[NSMutableArray arrayWithCapacity:[snaps count]];
 
 	NSEnumerator *e = [snaps objectEnumerator];
@@ -31,9 +34,13 @@
 	return array;
 }
 
-+ (NSArray*)snapsFromPropertyLists:(NSArray*)plists;
+
+// Creates an array of Snap objects from an array
+// of dictionaries.  Used for loading user data.
+//
++ (NSArray *)snapsFromPropertyLists:(NSArray *)plists;
 {
-	NSMutableArray* array =
+	NSMutableArray *array =
 		[NSMutableArray arrayWithCapacity:[plists count]];
 
 	NSEnumerator *e = [plists objectEnumerator];
@@ -47,9 +54,12 @@
 	return array;
 }
 
-- (NSDictionary*)propertyList;
+
+// Returns a key/value representation of this Snap.
+//
+- (NSDictionary *)propertyList;
 {
-	NSDictionary* plist =
+	NSDictionary *plist =
 		[NSDictionary dictionaryWithObjectsAndKeys:
 			title, @"title",
 			subtitle, @"subtitle",
@@ -59,23 +69,29 @@
 	return plist;
 }
 
-- (id)initWithPropertyList:(NSDictionary*)plist;
+
+// Initializes a new Snap from a loaded key/value representation.
+//
+- (id)initWithPropertyList:(NSDictionary *)plist;
 {
 	if (self = [super init])
 	{
 		title = [[plist objectForKey:@"title"] retain];
 		subtitle = [[plist objectForKey:@"subtitle"] retain];
 
-		NSDate* date = [[plist objectForKey:@"createdAt"] retain];
+		NSDate *date = [[plist objectForKey:@"createdAt"] retain];
 		createdAt = (date ? date : [[NSDate alloc] init]);
 
-		NSNumber* number = [plist objectForKey:@"needsLookup"];
+		NSNumber *number = [plist objectForKey:@"needsLookup"];
 		needsLookup = (number ? [number boolValue] : YES);
 	}
 	return self;
 }
 
-- (NSString*)stringFromCreationDate;
+
+// Returns the timestamp for this Snap as a wall clock time.
+//
+- (NSString *)stringFromCreationDate;
 {
 	NSDateFormatter *dateFormat =
 		[[[NSDateFormatter alloc] init] autorelease];
@@ -85,7 +101,10 @@
 	return [dateFormat stringFromDate:createdAt];
 }
 
-- (id)initWithTitle:(NSString*)newTitle artist:(NSString*)newArtist;
+
+// Initializes a new Snap where the title and author are already known.
+//
+- (id)initWithTitle:(NSString *)newTitle artist:(NSString *)newArtist;
 {
 	if (self = [super init])
 	{
@@ -97,7 +116,10 @@
 	return self;
 }
 
-- (id)initWithStation:(NSString*)newStation creationTime:(NSDate*)when;
+
+// Initializes a new Snap where only the radio station and time are known.
+//
+- (id)initWithStation:(NSString *)newStation creationTime:(NSDate *)when;
 {
 	if (self = [super init])
 	{
@@ -109,15 +131,22 @@
 	return self;
 }
 
-- (id)initWithStation:(NSString*)newStation;
+
+// Initializes a new Snap for a radio station playing right now.
+//
+- (id)initWithStation:(NSString *)newStation;
 {
 	return [self initWithStation:newStation creationTime:[NSDate date]];
 }
 
+
+// Initializes a new Snap for right now, with no radio station.
+//
 - (id)init
 {
 	return [self initWithStation:@""];
 }
+
 
 - (void)dealloc
 {

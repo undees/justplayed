@@ -57,24 +57,24 @@
 
 // Parse an incoming time-only timestamp into a full date/time object.
 //
-- (NSDate*)dateFromClockTime:(NSString*)clockTime;
+- (NSDate *)dateFromClockTime:(NSString *)clockTime;
 {
-	NSDate* date = [NSDate date];
-	NSCalendar* calendar = [NSCalendar currentCalendar];
+	NSDate *date = [NSDate date];
+	NSCalendar *calendar = [NSCalendar currentCalendar];
 	NSInteger dateUnits =
 	NSYearCalendarUnit |
 	NSMonthCalendarUnit |
 	NSDayCalendarUnit;
-	NSDateComponents* dateParts = [calendar components:dateUnits fromDate:date];
+	NSDateComponents *dateParts = [calendar components:dateUnits fromDate:date];
 	
-	NSDateFormatter* format = [[[NSDateFormatter alloc] init] autorelease];
+	NSDateFormatter *format = [[[NSDateFormatter alloc] init] autorelease];
 	[format setDateFormat:@"HH:mm"];
-	NSDate* time = [format dateFromString:clockTime];
+	NSDate *time = [format dateFromString:clockTime];
 	
 	NSInteger timeUnits =
 	NSHourCalendarUnit |
 	NSMinuteCalendarUnit;
-	NSDateComponents* timeParts = [calendar components:timeUnits fromDate:time];
+	NSDateComponents *timeParts = [calendar components:timeUnits fromDate:time];
 	
 	NSInteger hour = [timeParts hour];
 	NSInteger minute = [timeParts minute];
@@ -89,7 +89,7 @@
 // GUI testing hooks
 
 
-- (NSString*)restoreDefaults:(NSDictionary*)ignored;
+- (NSString *)restoreDefaults:(NSDictionary *)ignored;
 {
 	[viewController setToFactoryDefaults];
 
@@ -97,7 +97,7 @@
 }
 
 
-- (NSString*)terminateApp:(NSDictionary*)ignored;
+- (NSString *)terminateApp:(NSDictionary *)ignored;
 {
 	[viewController saveUserData];
 	[[NSUserDefaults standardUserDefaults] synchronize];
@@ -109,13 +109,13 @@
 
 // Return application settings by name.
 //
-- (NSString*)getTestData:(NSDictionary*)data;
+- (NSString *)getTestData:(NSDictionary *)data;
 {
-	NSString* key = [data objectForKey:@"key"];
+	NSString *key = [data objectForKey:@"key"];
 
 	if ([key isEqualToString:@"lookupServer"])
 	{
-		NSData* data = [NSPropertyListSerialization
+		NSData *data = [NSPropertyListSerialization
 			dataFromPropertyList:(viewController.lookupServer)
 			format:NSPropertyListXMLFormat_v1_0
 			errorDescription:nil];
@@ -131,27 +131,27 @@
 
 // Inject test data into the app.
 //
-- (NSString*)setTestData:(NSDictionary*)data;
+- (NSString *)setTestData:(NSDictionary *)data;
 {
-	NSArray* stations = [data objectForKey:@"stations"];
+	NSArray *stations = [data objectForKey:@"stations"];
 	if (stations)
 	{
 		[viewController setStations:stations];
 	}
 	
-	NSArray* plists = [data objectForKey:@"snaps"];
+	NSArray *plists = [data objectForKey:@"snaps"];
 	if (plists)
 	{
 		[viewController setSnaps:[Snap snapsFromPropertyLists:plists]];
 	}
 
-	NSString* lookupServer = [data objectForKey:@"lookupServer"];
+	NSString *lookupServer = [data objectForKey:@"lookupServer"];
 	if (lookupServer)
 	{
 		viewController.lookupServer = lookupServer;
 	}
 
-	NSString* testTime = [data objectForKey:@"testTime"];
+	NSString *testTime = [data objectForKey:@"testTime"];
 	if (testTime)
 	{
 		viewController.testTime = [self dateFromClockTime:testTime];
@@ -161,7 +161,6 @@
 
 	return @"pass";
 }
-
 
 #endif
 

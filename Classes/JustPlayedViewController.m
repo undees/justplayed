@@ -12,23 +12,30 @@
 #import "ASINetworkQueue.h"
 
 
-const int StationSection = 0;
-const int SnapSection = 1;
+enum {
+	StationSection = 0,
+	SnapSection
+};
 
-const int StationTag = 1;
-const int SnapTag = 2;
-const int TitleTag = 3;
-const int SubtitleTag = 4;
-const int DownloadingTag = 5;
-const int HelpTag = 6;
-const int LocationTag = 7;
 
-NSString* const EmptyCell = @"EmptyCell";
-NSString* const StationCell = @"StationCell";
-NSString* const SnapCell = @"SnapCell";
+enum {
+	StationTag = 1,
+	SnapTag,
+	TitleTag,
+	SubtitleTag,
+	DownloadingTag,
+	HelpTag,
+	LocationTag,
+};
 
-NSString* const DefaultServer = @"http://justplayed.heroku.com";
-NSString* const DefaultLocation = @"Portland";
+
+NSString * const EmptyCell = @"EmptyCell";
+NSString * const StationCell = @"StationCell";
+NSString * const SnapCell = @"SnapCell";
+
+NSString * const DefaultServer = @"http://justplayed.heroku.com";
+NSString * const DefaultLocation = @"Portland";
+
 
 @implementation JustPlayedViewController
 
@@ -42,9 +49,9 @@ NSString* const DefaultLocation = @"Portland";
 
 // Empty cell with a simple howto message.
 //
-- (UITableViewCell*)emptyCellWithView:(UITableView*)tableView;
+- (UITableViewCell *)emptyCellWithView:(UITableView *)tableView;
 {
-	UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:EmptyCell];
+	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:EmptyCell];
 	if (cell == nil)
 	{
 		CGRect frame = CGRectMake(0, 0, 300, 44);
@@ -53,9 +60,9 @@ NSString* const DefaultLocation = @"Portland";
 		cell.tag = StationTag;
 		
 #if __IPHONE_OS_VERSION_MIN_REQUIRED >= 30000
-		UILabel* custom = cell.textLabel;
+		UILabel *custom = cell.textLabel;
 #else
-		UITableViewCell* custom = cell;
+		UITableViewCell *custom = cell;
 #endif
 		custom.font = [UIFont systemFontOfSize:12.0];
 		custom.textColor = [UIColor lightGrayColor];
@@ -68,9 +75,9 @@ NSString* const DefaultLocation = @"Portland";
 
 // Cell with a radio station name.
 //
-- (UITableViewCell*)stationCellWithView:(UITableView*)tableView;
+- (UITableViewCell *)stationCellWithView:(UITableView *)tableView;
 {
-	UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:StationCell];
+	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:StationCell];
 	if (cell == nil)
 	{
 		CGRect frame = CGRectMake(0, 0, 300, 44);
@@ -78,13 +85,13 @@ NSString* const DefaultLocation = @"Portland";
 		cell.tag = StationTag;
 		
 		// Hey Apple, how about a +buttonTitleColor for system colors?
-		UIButton* button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-		UIColor* textColor = button.currentTitleColor;
+		UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+		UIColor *textColor = button.currentTitleColor;
 		
 #if __IPHONE_OS_VERSION_MIN_REQUIRED >= 30000
-		UILabel* custom = cell.textLabel;
+		UILabel *custom = cell.textLabel;
 #else
-		UITableViewCell* custom = cell;
+		UITableViewCell *custom = cell;
 #endif
 		
 		custom.font = [UIFont boldSystemFontOfSize:15.0];
@@ -98,20 +105,20 @@ NSString* const DefaultLocation = @"Portland";
 
 // Cell with either a station/time, or a title/artist.
 //
-- (UITableViewCell*)snapCellWithView:(UITableView*)tableView;
+- (UITableViewCell *)snapCellWithView:(UITableView *)tableView;
 {
-	UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:SnapCell];
+	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:SnapCell];
 	if (cell == nil)
 	{
 		CGRect frame = CGRectMake(0, 0, 290, 60);
 		cell = [[[UITableViewCell alloc] initWithFrame:frame reuseIdentifier:SnapCell] autorelease];
 		cell.tag = SnapTag;
 		
-		UILabel* snapTitle = [[[UILabel alloc] initWithFrame:CGRectMake(10, 10, 280, 25)] autorelease];
+		UILabel *snapTitle = [[[UILabel alloc] initWithFrame:CGRectMake(10, 10, 280, 25)] autorelease];
 		snapTitle.tag = TitleTag;
 		[cell.contentView addSubview:snapTitle];
 		
-		UILabel* snapSubtitle = [[[UILabel alloc] initWithFrame:CGRectMake(10, 33, 280, 25)] autorelease];
+		UILabel *snapSubtitle = [[[UILabel alloc] initWithFrame:CGRectMake(10, 33, 280, 25)] autorelease];
 		snapSubtitle.tag = SubtitleTag;
 		snapSubtitle.font = [UIFont systemFontOfSize:12.0];
 		snapSubtitle.textColor = [UIColor lightGrayColor];
@@ -124,16 +131,16 @@ NSString* const DefaultLocation = @"Portland";
 
 // Bookmark the fact that we are listening to the given station right now.
 //
-- (void)addSnapForStation:(NSString*)station;
+- (void)addSnapForStation:(NSString *)station;
 {
 	// First insert the new snap into the in-memory list...
-	NSDate* date = (self.testTime ? self.testTime : [NSDate date]);
-	Snap* snap = [[[Snap alloc] initWithStation:station creationTime:date] autorelease];
+	NSDate *date = (self.testTime ? self.testTime : [NSDate date]);
+	Snap *snap = [[[Snap alloc] initWithStation:station creationTime:date] autorelease];
 	[snaps insertObject:snap atIndex:0];
 	
 	// ... and then add it to the GUI.
-	NSIndexPath* path = [NSIndexPath indexPathForRow:0 inSection:SnapSection];
-	NSArray* paths = [NSArray arrayWithObject:path];
+	NSIndexPath *path = [NSIndexPath indexPathForRow:0 inSection:SnapSection];
+	NSArray *paths = [NSArray arrayWithObject:path];
 	[snapsTable insertRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationTop];
 	[self refreshView];
 }
@@ -150,13 +157,13 @@ NSString* const DefaultLocation = @"Portland";
 // Table view functions called by Cocoa Touch in response to GUI events.
 
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView*)tableView
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
 	return 2;
 }
 
 
-- (NSString*)tableView:(UITableView*)tableView titleForHeaderInSection:(NSInteger)section
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
 	if (StationSection == section)
 		return @"Stations";
@@ -165,7 +172,7 @@ NSString* const DefaultLocation = @"Portland";
 }
 
 
-- (NSInteger)tableView:(UITableView*)tableView numberOfRowsInSection:(NSInteger)section;
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section;
 {
 	if (StationSection == section)
 	{
@@ -180,7 +187,7 @@ NSString* const DefaultLocation = @"Portland";
 }
 
 
--(CGFloat)tableView:(UITableView*)tableView heightForRowAtIndexPath:(NSIndexPath*)indexPath;
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath;
 {
 	return (StationSection == indexPath.section ? 44 : 60);
 }
@@ -188,7 +195,7 @@ NSString* const DefaultLocation = @"Portland";
 
 // Called by Cooca Touch when it's time to fill a cell with data and show it.
 //
-- (UITableViewCell*)tableView:(UITableView*)tableView cellForRowAtIndexPath:(NSIndexPath*)indexPath;
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath;
 {
 	if (StationSection == indexPath.section)
 	{
@@ -197,8 +204,8 @@ NSString* const DefaultLocation = @"Portland";
 		
 		if ([stations count] > 0)
 		{
-			UITableViewCell* cell = [self stationCellWithView:tableView];
-			NSString* title = [stations objectAtIndex:[indexPath row]];
+			UITableViewCell *cell = [self stationCellWithView:tableView];
+			NSString *title = [stations objectAtIndex:[indexPath row]];
 			
 #if __IPHONE_OS_VERSION_MIN_REQUIRED >= 30000
 			cell.textLabel.text = title;
@@ -217,14 +224,14 @@ NSString* const DefaultLocation = @"Portland";
 	{
 		// Show a station/time snapshot, or a title/artist cell.
 		
-		UITableViewCell* cell = [self snapCellWithView:tableView];
+		UITableViewCell *cell = [self snapCellWithView:tableView];
 		
 		cell.selectionStyle = UITableViewCellSelectionStyleNone;
 		
-		UILabel* snapTitle = (UILabel*)[cell.contentView viewWithTag:TitleTag];
-		UILabel* snapSubtitle = (UILabel *)[cell.contentView viewWithTag:SubtitleTag];
+		UILabel *snapTitle = (UILabel *)[cell.contentView viewWithTag:TitleTag];
+		UILabel *snapSubtitle = (UILabel  *)[cell.contentView viewWithTag:SubtitleTag];
 		
-		Snap* snap = [snaps objectAtIndex:[indexPath row]];
+		Snap *snap = [snaps objectAtIndex:[indexPath row]];
 		snapTitle.text = snap.title;
 		snapSubtitle.text = snap.subtitle;
 		
@@ -240,7 +247,7 @@ NSString* const DefaultLocation = @"Portland";
 
 // Called when the user taps on a cell.
 //
-- (void)tableView:(UITableView*)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath;
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath;
 {
 	if (StationSection == indexPath.section)
 	{
@@ -248,7 +255,7 @@ NSString* const DefaultLocation = @"Portland";
 		// record the station and time.
 		if ([stations count] > 0)
 		{
-			NSString* station = [stations objectAtIndex:[indexPath row]];
+			NSString *station = [stations objectAtIndex:[indexPath row]];
 			[self addSnapForStation:station];
 		}
 		
@@ -256,21 +263,21 @@ NSString* const DefaultLocation = @"Portland";
 	}
 	else
 	{
-		Snap* snap = [snaps objectAtIndex:[indexPath row]];
+		Snap *snap = [snaps objectAtIndex:[indexPath row]];
 		
 		// If he clicked on a title/artist cell, go to the iTunes Store
 		// to search for that song.
 		if (!snap.needsLookup)
 		{
-			NSString* link =
+			NSString *link =
 				[NSString stringWithFormat:@"itms://phobos.apple.com/WebObjects/MZSearch.woa/wa/com.apple.jingle.search.DirectAction/search?term=%@ %@",
 				 snap.title,
 				 snap.subtitle];
 
-			NSString* escapedLink =
+			NSString *escapedLink =
 				[link stringByAddingPercentEscapesUsingEncoding:
 				 NSASCIIStringEncoding];
-				NSURL* url = [NSURL URLWithString:escapedLink];
+				NSURL *url = [NSURL URLWithString:escapedLink];
 
 			[[UIApplication sharedApplication] openURL:url];
 		}
@@ -280,7 +287,7 @@ NSString* const DefaultLocation = @"Portland";
 
 // Called when the user deletes a station.
 //
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath;
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath  *)indexPath;
 {
 	if (StationSection == indexPath.section)
 	{
@@ -293,7 +300,7 @@ NSString* const DefaultLocation = @"Portland";
 		// ... and from the GUI (leave behind a helper message if he deleted the last one).
 		if ([stations count] > 0)
 		{
-			NSArray* doomed = [NSArray arrayWithObject:indexPath];
+			NSArray *doomed = [NSArray arrayWithObject:indexPath];
 			[tableView deleteRowsAtIndexPaths:doomed withRowAnimation:UITableViewRowAnimationBottom];
 		}
 		
@@ -304,7 +311,7 @@ NSString* const DefaultLocation = @"Portland";
 
 // Only station cells can be individually deleted.
 //
-- (UITableViewCellEditingStyle)tableView:(UITableView*)tableView editingStyleForRowAtIndexPath:(NSIndexPath*)indexPath;
+- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath;
 {
 	if (StationSection == indexPath.section)
 		return UITableViewCellEditingStyleDelete;
@@ -338,30 +345,30 @@ NSString* const DefaultLocation = @"Portland";
 	
 	for (unsigned i = 0; i < [snaps count]; i++)
 	{
-		Snap* snap = [snaps objectAtIndex:i];
+		Snap *snap = [snaps objectAtIndex:i];
 		
 		// Some snaps in the list will already have been successfully looked up.
 		if (snap.needsLookup)
 		{
 			// URL will look like http://justplayed.heroku.com/KNRK/2009-07-03T10:00
 			
-			NSDateFormatter* dateFormat = [[[NSDateFormatter alloc] init] autorelease];
+			NSDateFormatter *dateFormat = [[[NSDateFormatter alloc] init] autorelease];
 			[dateFormat setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
 			
-			NSString* snappedAt = [dateFormat stringFromDate:snap.createdAt];
-			NSString* lookup = [NSString stringWithFormat:@"%@/%@/%@",
+			NSString *snappedAt = [dateFormat stringFromDate:snap.createdAt];
+			NSString *lookup = [NSString stringWithFormat:@"%@/%@/%@",
 								self.lookupServer,
 								snap.title,
 								snappedAt];
-			NSURL* lookupURL = [NSURL URLWithString:lookup];
+			NSURL *lookupURL = [NSURL URLWithString:lookup];
 			
-			ASIHTTPRequest* request = [[[ASIHTTPRequest alloc] initWithURL:lookupURL] autorelease];
+			ASIHTTPRequest *request = [[[ASIHTTPRequest alloc] initWithURL:lookupURL] autorelease];
 			
 			// Tie the HTTP request to this snap, so we'll know where to route the results.
 			[[request userInfo] setValue:snap forKey:@"snap"];
 			
 			// Tell the network queue what to do after the lookup is complete.
-			NSDictionary* context = [NSDictionary dictionaryWithObjectsAndKeys:
+			NSDictionary *context = [NSDictionary dictionaryWithObjectsAndKeys:
 									 @"snapFetchComplete:", @"selector",
 									 snap, @"snap",
 									 nil];
@@ -380,7 +387,7 @@ NSString* const DefaultLocation = @"Portland";
 //
 - (IBAction)deleteButtonPressed:(id)sender;
 {
-	UIActionSheet* confirmation =
+	UIActionSheet *confirmation =
 	[[UIActionSheet alloc]
 	 initWithTitle:nil
 	 delegate:self
@@ -396,7 +403,7 @@ NSString* const DefaultLocation = @"Portland";
 // The user has confirmed that he really, really
 // wants to delete all his snaps.
 //
-- (void)actionSheet:(UIActionSheet*)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex;
+- (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex;
 {
 	if (0 == buttonIndex)
 	{
@@ -419,7 +426,7 @@ NSString* const DefaultLocation = @"Portland";
 //
 - (IBAction)helpButtonPressed:(id)sender;
 {
-	NSURL* url = [NSURL URLWithString:DefaultServer];
+	NSURL *url = [NSURL URLWithString:DefaultServer];
 	[[UIApplication sharedApplication] openURL:url];
 }
 
@@ -430,18 +437,18 @@ NSString* const DefaultLocation = @"Portland";
 // We've received a dictionary of stations (keys = call letters, values = links).
 // Fill the stations list with the new data.
 //
-- (void)stationFetchComplete:(ASIHTTPRequest*)request;
+- (void)stationFetchComplete:(ASIHTTPRequest *)request;
 {
-	NSData* data = [request responseData];
+	NSData *data = [request responseData];
 	
-	NSDictionary* details =
+	NSDictionary *details =
 	[NSPropertyListSerialization
 	 propertyListFromData:data
 	 mutabilityOption:NSPropertyListImmutable
 	 format:nil
 	 errorDescription:nil];
 	
-	NSArray* newStations = [[details allKeys] sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
+	NSArray *newStations = [[details allKeys] sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
 	
 	[self performSelectorOnMainThread:@selector(setStations:)
 						   withObject:newStations
@@ -453,27 +460,27 @@ NSString* const DefaultLocation = @"Portland";
 // on the networking thread.  Bundle it up and send it to
 // the GUI thread for updating.
 // 
-- (void)snapFetchComplete:(ASIHTTPRequest*)request;
+- (void)snapFetchComplete:(ASIHTTPRequest *)request;
 {
-	NSData* data = [request responseData];
-	NSDictionary* snap = [[request userInfo] objectForKey:@"snap"];
+	NSData *data = [request responseData];
+	NSDictionary *snap = [[request userInfo] objectForKey:@"snap"];
 	
-	NSDictionary* details =
+	NSDictionary *details =
 	[NSPropertyListSerialization
 	 propertyListFromData:data
 	 mutabilityOption:NSPropertyListImmutable
 	 format:nil
 	 errorDescription:nil];
 	
-	NSString* title = [details objectForKey:@"title"];
-	NSString* artist = [details objectForKey:@"artist"];
+	NSString *title = [details objectForKey:@"title"];
+	NSString *artist = [details objectForKey:@"artist"];
 	
 	if (!title || !artist || !snap)
 		return;
 	
-	Snap* song = [[[Snap alloc] initWithTitle:title	artist:artist] autorelease];
+	Snap *song = [[[Snap alloc] initWithTitle:title	artist:artist] autorelease];
 	
-	NSArray* snapAndSong =
+	NSArray *snapAndSong =
 	[NSArray arrayWithObjects:snap, song, nil];
 	
 	[self performSelectorOnMainThread:@selector(updateSnap:)
@@ -485,10 +492,10 @@ NSString* const DefaultLocation = @"Portland";
 // Find and replace a station/time pair
 // with a title/artist pair.
 //
-- (void)updateSnap:(NSArray*)snapAndSong
+- (void)updateSnap:(NSArray *)snapAndSong
 {
-	Snap* snap = [snapAndSong objectAtIndex:0];
-	Snap* song = [snapAndSong objectAtIndex:1];
+	Snap *snap = [snapAndSong objectAtIndex:0];
+	Snap *song = [snapAndSong objectAtIndex:1];
 	
 	NSUInteger found = [snaps indexOfObject:snap];
 	
@@ -503,24 +510,24 @@ NSString* const DefaultLocation = @"Portland";
 // HTTP request callbacks
 
 
-- (void)lookupDidFinish:(ASINetworkQueue*)queue;
+- (void)lookupDidFinish:(ASINetworkQueue *)queue;
 {
 	[self showProgressIndicator:NO];
 }
 
 
-- (void)lookupDidFail:(ASINetworkQueue*)queue;
+- (void)lookupDidFail:(ASINetworkQueue *)queue;
 {
 	BOOL alreadyWarnedUser = ![downloadProgress isAnimating];
 	if (alreadyWarnedUser)
 		return;
 	
-	NSString* title = @"Temporary difficulties";
-	NSString* message = @"Looks like someone kicked out the plug \
+	NSString *title = @"Temporary difficulties";
+	NSString *message = @"Looks like someone kicked out the plug \
 	at the other end of the network connection. \
 	Sorry about that!";
 	
-	UIAlertView* alert =
+	UIAlertView *alert =
 	[[UIAlertView alloc]
 	 initWithTitle:title
 	 message:message
@@ -537,9 +544,9 @@ NSString* const DefaultLocation = @"Portland";
 // We've received a radio station or a title/artist from the network.
 // Route the data to the handler that's expecting it.
 //
-- (void)fetchComplete:(ASIHTTPRequest*)request;
+- (void)fetchComplete:(ASIHTTPRequest *)request;
 {
-	NSString* selectorName = [[request userInfo] objectForKey:@"selector"];
+	NSString *selectorName = [[request userInfo] objectForKey:@"selector"];
 	if (!selectorName)
 		return;
 
@@ -554,16 +561,16 @@ NSString* const DefaultLocation = @"Portland";
 {
 	// URL will look like http://justplayed.heroku.com/stations/Portland
 
-	NSString* lookup = [NSString stringWithFormat:@"%@/stations/%@",
+	NSString *lookup = [NSString stringWithFormat:@"%@/stations/%@",
 						self.lookupServer,
 						self.location];
-	NSURL* lookupURL = [NSURL URLWithString:lookup];
+	NSURL *lookupURL = [NSURL URLWithString:lookup];
 	
 	ASIHTTPRequest *request =
 		[[[ASIHTTPRequest alloc] initWithURL:lookupURL] autorelease];
 
 	// Tell the HTTP request what to do after it finishes.
-	NSDictionary* context =
+	NSDictionary *context =
 		[NSDictionary dictionaryWithObjectsAndKeys:@"stationFetchComplete:", @"selector", nil];
 	[request setUserInfo:context];
 
@@ -578,7 +585,7 @@ NSString* const DefaultLocation = @"Portland";
 // Like standard Cocoa setters, but these
 // also direct the GUI to update itself afterward.
 
-- (void)setStations:(NSArray*)newStations;
+- (void)setStations:(NSArray *)newStations;
 {
 	if (newStations == stations)
 		return;
@@ -590,7 +597,7 @@ NSString* const DefaultLocation = @"Portland";
 }
 
 
-- (void)setSnaps:(NSArray*)newSnaps;
+- (void)setSnaps:(NSArray *)newSnaps;
 {
 	if (newSnaps == snaps)
 		return;
@@ -608,7 +615,7 @@ NSString* const DefaultLocation = @"Portland";
 
 - (void)loadUserData;
 {
-	NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 	
 	[self setStations:[userDefaults arrayForKey:@"stations"]];
 	[self setSnaps:[Snap snapsFromPropertyLists:[userDefaults arrayForKey:@"snaps"]]];
@@ -632,7 +639,7 @@ NSString* const DefaultLocation = @"Portland";
 
 - (void)saveUserData;
 {
-	NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 	
 	[userDefaults setObject:stations forKey:@"stations"];
 	[userDefaults
@@ -647,7 +654,7 @@ NSString* const DefaultLocation = @"Portland";
 //
 - (void)setToFactoryDefaults;
 {
-	NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 	[userDefaults removeObjectForKey:@"stations"];
 	[userDefaults removeObjectForKey:@"snaps"];
 	[userDefaults removeObjectForKey:@"lookupServer"];
@@ -665,8 +672,8 @@ NSString* const DefaultLocation = @"Portland";
 {
 	[super viewDidLoad];
 	
-	NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-    NSDictionary* appDefaults =
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSDictionary *appDefaults =
 		[NSDictionary dictionaryWithObjectsAndKeys:
 			[NSArray array], @"stations",
 			[NSArray array], @"snaps",
