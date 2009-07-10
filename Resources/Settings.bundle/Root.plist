@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>Title</key>
-	<string>YOUR_PROJECT_NAME</string>
+	<string>JustPlayed</string>
 	<key>StringsTable</key>
 	<string>Root</string>
 	<key>PreferenceSpecifiers</key>
@@ -34,7 +34,7 @@
 			<key>Key</key>
 			<string>lookupServer</string>
 			<key>DefaultValue</key>
-			<string>http://dielectric.heroku.com</string>
+			<string>http://justplayed.heroku.com</string>
 			<key>IsSecure</key>
 			<false/>
 			<key>KeyboardType</key>
