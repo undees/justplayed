@@ -33,18 +33,22 @@ If you're using Git, run the following commands::
 How to Tinker With the Server
 -----------------------------
 
-Just Played will work with any Web application server that has the following properties:
+Just Played will work with any Web server that has the following properties:
 
-* Requests to http://example.com/stations return a property list containing an array of station names, like this::
+* Responds to http://example.com/stations with a plist_-formatted array of dictionaries, each of which has a name and link, like this::
 
   <plist version="1.0">
   <array>
+  <dict>
+  <key>name</key>
   <string>KNRK</string>
-  <string>KINK</string>
+  <key>link</key>
+  <string>http://www.947.fm</string>
+  </dict>
   </array>
   </plist>
 
-* Requests to http://example.com/[station]/[time] return a property list containing a dictionary with "title" and "artist" strings.  Times must be in ISO8601 combined UTC format; e.g., 2009-06-07T12:00Z.  Here's a sample result::
+* Responds to http://example.com/[station]/[time] with a plist-formatted dictionary containing a title and artist.  Times must be in ISO8601 combined UTC format; e.g., 2009-06-07T12:00:00Z.  Here's a sample result::
 
   <plist version="1.0">
   <dict>
@@ -55,9 +59,7 @@ Just Played will work with any Web application server that has the following pro
   </dict>
   </plist>
 
-This spec is simple enough to implement in just about any language or framework.  You might want to build on Dielectric, the demonstration server that was made for Just Played (source available in two_ main_ repositories).  This implementation fetches the data from other online sources, and is intended just for demonstration purposes.  Don't go hammering some poor radio station's Web server without getting permission!
-
-Inside the code, you'll see two functions for each radio station.  One function generates the right third-party URL where Dielectric will look up the information for a specific time.  The other one parses returned HTML to extract the song title and artist name.  So follow the example, write your own function pair for your stations, and voila!
+This spec is simple enough to implement in just about any language or framework.  You might want to build on Dielectric, the demonstration server that was made for Just Played (source available in two_ main_ repositories).  This implementation fetches Creative-Commons-licensed data provided by http://api.yes.com.  If you deploy your own server somewhere using this or other data, make sure you follow whatever terms of service they set forth.
 
 Once you've deployed your own server somewhere, you can point Just Played at at by entering your URL into the app's Settings bundle (Home button >> Settings >> Just Played >> Lookup Server).
 
@@ -73,6 +75,7 @@ Thanks to DRB62 on flickr.com for the CC-licensed `speaker photo`_ used in the i
 .. _GUI testing library: http://code.google.com/p/bromine
 .. _Cucumber: http://cukes.info
 .. _forest extension: http://www.selenic.com/mercurial/wiki/ForestExtension
+.. _plist: http://developer.apple.com/documentation/Darwin/Reference/ManPages/man5/plist.5.html
 .. _two: http://bitbucket.org/undees/dielectric
 .. _main: http://github.com/undees/dielectric
 .. _speaker photo: http://www.flickr.com/photos/drb62/3012428460
