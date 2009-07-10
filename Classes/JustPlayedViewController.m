@@ -350,7 +350,7 @@ NSString * const DefaultLocation = @"Portland";
 		// Some snaps in the list will already have been successfully looked up.
 		if (snap.needsLookup)
 		{
-			// URL will look like http://justplayed.heroku.com/KNRK/2009-07-03T10:00
+			// URL will look like http://justplayed.heroku.com/KNRK/2009-07-03T10:00:00
 			
 			NSDateFormatter *dateFormat = [[[NSDateFormatter alloc] init] autorelease];
 			[dateFormat setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
