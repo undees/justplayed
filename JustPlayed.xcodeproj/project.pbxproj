@@ -439,7 +439,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = JustPlayed_Prefix.pch;
 				INFOPLIST_FILE = Resources/Info.plist;
-				PRODUCT_NAME = "Just Played";
+				PRODUCT_NAME = JustPlayed;
 			};
 			name = Debug;
 		};
@@ -451,7 +451,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = JustPlayed_Prefix.pch;
 				INFOPLIST_FILE = Resources/Info.plist;
-				PRODUCT_NAME = "Just Played";
+				PRODUCT_NAME = JustPlayed;
 			};
 			name = Release;
 		};
@@ -540,7 +540,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = BROMINET_ENABLED;
 				HEADER_SEARCH_PATHS = /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS2.2.1.sdk/usr/include/libxml2;
 				INFOPLIST_FILE = Resources/Info.plist;
-				PRODUCT_NAME = "Just Played";
+				PRODUCT_NAME = JustPlayed;
 			};
 			name = Debug;
 		};
@@ -555,7 +555,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = BROMINET_ENABLED;
 				HEADER_SEARCH_PATHS = /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS2.2.1.sdk/usr/include/libxml2;
 				INFOPLIST_FILE = Resources/Info.plist;
-				PRODUCT_NAME = "Just Played";
+				PRODUCT_NAME = JustPlayed;
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 			};
 			name = Release;
