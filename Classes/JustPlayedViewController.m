@@ -443,14 +443,24 @@ NSString * const DefaultLocation = @"Portland";
 {
 	NSData *data = [request responseData];
 	
-	NSDictionary *details =
-	[NSPropertyListSerialization
-	 propertyListFromData:data
-	 mutabilityOption:NSPropertyListImmutable
-	 format:nil
-	 errorDescription:nil];
+	NSArray *details =
+		[NSPropertyListSerialization
+		 propertyListFromData:data
+		 mutabilityOption:NSPropertyListImmutable
+		 format:nil
+		 errorDescription:nil];
 	
-	NSArray *newStations = [[details allKeys] sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
+	NSMutableArray *newStations =
+		[NSMutableArray arrayWithCapacity:[details count]];
+	
+	NSEnumerator *e = [details objectEnumerator];
+	id station;
+	
+	while ((station = [e nextObject]))
+	{
+		NSString *name = [station objectForKey:@"name"];
+		[newStations addObject:name];
+	}	
 	
 	[self performSelectorOnMainThread:@selector(setStations:)
 						   withObject:newStations
