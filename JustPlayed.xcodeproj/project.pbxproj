@@ -68,7 +68,7 @@
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1D3623240D0F684500981E51 /* JustPlayedAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JustPlayedAppDelegate.h; sourceTree = "<group>"; };
 		1D3623250D0F684500981E51 /* JustPlayedAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JustPlayedAppDelegate.m; sourceTree = "<group>"; };
-		1D6058910D05DD3D006BFB54 /* Just Played.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Just Played.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1D6058910D05DD3D006BFB54 /* JustPlayed.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JustPlayed.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		288765A40DF7441C002DB57D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		28D7ACF60DDB3853001CB0EB /* JustPlayedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JustPlayedViewController.h; sourceTree = "<group>"; };
@@ -88,7 +88,7 @@
 		DF6A81A20FFE8F2600E580D5 /* MainWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainWindow.xib; sourceTree = "<group>"; };
 		DF6A81A30FFE8F2600E580D5 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		DF7EC8DA0F9BF9E9005AD5B0 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
-		DF7EC8EE0F9BFCE8005AD5B0 /* Just Played.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Just Played.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		DF7EC8EE0F9BFCE8005AD5B0 /* JustPlayed.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JustPlayed.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DF7EC9180F9BFD50005AD5B0 /* ScriptRunner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScriptRunner.h; sourceTree = "<group>"; };
 		DF7EC9190F9BFD50005AD5B0 /* ScriptRunner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScriptRunner.m; sourceTree = "<group>"; };
 		DF7EC91B0F9BFD50005AD5B0 /* TouchSynthesis.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TouchSynthesis.h; sourceTree = "<group>"; };
@@ -173,8 +173,8 @@
 		19C28FACFE9D520D11CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				1D6058910D05DD3D006BFB54 /* Just Played.app */,
-				DF7EC8EE0F9BFCE8005AD5B0 /* Just Played.app */,
+				1D6058910D05DD3D006BFB54 /* JustPlayed.app */,
+				DF7EC8EE0F9BFCE8005AD5B0 /* JustPlayed.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -314,7 +314,7 @@
 			);
 			name = JustPlayed;
 			productName = JustPlayed;
-			productReference = 1D6058910D05DD3D006BFB54 /* Just Played.app */;
+			productReference = 1D6058910D05DD3D006BFB54 /* JustPlayed.app */;
 			productType = "com.apple.product-type.application";
 		};
 		DF7EC8DE0F9BFCE8005AD5B0 /* Brominet */ = {
@@ -331,7 +331,7 @@
 			);
 			name = Brominet;
 			productName = JustPlayed;
-			productReference = DF7EC8EE0F9BFCE8005AD5B0 /* Just Played.app */;
+			productReference = DF7EC8EE0F9BFCE8005AD5B0 /* JustPlayed.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
