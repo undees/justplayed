@@ -13,6 +13,7 @@
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		288765A50DF7441C002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765A40DF7441C002DB57D /* CoreGraphics.framework */; };
 		28D7ACF80DDB3853001CB0EB /* JustPlayedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28D7ACF70DDB3853001CB0EB /* JustPlayedViewController.m */; };
+		D50A1D3110082A5B00BD7ED8 /* NSObject+ClassName.m in Sources */ = {isa = PBXBuildFile; fileRef = D50A1D3010082A5B00BD7ED8 /* NSObject+ClassName.m */; };
 		DF3D29ED0FD8E2DD00E2F374 /* Snap.m in Sources */ = {isa = PBXBuildFile; fileRef = DF3D29EC0FD8E2DD00E2F374 /* Snap.m */; };
 		DF3D29EE0FD8E2DD00E2F374 /* Snap.m in Sources */ = {isa = PBXBuildFile; fileRef = DF3D29EC0FD8E2DD00E2F374 /* Snap.m */; };
 		DF598EA20FA6D1B7005D6E40 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DF598EA10FA6D1B7005D6E40 /* libicucore.dylib */; };
@@ -75,6 +76,8 @@
 		28D7ACF70DDB3853001CB0EB /* JustPlayedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JustPlayedViewController.m; sourceTree = "<group>"; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		32CA4F630368D1EE00C91783 /* JustPlayed_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JustPlayed_Prefix.pch; sourceTree = "<group>"; };
+		D50A1D2F10082A5B00BD7ED8 /* NSObject+ClassName.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+ClassName.h"; sourceTree = "<group>"; };
+		D50A1D3010082A5B00BD7ED8 /* NSObject+ClassName.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+ClassName.m"; sourceTree = "<group>"; };
 		DF3D29EB0FD8E2DD00E2F374 /* Snap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Snap.h; sourceTree = "<group>"; };
 		DF3D29EC0FD8E2DD00E2F374 /* Snap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Snap.m; sourceTree = "<group>"; };
 		DF598EA10FA6D1B7005D6E40 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
@@ -236,6 +239,8 @@
 		DF7EC8FB0F9BFD50005AD5B0 /* Brominet */ = {
 			isa = PBXGroup;
 			children = (
+				D50A1D2F10082A5B00BD7ED8 /* NSObject+ClassName.h */,
+				D50A1D3010082A5B00BD7ED8 /* NSObject+ClassName.m */,
 				DF7EC9180F9BFD50005AD5B0 /* ScriptRunner.h */,
 				DF7EC9190F9BFD50005AD5B0 /* ScriptRunner.m */,
 				DF7EC91B0F9BFD50005AD5B0 /* TouchSynthesis.h */,
@@ -423,6 +428,7 @@
 				DFD4C5C20FD6D30C00532647 /* ASIHTTPRequest.m in Sources */,
 				DFD4C5C30FD6D30C00532647 /* ASINetworkQueue.m in Sources */,
 				DF3D29ED0FD8E2DD00E2F374 /* Snap.m in Sources */,
+				D50A1D3110082A5B00BD7ED8 /* NSObject+ClassName.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
