@@ -5,12 +5,20 @@ require 'time'
 get '/stations/:location' do |location|
   <<HERE
 <plist version="1.0">
-<dict>
-	<key>KNRK</key>
-	<string>http://yes.com/KNRK</string>
-	<key>KOPB</key>
-	<string>http://yes.com/KOPB</string>
-</dict>
+<array>
+  <dict>
+    <key>name</key>
+  	<string>KNRK</string>
+    <key>link</key>
+  	<string>http://yes.com/KNRK</string>
+  </dict>
+  <dict>
+    <key>name</key>
+  	<string>KOPB</string>
+    <key>link</key>
+  	<string>http://yes.com/KOPB</string>
+  </dict>
+</array>
 </plist>
 HERE
 end
