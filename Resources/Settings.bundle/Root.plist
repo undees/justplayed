@@ -30,7 +30,7 @@
 			<key>Type</key>
 			<string>PSTextFieldSpecifier</string>
 			<key>Title</key>
-			<string>Lookup Server</string>
+			<string>Server</string>
 			<key>Key</key>
 			<string>lookupServer</string>
 			<key>DefaultValue</key>
