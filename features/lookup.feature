@@ -33,3 +33,10 @@ Feature: Lookup
       | title                | subtitle         |
       | KNRK                 | 2:00 PM          |
       | Been Caught Stealing | Jane's Addiction |
+
+  Scenario: Nothing to look up
+    Given the following snaps:
+      | title | artist    | link |
+      | 4'33" | John Cage | yes  |
+    And I look up my snaps
+    Then the app should not be downloading anything

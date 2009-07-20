@@ -64,3 +64,7 @@ Then /^I should see the following snaps:$/ do
 
   actual.should == hashes
 end
+
+Then /^the app should not be downloading anything$/ do
+  app.should_not be_downloading
+end

@@ -342,7 +342,9 @@ NSString * const DefaultLocation = @"Portland";
 {
 	if (0 == [snaps count])
 		return;
-	
+
+	BOOL needNetwork = NO;
+
 	for (unsigned i = 0; i < [snaps count]; i++)
 	{
 		Snap *snap = [snaps objectAtIndex:i];
@@ -350,6 +352,8 @@ NSString * const DefaultLocation = @"Portland";
 		// Some snaps in the list will already have been successfully looked up.
 		if (snap.needsLookup)
 		{
+			needNetwork = YES;
+
 			// URL will look like http://justplayed.heroku.com/KNRK/2009-07-03T10:00:00
 			
 			NSDateFormatter *dateFormat = [[[NSDateFormatter alloc] init] autorelease];
@@ -379,9 +383,12 @@ NSString * const DefaultLocation = @"Portland";
 			[networkQueue addOperation:request];
 		}
 	}
-	
-	[networkQueue go];
-	[self showProgressIndicator:YES];
+
+	if (needNetwork)
+	{
+		[networkQueue go];
+		[self showProgressIndicator:YES];
+	}
 }
 
 
