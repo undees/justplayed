@@ -443,19 +443,52 @@ NSString * const DefaultLocation = @"Portland";
 // Network helpers used by the HTTP request callbacks.
 
 
+- (void)lookupDidFail:(ASINetworkQueue *)queue;
+{
+	BOOL alreadyWarnedUser = ![downloadProgress isAnimating];
+	if (alreadyWarnedUser)
+		return;
+	
+	NSString *title = @"Network trouble";
+	NSString *message =
+	[NSString stringWithFormat:@"Couldn't reach %@\n\nPlease check your connection or try a different server.",
+	 self.lookupServer];
+	
+	UIAlertView *alert =
+	[[UIAlertView alloc]
+	 initWithTitle:title
+	 message:message
+	 delegate:nil
+	 cancelButtonTitle:@"Close"
+	 otherButtonTitles:nil];
+	
+	[alert show];
+	[alert release];
+	[self showProgressIndicator:NO];
+}
+
+
 // We've received a dictionary of stations (keys = call letters, values = links).
 // Fill the stations list with the new data.
 //
 - (void)stationFetchComplete:(ASIHTTPRequest *)request;
 {
 	NSData *data = [request responseData];
+	NSString *error = nil;
 	
 	NSArray *details =
 		[NSPropertyListSerialization
 		 propertyListFromData:data
 		 mutabilityOption:NSPropertyListImmutable
 		 format:nil
-		 errorDescription:nil];
+		 errorDescription:&error];
+	
+	if (error)
+	{
+		[error release];
+		[self lookupDidFail:networkQueue];
+		return;
+	}
 	
 	NSMutableArray *newStations =
 		[NSMutableArray arrayWithCapacity:[details count]];
@@ -483,13 +516,21 @@ NSString * const DefaultLocation = @"Portland";
 {
 	NSData *data = [request responseData];
 	NSDictionary *snap = [[request userInfo] objectForKey:@"snap"];
+	NSString *error = nil;
 	
 	NSDictionary *details =
 	[NSPropertyListSerialization
 	 propertyListFromData:data
 	 mutabilityOption:NSPropertyListImmutable
 	 format:nil
-	 errorDescription:nil];
+	 errorDescription:&error];
+
+	if (error)
+	{
+		[error release];
+		[self lookupDidFail:networkQueue];
+		return;
+	}	
 	
 	NSString *title = [details objectForKey:@"title"];
 	NSString *artist = [details objectForKey:@"artist"];
@@ -531,31 +572,6 @@ NSString * const DefaultLocation = @"Portland";
 
 - (void)lookupDidFinish:(ASINetworkQueue *)queue;
 {
-	[self showProgressIndicator:NO];
-}
-
-
-- (void)lookupDidFail:(ASINetworkQueue *)queue;
-{
-	BOOL alreadyWarnedUser = ![downloadProgress isAnimating];
-	if (alreadyWarnedUser)
-		return;
-	
-	NSString *title = @"Temporary difficulties";
-	NSString *message = @"Looks like someone kicked out the plug \
-	at the other end of the network connection. \
-	Sorry about that!";
-	
-	UIAlertView *alert =
-	[[UIAlertView alloc]
-	 initWithTitle:title
-	 message:message
-	 delegate:nil
-	 cancelButtonTitle:@"Close"
-	 otherButtonTitles:nil];
-	
-	[alert show];
-	[alert release];
 	[self showProgressIndicator:NO];
 }
 
