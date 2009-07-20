@@ -449,9 +449,9 @@ NSString * const DefaultLocation = @"Portland";
 	if (alreadyWarnedUser)
 		return;
 	
-	NSString *title = @"Network trouble";
+	NSString *title = @"Can't connect";
 	NSString *message =
-	[NSString stringWithFormat:@"Couldn't reach %@\n\nPlease check your connection or try a different server.",
+	[NSString stringWithFormat:@"Sorry, I couldn't reach %@\n\nReconnecting your network or trying a different server might fix the issue.",
 	 self.lookupServer];
 	
 	UIAlertView *alert =
