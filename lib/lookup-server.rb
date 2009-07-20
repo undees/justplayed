@@ -27,8 +27,8 @@ get '/:station/:time' do |station, time|
   sleep 1
   local_clock = Time.parse(time).strftime('%H%M')
   puts local_clock
-  halt 404 unless station.downcase == 'knrk' && local_clock == '1200'
-  <<HERE
+  if station.downcase == 'knrk' && local_clock == '1200'
+    <<HERE
 <plist version="1.0">
 <dict>
 	<key>title</key>
@@ -38,4 +38,11 @@ get '/:station/:time' do |station, time|
 </dict>
 </plist>
 HERE
+  else
+    <<HERE
+<plist version="1.0">
+<dict/>
+</plist>
+HERE
+  end
 end
