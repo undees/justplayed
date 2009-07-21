@@ -28,3 +28,7 @@ end
 Then /^I should see a help button$/ do
   app.should have_help_button
 end
+
+Then /^the app should not be downloading anything$/ do
+  app.should_not be_downloading
+end

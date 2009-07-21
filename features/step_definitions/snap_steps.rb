@@ -1,15 +1,7 @@
 Given /^the following snaps:$/ do
   |snaps_table|
 
-  hashes = snaps_table.hashes.map do |h|
-    r = {:title => h['title'] || h['station'],
-         :subtitle => h['subtitle'] || h['time'] || h['artist'],
-         :created_at => ((h['time'] || h['link'] == 'yes') ? Chronic.parse(h['time'] || h['subtitle']) : nil)}
-    r[:link] = (h['link'] == 'yes') if h['link']
-    r
-  end
-
-  app.snaps = hashes
+  app.snaps = snaps_from_table(snaps_table, :with_timestamp)
 end
 
 Given /^a current time of (.*)$/ do
@@ -49,22 +41,8 @@ end
 Then /^I should see the following snaps:$/ do
   |snaps_table|
 
-  hashes = snaps_table.hashes.map do |h|
-    r = {:title => h['title'] || h['station'],
-         :subtitle => h['subtitle'] || h['time'] || h['artist']}
+  need_links = snaps_table.headers.include? 'link'
+  actual = app.snaps.map {|h| h.delete(:link) unless need_links; h}
 
-    r[:link] = (h['link'] == 'yes') if h['link']
-    r
-  end
-
-  actual = app.snaps
-  unless snaps_table.headers.include? 'link'
-    actual.map! {|h| h.delete :link; h}
-  end
-
-  actual.should == hashes
-end
-
-Then /^the app should not be downloading anything$/ do
-  app.should_not be_downloading
+  actual.should == snaps_from_table(snaps_table)
 end
