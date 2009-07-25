@@ -594,12 +594,20 @@ NSString * const DefaultLocation = @"Portland";
 //
 - (IBAction)locationButtonPressed:(id)sender;
 {
+	if ([self.location length] == 0)
+		return;
+	
 	// URL will look like http://justplayed.heroku.com/stations/Portland
 
 	NSString *lookup = [NSString stringWithFormat:@"%@/stations/%@",
 						self.lookupServer,
 						self.location];
-	NSURL *lookupURL = [NSURL URLWithString:lookup];
+
+	NSString *escapedLookup =
+		[lookup stringByAddingPercentEscapesUsingEncoding:
+		 NSASCIIStringEncoding];
+
+	NSURL *lookupURL = [NSURL URLWithString:escapedLookup];
 	
 	ASIHTTPRequest *request =
 		[[[ASIHTTPRequest alloc] initWithURL:lookupURL] autorelease];

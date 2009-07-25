@@ -3,6 +3,9 @@ require 'rexml/document'
 require 'time'
 
 class JustPlayed
+  class ExpectationFailed < RuntimeError
+  end
+
   def initialize(host = 'localhost')
     @gui = Encumber::GUI.new host
   end
@@ -74,6 +77,10 @@ class JustPlayed
     @gui.command 'setTestData', :raw, 'snaps', JustPlayed.snap_plist(list)
   end
 
+  def city=(city)
+    @gui.command 'setTestData', 'location', city
+  end
+
   def server
     xml = @gui.command 'getTestData', 'key', 'lookupServer'
     doc = REXML::Document.new xml
@@ -115,7 +122,7 @@ class JustPlayed
 
     xpath = '//UIAlertView'
     warning = REXML::XPath.match(doc, xpath).first
-    raise 'Expected a warning message' unless warning
+    raise ExpectationFailed unless warning
 
     @gui.press '//UIThreePartButton'
   end

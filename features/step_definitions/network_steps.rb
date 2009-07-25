@@ -17,12 +17,26 @@ Given /^a missing test server$/ do
   app.server = 'http://localhost:55555'
 end
 
+Given /^a city name of "(.*)"$/ do
+  |city|
+
+  app.city = city
+end
+
 Then /^the server should not be empty$/ do
   app.server.should_not be_empty
 end
 
-Then /^I should see a network warning$/ do
-  app.dismiss_warning
+Then /^I should( not)? see a network warning$/ do
+  | negated |
+
+  dismiss = lambda {app.dismiss_warning}
+
+  if negated
+    dismiss.should     raise_error(JustPlayed::ExpectationFailed)
+  else
+    dismiss.should_not raise_error(JustPlayed::ExpectationFailed)
+  end
 end
 
 Then /^I should see a help button$/ do

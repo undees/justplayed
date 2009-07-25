@@ -40,3 +40,19 @@ Feature: Lookup
       | 4'33" | John Cage | yes  |
     And I look up my snaps
     Then the app should not be downloading anything
+
+  Scenario: City names with spaces
+    Given a city name of "San Jose"
+    And a test server
+    When I look up my stations
+    # Fake server always uses Portland stations; this is ok
+    Then I should see the stations "KNRK,KOPB"
+
+  Scenario: Empty city name
+    Given a list of radio stations "KNRK"
+    And a city name of ""
+    And a test server
+    When I look up my stations
+    Then the app should not be downloading anything
+    And I should not see a network warning
+    And I should see the stations "KNRK"

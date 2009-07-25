@@ -133,6 +133,12 @@
 //
 - (NSString *)setTestData:(NSDictionary *)data;
 {
+	NSString *location = [data objectForKey:@"location"];
+	if (location)
+	{
+		[viewController setLocation:location];
+	}
+
 	NSArray *stations = [data objectForKey:@"stations"];
 	if (stations)
 	{
