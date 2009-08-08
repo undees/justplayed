@@ -6,6 +6,8 @@ class JustPlayed
   class ExpectationFailed < RuntimeError
   end
 
+  attr_reader :warning_text
+
   def initialize(host = 'localhost')
     @gui = Encumber::GUI.new host
   end
@@ -117,12 +119,16 @@ class JustPlayed
   end
 
   def dismiss_warning
+    @warning_text = ''
     xml = @gui.dump
     doc = REXML::Document.new xml
 
     xpath = '//UIAlertView'
     warning = REXML::XPath.match(doc, xpath).first
     raise ExpectationFailed unless warning
+
+    xpath = '//UIAlertView/subviews/UILabel/text'
+    @warning_text = REXML::XPath.match(doc, xpath)[1].text
 
     @gui.press '//UIThreePartButton'
   end

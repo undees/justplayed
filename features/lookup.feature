@@ -23,6 +23,7 @@ Feature: Lookup
       | KNRK    | 2:00 PM  |
       | KNRK    | 12:00 PM |
     When I look up my snaps
+    Then I should be reminded to look up 1 song later
     Then I should see the following snaps:
       | title                | subtitle         |
       | KNRK                 | 2:00 PM          |
@@ -42,10 +43,9 @@ Feature: Lookup
     Then the app should not be downloading anything
 
   Scenario: City names with spaces
-    Given a city name of "San Jose"
+    Given a city name of "Southeast Portland"
     And a test server
     When I look up my stations
-    # Fake server always uses Portland stations; this is ok
     Then I should see the stations "KNRK,KOPB"
 
   Scenario: Empty city name

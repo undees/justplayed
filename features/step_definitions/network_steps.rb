@@ -28,7 +28,7 @@ Then /^the server should not be empty$/ do
 end
 
 Then /^I should( not)? see a network warning$/ do
-  | negated |
+  |negated|
 
   dismiss = lambda {app.dismiss_warning}
 
@@ -37,6 +37,13 @@ Then /^I should( not)? see a network warning$/ do
   else
     dismiss.should_not raise_error(JustPlayed::ExpectationFailed)
   end
+end
+
+Then /^I should be reminded to look up (\d+) songs? later$/ do
+  |count|
+
+  app.dismiss_warning
+  app.warning_text.should =~ /#{count} of your songs/
 end
 
 Then /^I should see a help button$/ do

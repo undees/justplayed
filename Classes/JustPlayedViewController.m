@@ -386,6 +386,7 @@ NSString * const DefaultLocation = @"Portland";
 
 	if (needNetwork)
 	{
+		missingSnapCount = 0;
 		[networkQueue go];
 		[self showProgressIndicator:YES];
 	}
@@ -468,6 +469,26 @@ NSString * const DefaultLocation = @"Portland";
 }
 
 
+- (void)snapLookupWasPartial
+{
+	NSString *title = @"Songs not yet posted";
+	NSString *message =
+	[NSString stringWithFormat:@"The radio stations have not yet posted titles for %d of your songs.\n\nDepending on the station, this process may take anywhere from a few minutes to a few hours.",
+	 missingSnapCount];
+	
+	UIAlertView *alert =
+	[[UIAlertView alloc]
+	 initWithTitle:title
+	 message:message
+	 delegate:nil
+	 cancelButtonTitle:@"Close"
+	 otherButtonTitles:nil];
+	
+	[alert show];
+	[alert release];
+}
+
+
 // We've received a dictionary of stations (keys = call letters, values = links).
 // Fill the stations list with the new data.
 //
@@ -536,7 +557,10 @@ NSString * const DefaultLocation = @"Portland";
 	NSString *artist = [details objectForKey:@"artist"];
 	
 	if (!title || !artist || !snap)
+	{
+		++missingSnapCount;
 		return;
+	}
 	
 	Snap *song = [[[Snap alloc] initWithTitle:title	artist:artist] autorelease];
 	
@@ -573,6 +597,9 @@ NSString * const DefaultLocation = @"Portland";
 - (void)lookupDidFinish:(ASINetworkQueue *)queue;
 {
 	[self showProgressIndicator:NO];
+
+	if (missingSnapCount > 0)
+		[self snapLookupWasPartial];
 }
 
 

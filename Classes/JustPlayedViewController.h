@@ -27,6 +27,7 @@
 	NSString *location;
 	NSDate *testTime;
 	ASINetworkQueue *networkQueue;
+	int missingSnapCount;
 }
 
 - (void)setStations:(NSArray *)newStations;
