@@ -506,6 +506,7 @@ NSString * const DefaultLocation = @"Portland";
 	
 	if (error)
 	{
+		NSLog(@"Station parse error: %@\n", error);
 		[error release];
 		[self lookupDidFail:networkQueue];
 		return;
@@ -548,13 +549,15 @@ NSString * const DefaultLocation = @"Portland";
 
 	if (error)
 	{
+		NSLog(@"Snap parse error: %@\n", error);
 		[error release];
 		[self lookupDidFail:networkQueue];
 		return;
 	}	
 	
-	NSString *title = [details objectForKey:@"title"];
-	NSString *artist = [details objectForKey:@"artist"];
+	// Use a category on NSString instead if a band comes along with less-than or greater-than in its name.
+	NSString *title  = [[details objectForKey:@"title"] stringByReplacingOccurrencesOfString:@"&amp;" withString:@"&"];
+	NSString *artist = [[details objectForKey:@"artist"] stringByReplacingOccurrencesOfString:@"&amp;" withString:@"&"];
 	
 	if (!title || !artist || !snap)
 	{
