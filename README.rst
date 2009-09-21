@@ -16,18 +16,16 @@ Just Played uses the ASIHTTPRequest_ library to make network requests in the bac
 How to Tinker With the App
 --------------------------
 
-If you're using Mercurial, turn on the `forest extension`_ and run these commands::
+If you're using Mercurial 1.3 or later, run this command:
 
   hg clone http://bitbucket.org/undees/justplayed
-  cd justplayed
-  hg fseed snapshot.txt
 
 If you're using Git, run the following commands::
 
   git clone git://github.com/undees/justplayed
   git clone git://github.com/undees/brominet justplayed/brominet
   git clone git://github.com/undees/cocoahttpserver justplayed/server
-  git clone git://github.com/pokeb/asi-http-request justplayed/asi-http-request
+  git clone git://github.com/undees/asi-http-request justplayed/asi-http-request
 
 How to Tinker With the Server
 -----------------------------
