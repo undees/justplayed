@@ -45,6 +45,12 @@
 		DF6A81B30FFE8F2600E580D5 /* LargeIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = DF6A81A10FFE8F2600E580D5 /* LargeIcon.png */; };
 		DF6A81B40FFE8F2600E580D5 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = DF6A81A20FFE8F2600E580D5 /* MainWindow.xib */; };
 		DF6A81B50FFE8F2600E580D5 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = DF6A81A30FFE8F2600E580D5 /* Settings.bundle */; };
+		DF711EEC1067387B0036BA9D /* ASIHTTPRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 329C40C3104E159200C798AE /* ASIHTTPRequest.m */; };
+		DF711EED1067387B0036BA9D /* ASINetworkQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 329C40C7104E159300C798AE /* ASINetworkQueue.m */; };
+		DF711EF81067388D0036BA9D /* ASIInputStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 329C40C5104E159300C798AE /* ASIInputStream.m */; };
+		DF711EFB106738BA0036BA9D /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 329C40DA104E159900C798AE /* Reachability.m */; };
+		DF711F161067391F0036BA9D /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 329C40F1104E181B00C798AE /* SystemConfiguration.framework */; };
+		DF711F24106739850036BA9D /* ASIAuthenticationDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = 329C40BF104E159200C798AE /* ASIAuthenticationDialog.m */; };
 		DF7EC8E40F9BFCE8005AD5B0 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
 		DF7EC8E50F9BFCE8005AD5B0 /* JustPlayedAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* JustPlayedAppDelegate.m */; };
 		DF7EC8E60F9BFCE8005AD5B0 /* JustPlayedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28D7ACF70DDB3853001CB0EB /* JustPlayedViewController.m */; };
@@ -179,6 +185,7 @@
 				DF7EC9B90F9BFFA6005AD5B0 /* CFNetwork.framework in Frameworks */,
 				DF598EA30FA6D1B7005D6E40 /* libicucore.dylib in Frameworks */,
 				DFD4C5CD0FD6D3B800532647 /* libz.dylib in Frameworks */,
+				DF711F161067391F0036BA9D /* SystemConfiguration.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -477,6 +484,11 @@
 				DF7EC9AA0F9BFEC5005AD5B0 /* HTTPServer.m in Sources */,
 				DF3D29ED0FD8E2DD00E2F374 /* Snap.m in Sources */,
 				D50A1D3110082A5B00BD7ED8 /* NSObject+ClassName.m in Sources */,
+				DF711EEC1067387B0036BA9D /* ASIHTTPRequest.m in Sources */,
+				DF711EED1067387B0036BA9D /* ASINetworkQueue.m in Sources */,
+				DF711EF81067388D0036BA9D /* ASIInputStream.m in Sources */,
+				DF711EFB106738BA0036BA9D /* Reachability.m in Sources */,
+				DF711F24106739850036BA9D /* ASIAuthenticationDialog.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
