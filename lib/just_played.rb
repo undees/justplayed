@@ -41,11 +41,17 @@ class JustPlayed
 
     xpath = '//UITableViewCell[tag="%s"]' % SnapTag
     links = REXML::XPath.match doc, xpath
+    positions = links.map {|e| e.elements['frame/y'].text.to_f}
     links.map! {|e| e.elements['accessoryType'].text.to_i == 1}
 
-    titles.zip(subtitles, links).inject([]) do |memo, obj|
-      title, subtitle, link = obj
-      memo << {:title => title, :subtitle => subtitle, :link => link}
+    titles.zip(subtitles, links, positions).inject([]) do |memo, obj|
+      title, subtitle, link, position = obj
+      memo << {:title => title, :subtitle => subtitle, :link => link, :position => position}
+    end.sort_by do |obj|
+      obj[:position]
+    end.map do |obj|
+      obj.delete :position
+      obj
     end
   end
 
@@ -55,7 +61,11 @@ class JustPlayed
 
     xpath = '//UITableViewCell[tag="%s"]' % StationTag
     titles = REXML::XPath.match doc, xpath
-    titles.map {|e| e.elements['text'].text}
+    titles.sort_by do |e|
+      e.elements['frame/y'].text.to_f
+    end.map do |e|
+      e.elements['text'].text
+    end
   end
 
   def stations=(list)
