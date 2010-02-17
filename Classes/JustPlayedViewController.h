@@ -39,6 +39,8 @@
 - (void)saveUserData;
 - (void)refreshView;
 
+- (void)deleteStation:(NSUInteger)index;
+
 - (IBAction)locationButtonPressed:(id)sender;
 - (IBAction)lookupButtonPressed:(id)sender;
 - (IBAction)deleteButtonPressed:(id)sender;

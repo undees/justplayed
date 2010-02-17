@@ -89,6 +89,14 @@
 // GUI testing hooks
 
 
+- (NSString *)deleteStation:(NSDictionary *)data;
+{
+	NSNumber *index = [data objectForKey:@"index"];
+	[viewController deleteStation:[index unsignedIntValue]];
+	return @"pass";
+}
+
+
 - (NSString *)restoreDefaults:(NSDictionary *)ignored;
 {
 	[viewController setToFactoryDefaults];

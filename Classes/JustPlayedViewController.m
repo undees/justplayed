@@ -333,6 +333,16 @@ NSString * const DefaultLocation = @"Portland";
 }
 
 
+// Fake a swipe and delete (for OS versions that can't simulate this directly).
+//
+- (void)deleteStation:(NSUInteger)index;
+{
+	[self          tableView:snapsTable
+		  commitEditingStyle:UITableViewCellEditingStyleDelete
+		   forRowAtIndexPath:[NSIndexPath indexPathForRow:index inSection:StationSection]];
+}
+
+
 // GUI callbacks.
 
 

@@ -80,8 +80,7 @@ class JustPlayed
 
   def delete_station(row)
     @gui.command 'scrollToRow', 'viewXPath', '//UITableView', 'rowIndex', row
-    @gui.command 'simulateSwipe', 'viewXPath', "//UITableViewCell[#{row + 1}]"
-    @gui.command 'simulateTouch', 'viewXPath', '//UIRemoveControlTextButton', 'hitTest', 0
+    @gui.command 'deleteStation', :raw, 'index', "<integer>#{row}</integer>"
     sleep 1
   end
 
